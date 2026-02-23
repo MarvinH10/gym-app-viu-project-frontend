@@ -1,0 +1,12 @@
+<z-card class="stat-card-wrapper" (click)="onClick()" (keyup.enter)="onClick()">
+  <div class="stat-inner">
+    <div class="stat-icon">{{ icon() }}</div>
+    <div class="stat-body">
+      <p class="stat-title">{{ title() }}</p>
+      <p class="stat-value">{{ value() }}</p>
+      @if (trend()) {
+        <p class="stat-trend">{{ trend() }}</p>
+      }
+    </div>
+  </div>
+</z-card>

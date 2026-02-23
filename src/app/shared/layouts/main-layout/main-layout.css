@@ -1,0 +1,27 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevents flexbox from breaking on large child content */
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px; /* Wider for dashboard */
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    flex-direction: column;
+  }
+}

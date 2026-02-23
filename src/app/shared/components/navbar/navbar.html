@@ -1,0 +1,34 @@
+<header class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <button z-button zType="ghost" zSize="icon-sm" (click)="sidebarService.toggle()">
+        <z-icon zType="panel-left" class="size-4" />
+      </button>
+      <div class="breadcrumb">
+        <z-breadcrumb>
+          <z-breadcrumb-item [routerLink]="['/dashboard']">
+            <z-icon zType="house" class="size-4" />
+          </z-breadcrumb-item>
+
+          @for (bc of breadcrumbService.breadcrumbs(); track bc.url) {
+            <z-breadcrumb-item [routerLink]="[bc.url]">
+              {{ bc.label }}
+            </z-breadcrumb-item>
+          }
+        </z-breadcrumb>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button z-button zType="ghost" zSize="icon-sm" class="relative">
+        <z-icon zType="bell" class="size-4" />
+        <span
+          class="absolute top-1.5 right-1.5 size-2 bg-primary rounded-full border-2 border-card"
+        ></span>
+      </button>
+      <button z-button zType="ghost" zSize="icon-sm">
+        <z-icon zType="sun-moon" class="size-4" />
+      </button>
+    </div>
+  </div>
+</header>

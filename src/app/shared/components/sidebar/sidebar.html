@@ -1,0 +1,106 @@
+<aside class="sidebar" [class.collapsed]="sidebarService.isCollapsed()">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <z-icon zType="activity" class="size-6" />
+    </div>
+    <span class="brand-name">GymApp</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <span class="nav-section-title">Principal</span>
+      @for (item of mainNavItems(); track item.label) {
+        @if (!item.children) {
+          <a [routerLink]="item.route" routerLinkActive="active" class="nav-item">
+            <z-icon [zType]="item.icon" class="size-4" />
+            <span>{{ item.label }}</span>
+          </a>
+        } @else {
+          <div class="nav-item-group">
+            <button
+              z-button
+              zType="ghost"
+              class="nav-item submenu-trigger"
+              [class.active]="isSubmenuExpanded(item.label)"
+              (click)="toggleSubmenu(item.label)"
+            >
+              <z-icon [zType]="item.icon" class="size-4" />
+              <span>{{ item.label }}</span>
+              <z-icon
+                zType="chevron-right"
+                class="size-3 ml-auto transition-transform"
+                [class.rotate-90]="isSubmenuExpanded(item.label)"
+              />
+            </button>
+
+            @if (isSubmenuExpanded(item.label) && !sidebarService.isCollapsed()) {
+              <div class="submenu-items">
+                <div class="submenu-line"></div>
+                @for (child of item.children; track child.route) {
+                  <a
+                    [routerLink]="child.route"
+                    routerLinkActive="active"
+                    class="nav-item submenu-item"
+                  >
+                    <z-icon [zType]="child.icon" class="size-4" />
+                    <span>{{ child.label }}</span>
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    @if (authService.currentUser(); as user) {
+      @if (showUserMenu()) {
+        <div class="user-menu-popover" (click)="$event.stopPropagation()">
+          <div class="popover-header">
+            <div class="user-avatar lg">{{ user.name.charAt(0) }}</div>
+            <div class="user-info">
+              <span class="user-name">{{ user.name }}</span>
+              <span class="user-email">{{ user.email }}</span>
+            </div>
+          </div>
+
+          <div class="popover-divider"></div>
+
+          <div class="popover-content">
+            <button z-button zType="ghost" class="menu-item" (click)="navigateToProfile()">
+              <z-icon zType="settings" class="size-4" />
+              <span>Perfil</span>
+            </button>
+
+            <div class="popover-divider"></div>
+
+            <button z-button zType="ghost" class="menu-item logout" (click)="logout()">
+              <z-icon zType="log-out" class="size-4" />
+              <span>Cerrar sesión</span>
+            </button>
+          </div>
+        </div>
+      }
+
+      <button
+        z-button
+        zType="ghost"
+        class="user-trigger"
+        [class.active]="showUserMenu()"
+        (click)="toggleUserMenu()"
+      >
+        <div class="user-avatar">
+          {{ user.name.charAt(0) }}
+        </div>
+        @if (!sidebarService.isCollapsed()) {
+          <div class="user-details">
+            <span class="user-name">{{ user.name }}</span>
+          </div>
+          <z-icon zType="chevrons-up-down" class="size-4 ml-auto text-muted-foreground" />
+        }
+      </button>
+    }
+  </div>
+</aside>

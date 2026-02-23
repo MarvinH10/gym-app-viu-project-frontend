@@ -1,0 +1,114 @@
+<div class="profile-page">
+  <div class="profile-header">
+    <h1 class="text-2xl font-bold tracking-tight">Configuración del Perfil</h1>
+    <p class="text-muted-foreground">Administra la configuración de tu cuenta y preferencias.</p>
+  </div>
+
+  <div class="profile-sections">
+    <div class="profile-section">
+      <div class="section-info">
+        <h2 class="section-title">Información del Perfil</h2>
+        <p class="section-description">
+          Actualiza la información de tu cuenta y dirección de correo electrónico.
+        </p>
+      </div>
+
+      <z-card class="section-card">
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="form-grid">
+          <div class="form-field" zardId="profile-name" #nameId="zardId">
+            <label [for]="nameId.id()" class="form-label">Nombre</label>
+            <input z-input [id]="nameId.id()" formControlName="name" placeholder="Tu nombre" />
+          </div>
+
+          <div class="form-field" zardId="profile-email" #emailId="zardId">
+            <label [for]="emailId.id()" class="form-label">Correo Electrónico</label>
+            <input
+              z-input
+              [id]="emailId.id()"
+              formControlName="email"
+              type="email"
+              placeholder="tu@email.com"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button z-button type="submit" [zLoading]="isProfileLoading()" class="w-fit">
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </z-card>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="profile-section">
+      <div class="section-info">
+        <h2 class="section-title">Actualizar Contraseña</h2>
+        <p class="section-description">
+          Asegúrate de que tu cuenta esté usando una contraseña larga y aleatoria para mantenerla
+          segura.
+        </p>
+      </div>
+
+      <z-card class="section-card">
+        <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()" class="form-grid">
+          <div class="form-field" zardId="current-password" #currId="zardId">
+            <label [for]="currId.id()" class="form-label">Contraseña Actual</label>
+            <input z-input [id]="currId.id()" formControlName="current_password" type="password" />
+          </div>
+
+          <div class="form-field" zardId="new-password" #newId="zardId">
+            <label [for]="newId.id()" class="form-label">Nueva Contraseña</label>
+            <input z-input [id]="newId.id()" formControlName="password" type="password" />
+          </div>
+
+          <div class="form-field" zardId="confirm-password" #confId="zardId">
+            <label [for]="confId.id()" class="form-label">Confirmar Contraseña</label>
+            <input
+              z-input
+              [id]="confId.id()"
+              formControlName="password_confirmation"
+              type="password"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button z-button type="submit" [zLoading]="isPasswordLoading()" class="w-fit">
+              Actualizar Contraseña
+            </button>
+          </div>
+        </form>
+      </z-card>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="profile-section">
+      <div class="section-info">
+        <h2 class="section-title">Eliminar Cuenta</h2>
+        <p class="section-description">
+          Una vez que tu cuenta sea eliminada, todos sus recursos y datos serán borrados
+          permanentemente.
+        </p>
+      </div>
+
+      <z-card class="section-card border-destructive/20">
+        <div class="p-1">
+          <p class="text-sm text-muted-foreground mb-4">
+            Antes de eliminar tu cuenta, por favor descarga cualquier dato o información que desees
+            conservar.
+          </p>
+          <button
+            z-button
+            zType="destructive"
+            (click)="deleteAccount()"
+            [zLoading]="isDeleteLoading()"
+          >
+            Eliminar mi cuenta permanentemente
+          </button>
+        </div>
+      </z-card>
+    </div>
+  </div>
+</div>

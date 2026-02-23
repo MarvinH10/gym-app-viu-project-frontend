@@ -1,0 +1,79 @@
+.profile-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-bottom: 4rem;
+}
+
+.profile-header {
+  margin-bottom: 3rem;
+}
+
+.profile-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.profile-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .profile-section {
+    grid-template-columns: 280px 1fr;
+    gap: 3rem;
+  }
+}
+
+.section-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.section-description {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+.section-card {
+  height: fit-content;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.section-divider {
+  height: 1px;
+  background: var(--border);
+  width: 100%;
+}

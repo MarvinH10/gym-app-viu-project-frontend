@@ -1,0 +1,70 @@
+.card-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+}
+
+.card-description {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.header-action {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.header-action:hover {
+  opacity: 0.8;
+}
+
+.error-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: oklch(0.5 0.2 25 / 10%);
+  border: 1px solid oklch(0.6 0.2 25 / 25%);
+  border-radius: var(--radius);
+  color: var(--destructive);
+  font-size: 0.8125rem;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.field-error {
+  font-size: 0.75rem;
+  color: var(--destructive);
+}

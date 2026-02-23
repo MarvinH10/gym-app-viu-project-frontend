@@ -1,0 +1,120 @@
+<z-card
+  class="w-full max-w-[400px]"
+  zTitle="Iniciar sesión"
+  zDescription="Ingresa tu email para acceder a tu cuenta"
+  zAction="Registrarse"
+  (zActionClick)="onRegisterRedirect()"
+>
+  @if (successMessage()) {
+    <div
+      class="mb-4 flex items-center gap-2 rounded-md border border-green-500/25 bg-green-500/10 p-3 text-sm text-green-500"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
+      </svg>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div
+      class="mb-4 flex items-center gap-2 rounded-md border border-destructive/25 bg-destructive/10 p-3 text-sm text-destructive"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div class="space-y-2" zardId="email" #e="zardId">
+      <label
+        [for]="e.id()"
+        class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        Email
+      </label>
+      <input
+        z-input
+        [id]="e.id()"
+        type="email"
+        formControlName="email"
+        placeholder="m@example.com"
+        zSize="lg"
+        [zStatus]="form.get('email')?.invalid && form.get('email')?.touched ? 'error' : undefined"
+      />
+      @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+        <p class="text-xs text-destructive">El email es requerido</p>
+      }
+    </div>
+
+    <div class="space-y-2">
+      <div class="flex items-center" zardId="password" #p="zardId">
+        <label
+          [for]="p.id()"
+          class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Contraseña
+        </label>
+        <a
+          routerLink="/auth/forgot-password"
+          class="ml-auto text-sm underline-offset-4 hover:underline text-muted-foreground"
+          >¿Olvidaste tu contraseña?</a
+        >
+      </div>
+      <input
+        z-input
+        [id]="p.id()"
+        type="password"
+        formControlName="password"
+        placeholder="••••••••"
+        zSize="lg"
+        [zStatus]="
+          form.get('password')?.invalid && form.get('password')?.touched ? 'error' : undefined
+        "
+      />
+      @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+        <p class="text-xs text-destructive">La contraseña es requerida</p>
+      }
+    </div>
+
+    <div class="flex w-full flex-col gap-2 pt-2">
+      <button
+        z-button
+        zType="default"
+        zFull
+        zSize="lg"
+        type="submit"
+        [zLoading]="isLoading()"
+        [zDisabled]="isLoading() || form.invalid"
+      >
+        Iniciar sesión
+      </button>
+      <button z-button zType="outline" zFull zSize="lg" type="button">Continuar con Google</button>
+    </div>
+  </form>
+</z-card>

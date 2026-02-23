@@ -1,0 +1,49 @@
+<div class="dashboard">
+  <!-- Saludo dinámico con data-binding -->
+  <section class="welcome-section">
+    @if (authService.currentUser(); as user) {
+      <h1 class="welcome-title">
+        Hola, <span class="highlight">{{ user.name }}</span> 👋
+      </h1>
+      <p class="welcome-sub">Miembro desde {{ user.created_at | relativeTime }}</p>
+    } @else {
+      <h1 class="welcome-title">Bienvenido a GymApp</h1>
+    }
+  </section>
+
+  <!-- Tarjetas de estadísticas con @for y componente hijo -->
+  <section class="stats-grid">
+    @for (stat of stats; track stat.title) {
+      <app-stat-card
+        [title]="stat.title"
+        [value]="stat.value"
+        [icon]="stat.icon"
+        [trend]="stat.trend"
+        (cardClick)="onCardClick($event)"
+      />
+    }
+  </section>
+
+  <!-- Feedback del output del hijo -->
+  @if (selectedCard()) {
+    <div class="card-selected-feedback">
+      Has seleccionado: <strong>{{ selectedCard() }}</strong>
+    </div>
+  }
+
+  <!-- Reproductor de video (HTML5 nativo) -->
+  <section class="video-section">
+    <h2 class="section-title">Workout del día</h2>
+    <div class="video-wrapper">
+      <video
+        controls
+        preload="metadata"
+        class="video-player"
+        [src]="videoUrl"
+        poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
+      >
+        Tu navegador no soporta video HTML5.
+      </video>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,129 @@
+<z-card
+  class="w-full max-w-[400px]"
+  zTitle="Crear cuenta"
+  zDescription="Ingresa tus datos para unirte a GymApp"
+  zAction="Iniciar sesión"
+  (zActionClick)="onLoginRedirect()"
+>
+  @if (errorMessage()) {
+    <div
+      class="mb-4 flex items-center gap-2 rounded-md border border-destructive/25 bg-destructive/10 p-3 text-sm text-destructive"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <!-- Nombre -->
+    <div class="space-y-2" zardId="name" #n="zardId">
+      <label
+        [for]="n.id()"
+        class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        Nombre completo
+      </label>
+      <input
+        z-input
+        [id]="n.id()"
+        type="text"
+        formControlName="name"
+        placeholder="Juan Pérez"
+        zSize="lg"
+        [zStatus]="form.get('name')?.invalid && form.get('name')?.touched ? 'error' : undefined"
+      />
+    </div>
+
+    <!-- Email -->
+    <div class="space-y-2" zardId="email" #e="zardId">
+      <label
+        [for]="e.id()"
+        class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        Email
+      </label>
+      <input
+        z-input
+        [id]="e.id()"
+        type="email"
+        formControlName="email"
+        placeholder="m@example.com"
+        zSize="lg"
+        [zStatus]="form.get('email')?.invalid && form.get('email')?.touched ? 'error' : undefined"
+      />
+    </div>
+
+    <!-- Password -->
+    <div class="space-y-2" zardId="password" #p="zardId">
+      <label
+        [for]="p.id()"
+        class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        Contraseña
+      </label>
+      <input
+        z-input
+        [id]="p.id()"
+        type="password"
+        formControlName="password"
+        placeholder="••••••••"
+        zSize="lg"
+        [zStatus]="
+          form.get('password')?.invalid && form.get('password')?.touched ? 'error' : undefined
+        "
+      />
+    </div>
+
+    <!-- Password Confirmation -->
+    <div class="space-y-2" zardId="confirm" #c="zardId">
+      <label
+        [for]="c.id()"
+        class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        Confirmar contraseña
+      </label>
+      <input
+        z-input
+        [id]="c.id()"
+        type="password"
+        formControlName="password_confirmation"
+        placeholder="••••••••"
+        zSize="lg"
+        [zStatus]="
+          passwordsMismatch && form.get('password_confirmation')?.touched ? 'error' : undefined
+        "
+      />
+      @if (passwordsMismatch && form.get('password_confirmation')?.touched) {
+        <p class="text-xs text-destructive">Las contraseñas no coinciden</p>
+      }
+    </div>
+
+    <div class="flex w-full flex-col gap-2 pt-2">
+      <button
+        z-button
+        zType="default"
+        zFull
+        zSize="lg"
+        type="submit"
+        [zLoading]="isLoading()"
+        [zDisabled]="isLoading() || form.invalid || passwordsMismatch"
+      >
+        Crear cuenta
+      </button>
+    </div>
+  </form>
+</z-card>
