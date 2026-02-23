@@ -1,6 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '@/core/services/auth';
 import { SidebarService } from '@/core/services/sidebar.service';
 import { ZardIconComponent } from '@/shared/components/icon/icon.component';
@@ -13,12 +11,7 @@ import {
 
 @Component({
   selector: 'app-navbar',
-  imports: [
-    ZardIconComponent,
-    ZardButtonComponent,
-    ZardBreadcrumbComponent,
-    ZardBreadcrumbItemComponent,
-  ],
+  imports: [ZardIconComponent, ZardButtonComponent, ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })

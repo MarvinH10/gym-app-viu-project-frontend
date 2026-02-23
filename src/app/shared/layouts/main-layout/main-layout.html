@@ -5,20 +5,6 @@
     <app-navbar />
 
     <main class="main-content">
-      <div class="mb-6">
-        <z-breadcrumb>
-          <z-breadcrumb-item [routerLink]="['/dashboard']">
-            <z-icon zType="house" class="size-4" />
-          </z-breadcrumb-item>
-
-          @for (bc of breadcrumbService.breadcrumbs(); track bc.url) {
-            <z-breadcrumb-item [routerLink]="[bc.url]">
-              {{ bc.label }}
-            </z-breadcrumb-item>
-          }
-        </z-breadcrumb>
-      </div>
-
       <router-outlet />
     </main>
 
