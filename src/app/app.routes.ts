@@ -79,6 +79,142 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'inventario',
+        data: { breadcrumb: 'Inventario' },
+        children: [
+          {
+            path: 'categorias',
+            loadComponent: () =>
+              import('./features/inventario/categorias/categorias').then((m) => m.Categorias),
+            data: { breadcrumb: 'Categorías' },
+          },
+          {
+            path: 'productos',
+            loadComponent: () =>
+              import('./features/inventario/productos/productos').then((m) => m.Productos),
+            data: { breadcrumb: 'Productos' },
+          },
+          {
+            path: 'atributos',
+            loadComponent: () =>
+              import('./features/inventario/atributos/atributos').then((m) => m.Atributos),
+            data: { breadcrumb: 'Atributos' },
+          },
+          {
+            path: 'almacen',
+            loadComponent: () =>
+              import('./features/inventario/almacen/almacen').then((m) => m.Almacen),
+            data: { breadcrumb: 'Almacén' },
+          },
+        ],
+      },
+      {
+        path: 'compras',
+        data: { breadcrumb: 'Compras' },
+        children: [
+          {
+            path: 'lista',
+            loadComponent: () =>
+              import('./features/compras/compras/compras').then((m) => m.Compras),
+            data: { breadcrumb: 'Compras' },
+          },
+          {
+            path: 'proveedores',
+            loadComponent: () =>
+              import('./features/compras/proveedores/proveedores').then((m) => m.Proveedores),
+            data: { breadcrumb: 'Proveedores' },
+          },
+        ],
+      },
+      {
+        path: 'ventas',
+        data: { breadcrumb: 'Ventas' },
+        children: [
+          {
+            path: 'pos',
+            loadComponent: () =>
+              import('./features/ventas/pos/pos').then((m) => m.Pos),
+            data: { breadcrumb: 'POS' },
+          },
+          {
+            path: 'lista',
+            loadComponent: () =>
+              import('./features/ventas/ventas/ventas').then((m) => m.Ventas),
+            data: { breadcrumb: 'Ventas' },
+          },
+          {
+            path: 'clientes',
+            loadComponent: () =>
+              import('./features/ventas/clientes/clientes').then((m) => m.Clientes),
+            data: { breadcrumb: 'Clientes' },
+          },
+        ],
+      },
+      {
+        path: 'reportes',
+        data: { breadcrumb: 'Reportes' },
+        children: [
+          {
+            path: 'productos-vendidos',
+            loadComponent: () =>
+              import('./features/reportes/productos-vendidos/productos-vendidos').then(
+                (m) => m.ProductosVendidos,
+              ),
+            data: { breadcrumb: 'Productos Vendidos' },
+          },
+        ],
+      },
+      {
+        path: 'sistema',
+        data: { breadcrumb: 'Sistema' },
+        children: [
+          {
+            path: 'companias',
+            loadComponent: () =>
+              import('./features/sistema/companias/companias').then((m) => m.Companias),
+            data: { breadcrumb: 'Compañías' },
+          },
+          {
+            path: 'usuarios',
+            loadComponent: () =>
+              import('./features/sistema/usuarios/usuarios').then((m) => m.Usuarios),
+            data: { breadcrumb: 'Usuarios' },
+          },
+          {
+            path: 'roles',
+            loadComponent: () =>
+              import('./features/sistema/roles/roles').then((m) => m.Roles),
+            data: { breadcrumb: 'Roles' },
+          },
+          {
+            path: 'permisos',
+            loadComponent: () =>
+              import('./features/sistema/permisos/permisos').then((m) => m.Permisos),
+            data: { breadcrumb: 'Permisos' },
+          },
+          {
+            path: 'diarios',
+            loadComponent: () =>
+              import('./features/sistema/diarios/diarios').then((m) => m.Diarios),
+            data: { breadcrumb: 'Diarios' },
+          },
+          {
+            path: 'impuestos',
+            loadComponent: () =>
+              import('./features/sistema/impuestos/impuestos').then((m) => m.Impuestos),
+            data: { breadcrumb: 'Impuestos' },
+          },
+          {
+            path: 'unidades-medida',
+            loadComponent: () =>
+              import('./features/sistema/unidades-medida/unidades-medida').then(
+                (m) => m.UnidadesMedida,
+              ),
+            data: { breadcrumb: 'Unidades de Medida' },
+          },
+        ],
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
