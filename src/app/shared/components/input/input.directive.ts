@@ -40,6 +40,7 @@ type OnChangeType = (value: string) => void;
     '(input)': 'updateValue($event.target)',
     '(blur)': 'onBlur()',
   },
+  standalone: true,
   exportAs: 'zInput',
 })
 export class ZardInputDirective implements ControlValueAccessor {

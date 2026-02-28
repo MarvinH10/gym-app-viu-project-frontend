@@ -1,6 +1,7 @@
 .app-shell {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: var(--background);
 }
 
@@ -8,20 +9,44 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Prevents flexbox from breaking on large child content */
+  min-width: 0;
+  overflow-y: auto;
+}
+
+app-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
 }
 
 .main-content {
   flex: 1;
   padding: 2rem;
-  max-width: 1400px; /* Wider for dashboard */
+  max-width: 1400px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
-  .app-shell {
-    flex-direction: column;
+  .main-content {
+    padding: 1rem;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 40;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '@/environments/environment';
 import {
   LoginRequest,
   RegisterRequest,
@@ -15,7 +16,7 @@ import {
   providedIn: 'root',
 })
 export class AuthApi {
-  private readonly API_URL = 'http://127.0.0.1:8000/api/v1';
+  private readonly API_URL = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

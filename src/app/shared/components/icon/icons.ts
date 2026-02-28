@@ -34,6 +34,7 @@ import {
   DollarSign,
   Ellipsis,
   Eye,
+  Filter,
   File,
   FileText,
   Folder,
@@ -87,6 +88,12 @@ import {
   User,
   UserPlus,
   Users,
+  Globe,
+  MapPin,
+  Pencil,
+  Phone,
+  ShoppingCart,
+  UserCheck,
   X,
   Zap,
 } from 'lucide-angular';
@@ -141,6 +148,7 @@ export const ZARD_ICONS = {
   'folder-plus': FolderPlus,
   file: File,
   'file-text': FileText,
+  filter: Filter,
   'layout-dashboard': LayoutDashboard,
   'loader-circle': LoaderCircle,
   save: Save,
@@ -190,6 +198,12 @@ export const ZARD_ICONS = {
   'user-plus': UserPlus,
   'credit-card': CreditCard,
   activity: Activity,
+  pencil: Pencil,
+  phone: Phone,
+  'map-pin': MapPin,
+  globe: Globe,
+  'user-check': UserCheck,
+  'shopping-cart': ShoppingCart,
 } as const satisfies Record<string, LucideIconData>;
 
 export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;

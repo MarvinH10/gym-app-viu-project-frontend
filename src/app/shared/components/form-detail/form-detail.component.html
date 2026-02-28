@@ -1,0 +1,44 @@
+@if (loading()) {
+  <!-- Skeleton -->
+  <div class="grid grid-cols-2 gap-x-8 gap-y-5">
+    @for (row of skeletonRows; track row) {
+      <div class="flex flex-col gap-1.5">
+        <z-skeleton class="h-3 w-24 rounded" />
+        <z-skeleton class="h-5 w-40 rounded-md" />
+      </div>
+    }
+  </div>
+} @else {
+  @for (section of sections(); track section.title) {
+    <div class="detail-section">
+      @if (section.title) {
+        <h3 class="detail-section-title">{{ section.title }}</h3>
+      }
+      <div class="detail-grid">
+        @for (field of section.fields; track field.name) {
+          <div class="detail-field" [class.col-span-2]="field.colSpan === 2">
+            <span class="detail-label">{{ field.label }}</span>
+
+            @if (field.type === 'badge') {
+              <z-badge [zType]="getBadgeVariant(field)" zShape="pill" class="w-fit">
+                {{ getValue(field) }}
+              </z-badge>
+            } @else if (field.type === 'boolean') {
+              <div class="flex items-center gap-1.5">
+                <z-icon
+                  [zType]="data()?.[field.name] ? 'circle-check' : 'circle-x'"
+                  class="size-4"
+                  [class.text-green-500]="data()?.[field.name]"
+                  [class.text-muted-foreground]="!data()?.[field.name]"
+                />
+                <span class="detail-value">{{ getValue(field) }}</span>
+              </div>
+            } @else {
+              <span class="detail-value">{{ getValue(field) }}</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+}
