@@ -10,6 +10,7 @@ class ZardIdInternalService {
 
 @Directive({
   selector: '[zardId]',
+  standalone: true,
   exportAs: 'zardId',
 })
 export class ZardIdDirective {

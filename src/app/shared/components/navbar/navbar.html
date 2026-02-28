@@ -10,7 +10,7 @@
             <z-icon zType="house" class="size-4" />
           </z-breadcrumb-item>
 
-          @for (bc of breadcrumbService.breadcrumbs(); track bc.url) {
+          @for (bc of breadcrumbService.breadcrumbs(); track $index) {
             <z-breadcrumb-item [routerLink]="[bc.url]">
               {{ bc.label }}
             </z-breadcrumb-item>

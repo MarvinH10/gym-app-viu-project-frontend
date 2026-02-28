@@ -34,11 +34,12 @@ export class BreadcrumbService {
       const routeUrl = parentUrl.concat(route.url.map((url) => url.path));
 
       if (route.data['breadcrumb']) {
-        const breadcrumb: Breadcrumb = {
-          label: route.data['breadcrumb'],
-          url: '/' + routeUrl.join('/'),
-        };
-        breadcrumbs.push(breadcrumb);
+        const label = route.data['breadcrumb'];
+        const url = '/' + routeUrl.join('/');
+
+        if (breadcrumbs.length === 0 || breadcrumbs[breadcrumbs.length - 1].label !== label) {
+          breadcrumbs.push({ label, url });
+        }
       }
 
       if (route.firstChild) {

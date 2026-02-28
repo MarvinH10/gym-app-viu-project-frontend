@@ -59,8 +59,32 @@ export const routes: Routes = [
         children: [
           {
             path: 'members',
-            loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard), // Temporary reuse
             data: { breadcrumb: 'Miembros' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/gym/members/members').then((m) => m.Members),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/gym/members/member-create-edit/member-create-edit.component'),
+                data: { breadcrumb: 'Crear' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/gym/members/member-detail/member-detail.component'),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/gym/members/member-create-edit/member-create-edit.component'),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'plans',

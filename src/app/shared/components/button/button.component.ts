@@ -44,6 +44,7 @@ import { ZardIconComponent } from '@/shared/components/icon/icon.component';
     '[attr.role]': 'isNotInsideOfButtonOrLink() ? "button" : null',
     '[attr.tabindex]': 'isNotInsideOfButtonOrLink() ? "0" : null',
   },
+  standalone: true,
   exportAs: 'zButton',
 })
 export class ZardButtonComponent implements OnDestroy {
@@ -72,7 +73,7 @@ export class ZardButtonComponent implements OnDestroy {
         const el = this.elementRef.nativeElement;
         const hasIcon = el.querySelector('z-icon, [z-icon]') !== null;
         const children = Array.from<Node>(el.childNodes);
-        const hasText = children.some(node => {
+        const hasText = children.some((node) => {
           if (node.nodeType === 3) {
             return node.textContent?.trim() !== '';
           }

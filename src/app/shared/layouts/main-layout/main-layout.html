@@ -8,6 +8,8 @@
       <router-outlet />
     </main>
 
-    <app-footer />
+    @if (!sidebarService.isCollapsed()) {
+      <div class="sidebar-overlay" (click)="sidebarService.collapse()"></div>
+    }
   </div>
 </div>

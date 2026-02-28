@@ -324,3 +324,23 @@
   background: oklch(0.55 0.15 0 / 10%);
   color: oklch(0.55 0.22 0);
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .sidebar:not(.collapsed) {
+    transform: translateX(0);
+    width: 280px;
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+}
