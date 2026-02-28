@@ -11,7 +11,6 @@ import {
   ForgotPasswordRequest,
   ResetPasswordRequest,
 } from '@/core/models';
-import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
