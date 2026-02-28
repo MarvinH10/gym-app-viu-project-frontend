@@ -7,7 +7,7 @@
       </p>
     </div>
     <div class="header-actions">
-      <button z-button zType="default" class="add-btn" (click)="goToNewMember()">
+      <button z-button zType="default" (click)="goToNewMember()">
         <z-icon zType="plus" class="size-4" />
         <span>Nuevo Miembro</span>
       </button>
@@ -25,207 +25,20 @@
   />
 
   <z-card class="table-card">
-    @if (error()) {
-      <div class="error-state">
-        <z-icon zType="triangle-alert" class="size-12 text-destructive" />
-        <p>{{ error() }}</p>
-        <button z-button zType="outline" (click)="loadMembers()">Reintentar</button>
-      </div>
-    } @else {
-      <div class="table-container">
-        <table z-table class="members-table">
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Miembro</th>
-              <th z-table-head>Documento</th>
-              <th z-table-head>Contacto</th>
-              <th z-table-head>Estado</th>
-              <th z-table-head>Acciones</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @if (loading() && members().length === 0) {
-              @for (i of [1, 2, 3, 4, 5]; track i) {
-                <tr z-table-row>
-                  <td z-table-cell>
-                    <div class="flex items-center gap-3">
-                      <z-skeleton class="size-9 rounded-full"></z-skeleton>
-                      <div class="flex flex-col gap-1.5">
-                        <z-skeleton class="h-4 w-28"></z-skeleton>
-                        <z-skeleton class="h-3 w-16"></z-skeleton>
-                      </div>
-                    </div>
-                  </td>
-                  <td z-table-cell>
-                    <div class="flex flex-col gap-1.5">
-                      <z-skeleton class="h-3 w-12"></z-skeleton>
-                      <z-skeleton class="h-4 w-20"></z-skeleton>
-                    </div>
-                  </td>
-                  <td z-table-cell>
-                    <div class="flex flex-col gap-1.5">
-                      <z-skeleton class="h-3 w-32"></z-skeleton>
-                      <z-skeleton class="h-3 w-24"></z-skeleton>
-                    </div>
-                  </td>
-                  <td z-table-cell>
-                    <z-skeleton class="h-6 w-20 rounded-full"></z-skeleton>
-                  </td>
-                  <td z-table-cell>
-                    <div class="flex gap-2">
-                      <z-skeleton class="size-7 rounded-md"></z-skeleton>
-                      <z-skeleton class="size-7 rounded-md"></z-skeleton>
-                    </div>
-                  </td>
-                </tr>
-              }
-            } @else if (members().length === 0) {
-              <tr z-table-row>
-                <td z-table-cell colspan="5" class="py-20!">
-                  <div class="empty-table-content">
-                    <z-icon zType="users" class="size-12 mb-4 opacity-20" />
-                    <p class="text-muted-foreground font-medium">
-                      No se encontraron miembros registrados
-                    </p>
-                    <p class="text-xs text-muted-foreground/60 mt-1">
-                      Intenta ajustar los filtros o añadir uno nuevo
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            } @else {
-              @for (member of members(); track member.id) {
-                <tr z-table-row>
-                  <td z-table-cell>
-                    <div class="member-profile">
-                      <div class="avatar">
-                        {{ member.name.charAt(0) }}
-                      </div>
-                      <div class="info">
-                        <span class="name">{{ member.name }}</span>
-                        <span class="id">ID: {{ member.id }}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td z-table-cell>
-                    <div class="document-info">
-                      <span class="type">{{ member.document_type }}</span>
-                      <span class="number">{{ member.document_number }}</span>
-                    </div>
-                  </td>
-                  <td z-table-cell>
-                    <div class="contact-info">
-                      <span class="email"
-                        ><z-icon zType="mail" class="size-3" /> {{ member.email }}</span
-                      >
-                      <span class="phone"
-                        ><z-icon zType="smartphone" class="size-3" />
-                        {{ member.mobile || member.phone || 'No registra' }}</span
-                      >
-                    </div>
-                  </td>
-                  <td z-table-cell>
-                    <z-badge
-                      [zType]="
-                        member.status === 'active'
-                          ? 'secondary'
-                          : member.status === 'blacklisted'
-                            ? 'destructive'
-                            : 'outline'
-                      "
-                      zShape="pill"
-                    >
-                      {{ getStatusLabel(member.status) }}
-                    </z-badge>
-                  </td>
-                  <td z-table-cell>
-                    <div class="actions">
-                      <z-dropdown-menu>
-                        <button
-                          dropdown-trigger
-                          z-button
-                          zType="outline"
-                          zSize="icon-sm"
-                          title="Opciones"
-                          class="border-transparent shadow-none hover:bg-muted"
-                        >
-                          <z-icon zType="ellipsis" class="size-4" />
-                        </button>
-
-                        <ul class="w-52">
-                          <li class="w-full">
-                            <button
-                              z-dropdown-menu-item
-                              class="w-full"
-                              (click)="goToMemberDetail(member.id)"
-                            >
-                              <z-icon zType="eye" class="size-4 mr-2" />
-                              <span>Ver detalles</span>
-                            </button>
-                          </li>
-                          <li class="w-full">
-                            <button
-                              z-dropdown-menu-item
-                              class="w-full"
-                              (click)="goToEditMember(member.id)"
-                            >
-                              <z-icon zType="settings" class="size-4 mr-2" />
-                              <span>Editar</span>
-                            </button>
-                          </li>
-                          <li class="w-full">
-                            <button
-                              z-dropdown-menu-item
-                              class="w-full text-destructive focus:text-destructive focus:bg-destructive/10"
-                              (click)="confirmDeleteMember(member)"
-                            >
-                              <z-icon zType="trash" class="size-4 mr-2" />
-                              <span>Eliminar</span>
-                            </button>
-                          </li>
-                        </ul>
-                      </z-dropdown-menu>
-                    </div>
-                  </td>
-                </tr>
-              }
-            }
-          </tbody>
-        </table>
-      </div>
-
-      @if (pagination()) {
-        <div class="pagination-wrapper">
-          <div class="pagination-meta">
-            Mostrando <strong>{{ pagination()?.from }}</strong> a
-            <strong>{{ pagination()?.to }}</strong> de
-            <strong>{{ pagination()?.total }}</strong> miembros
-          </div>
-
-          <div class="pagination-controls">
-            <div class="pagination-jump">
-              <span class="jump-label">Ir a:</span>
-              <input
-                z-input
-                type="number"
-                class="jump-input"
-                [value]="currentPage().toString()"
-                (change)="goToPage($any($event.target).value)"
-                min="1"
-                [max]="totalPages()"
-              />
-            </div>
-
-            <z-pagination
-              class="w-auto mx-0"
-              [zPageIndex]="currentPage()"
-              (zPageIndexChange)="goToPage($event)"
-              [zTotal]="totalPages()"
-              zSize="sm"
-            />
-          </div>
-        </div>
-      }
-    }
+    <app-table-details
+      [columns]="columns"
+      [data]="members()"
+      [actions]="actions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="users"
+      emptyLabel="No se encontraron miembros registrados"
+      emptyHint="Intenta ajustar los filtros o añadir uno nuevo"
+      itemLabel="miembros"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadMembers()"
+    />
   </z-card>
 </div>
