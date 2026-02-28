@@ -70,6 +70,53 @@ export class Sidebar {
         { label: 'Asistencias', route: '/gym/attendance', icon: 'clipboard' },
       ],
     },
+    {
+      label: 'Inventario',
+      icon: 'archive',
+      children: [
+        { label: 'Categorías', route: '/inventario/categorias', icon: 'layers' },
+        { label: 'Productos', route: '/inventario/productos', icon: 'square-library' },
+        { label: 'Atributos', route: '/inventario/atributos', icon: 'tag' },
+        { label: 'Almacén', route: '/inventario/almacen', icon: 'folder-open' },
+      ],
+    },
+    {
+      label: 'Compras',
+      icon: 'dollar-sign',
+      children: [
+        { label: 'Compras', route: '/compras/lista', icon: 'clipboard' },
+        { label: 'Proveedores', route: '/compras/proveedores', icon: 'users' },
+      ],
+    },
+    {
+      label: 'Ventas',
+      icon: 'circle-dollar-sign',
+      children: [
+        { label: 'POS', route: '/ventas/pos', icon: 'zap' },
+        { label: 'Ventas', route: '/ventas/lista', icon: 'file-text' },
+        { label: 'Clientes', route: '/ventas/clientes', icon: 'user-plus' },
+      ],
+    },
+    {
+      label: 'Reportes',
+      icon: 'book-open-text',
+      children: [
+        { label: 'Productos Vendidos', route: '/reportes/productos-vendidos', icon: 'arrow-up-right' },
+      ],
+    },
+    {
+      label: 'Sistema',
+      icon: 'settings',
+      children: [
+        { label: 'Compañías', route: '/sistema/companias', icon: 'house' },
+        { label: 'Usuarios', route: '/sistema/usuarios', icon: 'users' },
+        { label: 'Roles', route: '/sistema/roles', icon: 'shield' },
+        { label: 'Permisos', route: '/sistema/permisos', icon: 'badge-check' },
+        { label: 'Diarios', route: '/sistema/diarios', icon: 'calendar' },
+        { label: 'Impuestos', route: '/sistema/impuestos', icon: 'dollar-sign' },
+        { label: 'Unidades de Medida', route: '/sistema/unidades-medida', icon: 'layers' },
+      ],
+    },
   ];
 
   readonly mainNavItems = computed(() => this._navItems);
