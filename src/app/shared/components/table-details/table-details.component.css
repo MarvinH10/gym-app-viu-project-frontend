@@ -1,0 +1,162 @@
+.dt-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  transition: opacity 0.2s;
+}
+
+.dt-table-wrapper.dt-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.dt-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+.dt-empty-cell {
+  padding-top: 5rem !important;
+  padding-bottom: 5rem !important;
+}
+
+.dt-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.dt-avatar-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dt-avatar {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), oklch(0.55 0.22 300));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.dt-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dt-primary {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.dt-secondary {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.dt-secondary-flex {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dt-text {
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.dt-actions {
+  display: flex;
+  align-items: center;
+}
+
+.dt-actions-head {
+  text-align: right;
+}
+
+.dt-data-row:hover td {
+  background: hsl(var(--muted) / 0.4);
+}
+
+.dt-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.dt-pagination-meta {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+.dt-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.dt-jump {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dt-jump-label {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+.dt-jump-input {
+  width: 3.5rem !important;
+  height: 2rem !important;
+  padding: 0 0.25rem !important;
+  text-align: center !important;
+  border-radius: 0.375rem !important;
+  font-size: 0.75rem !important;
+}
+
+@media (max-width: 640px) {
+  .dt-pagination {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem 1rem;
+  }
+
+  .dt-pagination-controls {
+    flex-direction: column;
+    width: 100%;
+    gap: 1.25rem;
+  }
+
+  .dt-jump {
+    order: 2;
+  }
+
+  z-pagination {
+    order: 1;
+  }
+}

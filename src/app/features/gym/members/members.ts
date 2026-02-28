@@ -1,40 +1,31 @@
-import { Component, effect, computed, signal, inject } from '@angular/core';
+import { Component, computed, effect, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { toast } from 'ngx-sonner';
+
 import { MemberApi } from '@/core/services/api/member.api';
 import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';
 import { Member, PaginatedResponse, MemberQueryParams } from '@/core/models';
 import { ZardCardComponent } from '@/shared/components/card/card.component';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardIconComponent } from '@/shared/components/icon/icon.component';
-import { ZardInputDirective } from '@/shared/components/input/input.directive';
-import { ZardSelectImports } from '@/shared/components/select/select.imports';
-import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
-import { ZardTableImports } from '@/shared/components/table/table.imports';
-import { ZardPaginationImports } from '@/shared/components/pagination/pagination.imports';
-import { ZardBadgeImports } from '@/shared/components/badge';
 import { ZardSearchFiltersImports, FilterSection } from '@/shared/components/search-filters';
-import { ZardSkeletonImports } from '@/shared/components/skeleton';
+import {
+  TableDetailsImports,
+  TableDetailsColumn,
+  TableDetailsAction,
+} from '@/shared/components/table-details/table-details.imports';
 
 @Component({
   selector: 'app-members',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ZardCardComponent,
     ZardButtonComponent,
     ZardIconComponent,
-    ZardInputDirective,
-    ...ZardTableImports,
-    ...ZardPaginationImports,
-    ...ZardBadgeImports,
     ...ZardSearchFiltersImports,
-    ...ZardSkeletonImports,
-    ...ZardSelectImports,
-    ...ZardDropdownImports,
+    ...TableDetailsImports,
   ],
   templateUrl: './members.html',
   styleUrl: './members.css',
@@ -46,16 +37,23 @@ export class Members {
 
   readonly members = signal<Member[]>([]);
   readonly pagination = signal<PaginatedResponse<Member>['meta'] | null>(null);
-  loading = signal(false);
-  error = signal<string | null>(null);
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
 
-  search = signal('');
-  selectedStatuses = signal<string[]>([]);
-  selectedPortal = signal<string[]>([]);
-  currentPage = signal(1);
-  perPage = signal(10);
+  readonly search = signal('');
+  readonly selectedStatuses = signal<string[]>([]);
+  readonly selectedPortal = signal<string[]>([]);
+  readonly currentPage = signal(1);
+  readonly perPage = signal(10);
 
-  filterSections: FilterSection[] = [
+  readonly totalPages = computed(() => this.pagination()?.last_page ?? 1);
+
+  readonly selectedFilters = computed(() => ({
+    status: this.selectedStatuses(),
+    portal: this.selectedPortal(),
+  }));
+
+  readonly filterSections: FilterSection[] = [
     {
       id: 'status',
       title: 'Estado',
@@ -75,15 +73,71 @@ export class Members {
     },
   ];
 
-  selectedFilters = computed(() => ({
-    status: this.selectedStatuses(),
-    portal: this.selectedPortal(),
-  }));
+  readonly columns: TableDetailsColumn<Member>[] = [
+    {
+      key: 'name',
+      label: 'Miembro',
+      type: 'avatar',
+      subKey: 'id',
+      subTransform: (id) => `ID: ${id}`,
+    },
+    {
+      key: 'document_number',
+      label: 'Documento',
+      type: 'stack',
+      subKey: 'document_type',
+      subTransform: (v) => v,
+    },
+    {
+      key: 'email',
+      label: 'Contacto',
+      type: 'stack',
+      fallback: 'Sin correo',
+      subKey: 'mobile',
+      subIcon: 'smartphone',
+      subTransform: (v, row) => v || row['phone'] || 'No registra',
+    },
+    {
+      key: 'status',
+      label: 'Estado',
+      type: 'badge',
+      badgeVariant: (v) =>
+        v === 'active' ? 'secondary' : v === 'blacklisted' ? 'destructive' : 'outline',
+      transform: (v) =>
+        ({
+          active: 'Activo',
+          suspended: 'Suspendido',
+          blacklisted: 'Lista Negra',
+          inactive: 'Inactivo',
+        })[v as string] ?? v,
+    },
+  ];
 
-  totalPages = computed(() => this.pagination()?.last_page || 1);
+  readonly actions: TableDetailsAction<Member>[] = [
+    {
+      label: 'Ver detalles',
+      icon: 'eye',
+      onAction: (m) => this.router.navigate(['/gym/members', m.id]),
+    },
+    {
+      label: 'Editar',
+      icon: 'pencil',
+      onAction: (m) => this.router.navigate(['/gym/members', m.id, 'edit']),
+    },
+    {
+      label: 'Eliminar',
+      icon: 'trash',
+      destructive: true,
+      onAction: (m) => this.confirmDeleteMember(m),
+    },
+  ];
 
   constructor() {
     effect(() => {
+      this.search();
+      this.selectedStatuses();
+      this.selectedPortal();
+      this.currentPage();
       this.loadMembers();
     });
   }
@@ -92,12 +146,36 @@ export class Members {
     this.router.navigate(['/gym/members/new']);
   }
 
-  goToMemberDetail(id: string) {
-    this.router.navigate(['/gym/members', id]);
+  loadMembers() {
+    this.loading.set(true);
+    const params: MemberQueryParams = {
+      page: this.currentPage(),
+      per_page: this.perPage(),
+      search: this.search(),
+    };
+    if (this.selectedStatuses().length) params['status[]'] = this.selectedStatuses();
+    if (this.selectedPortal().length) params['portal[]'] = this.selectedPortal();
+
+    this.memberApi.getMembers(params).subscribe({
+      next: (res) => {
+        this.members.set(res.data);
+        this.pagination.set(res.meta);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('No se pudieron cargar los miembros. Inténtelo de nuevo.');
+        this.loading.set(false);
+      },
+    });
   }
 
-  goToEditMember(id: string) {
-    this.router.navigate(['/gym/members', id, 'edit']);
+  handleFilterToggle(event: { sectionId: string; value: string }) {
+    const toggle = (sig: ReturnType<typeof signal<string[]>>, v: string) =>
+      sig.update((cur) => (cur.includes(v) ? cur.filter((x) => x !== v) : [...cur, v]));
+
+    if (event.sectionId === 'status') toggle(this.selectedStatuses, event.value);
+    else if (event.sectionId === 'portal') toggle(this.selectedPortal, event.value);
+    this.currentPage.set(1);
   }
 
   confirmDeleteMember(member: Member) {
@@ -115,86 +193,10 @@ export class Members {
             });
             this.loadMembers();
           },
-          error: () => {
-            toast.error('Error al eliminar', {
-              description: 'No se pudo eliminar al miembro. Inténtalo de nuevo.',
-            });
-          },
+          error: () =>
+            toast.error('Error al eliminar', { description: 'No se pudo eliminar al miembro.' }),
         });
       },
     });
-  }
-
-  loadMembers() {
-    this.loading.set(true);
-    const params: MemberQueryParams = {
-      page: this.currentPage(),
-      per_page: this.perPage(),
-      search: this.search(),
-    };
-
-    if (this.selectedStatuses().length > 0) {
-      params['status[]'] = this.selectedStatuses();
-    }
-    if (this.selectedPortal().length > 0) {
-      params['portal[]'] = this.selectedPortal();
-    }
-
-    this.memberApi.getMembers(params).subscribe({
-      next: (response) => {
-        this.members.set(response.data);
-        this.pagination.set(response.meta);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set('No se pudieron cargar los miembros. Inténtelo de nuevo.');
-        this.loading.set(false);
-      },
-    });
-  }
-
-  onSearch(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.search.set(value);
-    this.currentPage.set(1);
-  }
-
-  toggleStatus(status: string) {
-    this.selectedStatuses.update((current) =>
-      current.includes(status) ? current.filter((s) => s !== status) : [...current, status],
-    );
-    this.currentPage.set(1);
-  }
-
-  togglePortal(portal: string) {
-    this.selectedPortal.update((current) =>
-      current.includes(portal) ? current.filter((p) => p !== portal) : [...current, portal],
-    );
-    this.currentPage.set(1);
-  }
-
-  handleFilterToggle(event: { sectionId: string; value: string }) {
-    if (event.sectionId === 'status') {
-      this.toggleStatus(event.value);
-    } else if (event.sectionId === 'portal') {
-      this.togglePortal(event.value);
-    }
-  }
-
-  goToPage(page: number) {
-    this.currentPage.set(page);
-  }
-
-  getStatusLabel(status: string): string {
-    switch (status) {
-      case 'active':
-        return 'Activo';
-      case 'suspended':
-        return 'Suspendido';
-      case 'blacklisted':
-        return 'Lista Negra';
-      default:
-        return 'Inactivo';
-    }
   }
 }
