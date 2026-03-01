@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ZardInputDirective } from '@/shared/components/input/input.directive';
 import { ZardLabelDirective } from '@/shared/components/label';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardIcon } from '@/shared/components/icon/icons';
 import { ZardBadgeImports } from '@/shared/components/badge';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 import { ZardDatePickerImports } from '@/shared/components/date-picker';
@@ -64,6 +65,7 @@ export interface DynamicField {
     ...ZardTimePickerImports,
   ],
   templateUrl: './form-create-edit.html',
+  exportAs: 'formCreateEdit',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormCreateEditComponent implements OnInit {
@@ -74,6 +76,7 @@ export class FormCreateEditComponent implements OnInit {
   loading = input(false);
   isSubmitting = input(false);
   submitLabel = input('Guardar');
+  submitIcon = input<ZardIcon | undefined>(undefined);
   showActions = input(true);
 
   @Output() formSubmit = new EventEmitter<any>();
@@ -81,7 +84,7 @@ export class FormCreateEditComponent implements OnInit {
 
   form!: FormGroup;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     this.initForm();

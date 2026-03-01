@@ -3,17 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { toast } from 'ngx-sonner';
 
-import { PurchaseApi } from '@/core/services/api/purchase.api';
+import { SaleApi } from '@/core/services/api/sale.api';
 import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';
-import { PurchaseResource, PurchaseQueryParams } from '@/core/models/purchase.model';
-import { PaginatedResponse } from '@/core/models/api-response.model';
+import { SaleResource, SaleQueryParams } from '@/core/models/sale.model';
+import { ApiResponse, PaginatedResponse } from '@/core/models/api-response.model';
 import { ZardCardComponent } from '@/shared/components/card/card.component';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardIconComponent } from '@/shared/components/icon/icon.component';
-import {
-    ZardSearchFiltersImports,
-    FilterSection
-} from '@/shared/components/search-filters';
+import { ZardSearchFiltersImports } from '@/shared/components/search-filters';
 import {
     TableDetailsImports,
     TableDetailsColumn,
@@ -21,7 +18,7 @@ import {
 } from '@/shared/components/table-details/table-details.imports';
 
 @Component({
-    selector: 'app-compras-list',
+    selector: 'app-ventas',
     standalone: true,
     imports: [
         CommonModule,
@@ -31,16 +28,16 @@ import {
         ...ZardSearchFiltersImports,
         ...TableDetailsImports,
     ],
-    templateUrl: './compras-list.component.html',
-    styleUrl: './compras-list.component.css',
+    templateUrl: './ventas.html',
+    styleUrl: './ventas.css',
 })
-export class ComprasListComponent {
+export class Ventas {
     private readonly router = inject(Router);
-    private readonly purchaseApi = inject(PurchaseApi);
+    private readonly saleApi = inject(SaleApi);
     private readonly alertDialog = inject(ZardAlertDialogService);
 
-    readonly purchases = signal<PurchaseResource[]>([]);
-    readonly pagination = signal<PaginatedResponse<PurchaseResource>['meta'] | null>(null);
+    readonly sales = signal<SaleResource[]>([]);
+    readonly pagination = signal<PaginatedResponse<SaleResource>['meta'] | null>(null);
     readonly loading = signal(false);
     readonly error = signal<string | null>(null);
 
@@ -49,28 +46,11 @@ export class ComprasListComponent {
     readonly currentPage = signal(1);
     readonly perPage = signal(10);
 
-    readonly filterSections: FilterSection[] = [
-        {
-            id: 'status',
-            title: 'Estado',
-            options: [
-                { label: 'Borrador', value: 'draft' },
-                { label: 'Publicado', value: 'posted' },
-                { label: 'Cancelado', value: 'cancelled' }
-            ]
-        }
-    ];
-
-    readonly selectedFilters = computed<Record<string, string[]>>(() => {
-        const s = this.status();
-        return { status: s ? [s] : [] };
-    });
-
     readonly totalPages = computed(() => this.pagination()?.last_page ?? 1);
 
-    readonly columns: TableDetailsColumn<PurchaseResource>[] = [
+    readonly columns: TableDetailsColumn<SaleResource>[] = [
         {
-            key: 'correlative',
+            key: 'document_number',
             label: 'Documento',
             type: 'stack',
             subKey: 'serie',
@@ -79,10 +59,10 @@ export class ComprasListComponent {
         },
         {
             key: 'partner',
-            label: 'Proveedor',
+            label: 'Cliente',
             type: 'stack',
             subKey: 'partner',
-            transform: (v) => v?.business_name || v?.name || 'Proveedor Desconocido',
+            transform: (v) => v?.name || 'Cliente Varios',
             subTransform: (v) => v?.document_number || 'S/D',
         },
         {
@@ -125,7 +105,7 @@ export class ComprasListComponent {
                 switch (v) {
                     case 'paid': return 'default';
                     case 'partial': return 'secondary';
-                    case 'not_paid': return 'destructive';
+                    case 'unpaid': return 'destructive';
                     default: return 'outline';
                 }
             },
@@ -133,43 +113,43 @@ export class ComprasListComponent {
                 switch (v) {
                     case 'paid': return 'Pagado';
                     case 'partial': return 'Parcial';
-                    case 'not_paid': return 'Pendiente';
+                    case 'unpaid': return 'Pendiente';
                     default: return v;
                 }
             },
         },
     ];
 
-    readonly actions: TableDetailsAction<PurchaseResource>[] = [
+    readonly actions: TableDetailsAction<SaleResource>[] = [
         {
             label: 'Ver detalles',
             icon: 'eye',
-            onAction: (p: PurchaseResource) => this.router.navigate(['/compras/lista', p.id]),
+            onAction: (s: SaleResource) => this.router.navigate(['/ventas/lista', s.id]),
         },
         {
             label: 'Editar',
             icon: 'pencil',
-            show: (p: PurchaseResource) => p.status === 'draft',
-            onAction: (p: PurchaseResource) => this.router.navigate(['/compras/lista', p.id, 'edit']),
+            show: (s: SaleResource) => s.status === 'draft',
+            onAction: (s: SaleResource) => this.router.navigate(['/ventas/lista', s.id, 'edit']),
         },
         {
             label: 'Publicar',
             icon: 'badge-check',
-            show: (p: PurchaseResource) => p.status === 'draft',
-            onAction: (p: PurchaseResource) => this.confirmPostPurchase(p),
+            show: (s: SaleResource) => s.status === 'draft',
+            onAction: (s: SaleResource) => this.confirmPostSale(s),
         },
         {
             label: 'Cancelar',
             icon: 'ban',
-            show: (p: PurchaseResource) => p.status === 'posted',
-            onAction: (p: PurchaseResource) => this.confirmCancelPurchase(p),
+            show: (s: SaleResource) => s.status === 'posted',
+            onAction: (s: SaleResource) => this.confirmCancelSale(s),
         },
         {
             label: 'Eliminar',
             icon: 'trash',
             destructive: true,
-            show: (p: PurchaseResource) => p.status === 'draft',
-            onAction: (p: PurchaseResource) => this.confirmDeletePurchase(p),
+            show: (s: SaleResource) => s.status === 'draft',
+            onAction: (s: SaleResource) => this.confirmDeleteSale(s),
         },
     ];
 
@@ -178,95 +158,87 @@ export class ComprasListComponent {
             this.search();
             this.status();
             this.currentPage();
-            this.loadPurchases();
+            this.loadSales();
         });
     }
 
-    onFilterToggle(event: { sectionId: string; value: string }) {
-        if (event.sectionId === 'status') {
-            const current = this.status();
-            this.status.set(current === event.value ? '' : event.value);
-            this.currentPage.set(1);
-        }
+    goToNewSale() {
+        this.router.navigate(['/ventas/lista/new']);
     }
 
-    goToNewPurchase() {
-        this.router.navigate(['/compras/lista/new']);
-    }
-
-    loadPurchases() {
+    loadSales() {
         this.loading.set(true);
-        const params: PurchaseQueryParams = {
+        const params: SaleQueryParams = {
             page: this.currentPage(),
             per_page: this.perPage(),
             search: this.search(),
             status: this.status(),
         };
 
-        this.purchaseApi.getPurchases(params).subscribe({
+        this.saleApi.getSales(params).subscribe({
             next: (res) => {
-                this.purchases.set(res.data.data);
+                this.sales.set(res.data.data);
                 this.pagination.set(res.data.meta || null);
                 this.loading.set(false);
             },
             error: () => {
-                this.error.set('No se pudieron cargar las compras.');
+                this.error.set('No se pudieron cargar las ventas.');
                 this.loading.set(false);
             },
         });
     }
 
-    confirmPostPurchase(purchase: PurchaseResource) {
+    confirmPostSale(sale: SaleResource) {
         this.alertDialog.confirm({
-            zTitle: 'Publicar Compra',
-            zContent: `¿Estás seguro de que deseas publicar la compra <strong>${purchase.serie}-${purchase.correlative}</strong>? Esta acción registrará el ingreso de stock.`,
+            zTitle: 'Publicar Venta',
+            zContent: `¿Estás seguro de que deseas publicar la venta <strong>${sale.serie}-${sale.correlative}</strong>? Esta acción generará el comprobante final.`,
             zOkText: 'Sí, publicar',
             zCancelText: 'Cancelar',
             zOnOk: () => {
-                this.purchaseApi.postPurchase(purchase.id).subscribe({
+                this.saleApi.postSale(sale.id).subscribe({
                     next: () => {
-                        toast.success('Compra publicada correctamente');
-                        this.loadPurchases();
+                        toast.success('Venta publicada correctamente');
+                        this.loadSales();
                     },
-                    error: (err) => toast.error(err.error?.message || 'No se pudo publicar la compra'),
+                    error: (err) => toast.error(err.error?.message || 'No se pudo publicar la venta'),
                 });
             },
         });
     }
 
-    confirmCancelPurchase(purchase: PurchaseResource) {
+    confirmCancelSale(sale: SaleResource) {
         this.alertDialog.confirm({
-            zTitle: 'Cancelar Compra',
-            zContent: `¿Estás seguro de que deseas cancelar la compra <strong>${purchase.serie}-${purchase.correlative}</strong>? Esta acción anulará el ingreso de stock.`,
+            zTitle: 'Cancelar Venta',
+            zContent: `¿Estás seguro de que deseas cancelar la venta <strong>${sale.serie}-${sale.correlative}</strong>? Esta acción anulará el comprobante.`,
             zOkText: 'Sí, cancelar',
             zCancelText: 'Cerrar',
             zOkDestructive: true,
             zOnOk: () => {
-                this.purchaseApi.cancelPurchase(purchase.id).subscribe({
+                this.saleApi.cancelSale(sale.id).subscribe({
                     next: () => {
-                        toast.success('Compra cancelada');
-                        this.loadPurchases();
+                        toast.success('Venta cancelada');
+                        this.loadSales();
                     },
-                    error: (err) => toast.error(err.error?.message || 'No se pudo cancelar la compra'),
+                    error: (err) => toast.error(err.error?.message || 'No se pudo cancelar la venta'),
                 });
             },
         });
     }
 
-    confirmDeletePurchase(purchase: PurchaseResource) {
+    confirmDeleteSale(sale: SaleResource) {
         this.alertDialog.confirm({
-            zTitle: 'Eliminar Compra',
-            zContent: `¿Estás seguro de que deseas eliminar el borrador de compra <strong>${purchase.serie}-${purchase.correlative}</strong>?`,
+            zTitle: 'Eliminar Venta',
+            zContent: `¿Estás seguro de que deseas eliminar el borrador de venta <strong>${sale.serie}-${sale.correlative}</strong>?`,
             zOkText: 'Sí, eliminar',
             zCancelText: 'Cancelar',
             zOkDestructive: true,
             zOnOk: () => {
-                this.purchaseApi.deletePurchase(purchase.id).subscribe({
+                this.saleApi.deleteSale(sale.id).subscribe({
                     next: () => {
-                        toast.success('Compra eliminada');
-                        this.loadPurchases();
+                        toast.success('Venta eliminada');
+                        this.loadSales();
                     },
-                    error: () => toast.error('No se pudo eliminar la compra'),
+                    error: () => toast.error('No se pudo eliminar la venta'),
                 });
             },
         });

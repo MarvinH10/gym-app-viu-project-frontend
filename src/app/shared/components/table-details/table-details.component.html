@@ -1,178 +1,155 @@
 @if (error()) {
-  <div class="dt-error-state">
-    <z-icon zType="triangle-alert" class="size-12 text-destructive" />
-    <p class="text-sm text-muted-foreground">{{ error() }}</p>
-    <button z-button zType="outline" (click)="retry.emit()">Reintentar</button>
-  </div>
+<div class="dt-error-state">
+  <z-icon zType="triangle-alert" class="size-12 text-destructive" />
+  <p class="text-sm text-muted-foreground">{{ error() }}</p>
+  <button z-button zType="outline" (click)="retry.emit()">Reintentar</button>
+</div>
 } @else {
-  <div class="dt-table-wrapper" [class.dt-loading]="loading()">
-    <table z-table>
-      <thead z-table-header>
-        <tr z-table-row>
-          @for (col of columns(); track col.key) {
-            <th z-table-head>{{ col.label }}</th>
-          }
-          @if (actions().length > 0) {
-            <th z-table-head class="dt-actions-head">Acciones</th>
-          }
-        </tr>
-      </thead>
-
-      <tbody z-table-body>
-        @if (loading() && data().length === 0) {
-          @for (i of skeletonArray(); track i) {
-            <tr z-table-row>
-              @for (col of columns(); track col.key) {
-                <td z-table-cell>
-                  @if (col.type === 'avatar') {
-                    <div class="dt-avatar-cell">
-                      <z-skeleton class="size-9 rounded-full" />
-                      <div class="dt-stack">
-                        <z-skeleton class="h-3.5 w-28" />
-                        <z-skeleton class="h-3 w-16" />
-                      </div>
-                    </div>
-                  } @else if (col.type === 'stack') {
-                    <div class="dt-stack">
-                      <z-skeleton class="h-3.5 w-32" />
-                      <z-skeleton class="h-3 w-24" />
-                    </div>
-                  } @else if (col.type === 'badge') {
-                    <z-skeleton class="h-6 w-20 rounded-full" />
-                  } @else {
-                    <z-skeleton class="h-3.5 w-24" />
-                  }
-                </td>
-              }
-              @if (actions().length > 0) {
-                <td z-table-cell>
-                  <z-skeleton class="size-7 rounded-md" />
-                </td>
-              }
-            </tr>
-          }
-        } @else if (data().length === 0) {
-          <tr z-table-row>
-            <td z-table-cell [attr.colspan]="totalCols()" class="dt-empty-cell">
-              <div class="dt-empty-state">
-                <z-icon [zType]="emptyIcon()" class="size-12 opacity-20" />
-                <p class="text-sm font-medium text-muted-foreground">{{ emptyLabel() }}</p>
-                <p class="text-xs text-muted-foreground/60">{{ emptyHint() }}</p>
-              </div>
-            </td>
-          </tr>
-        } @else {
-          @for (row of data(); track row['id'] ?? $index) {
-            <tr z-table-row class="dt-data-row">
-              @for (col of columns(); track col.key) {
-                <td z-table-cell>
-                  @if (col.type === 'avatar') {
-                    <div class="dt-avatar-cell">
-                      <div class="dt-avatar">{{ getAvatarLetter(col, row) }}</div>
-                      <div class="dt-stack">
-                        <span class="dt-primary">{{ getValue(col, row) }}</span>
-                        @if (col.subKey) {
-                          <span class="dt-secondary"
-                            >{{ col.subKey }}: {{ getSubValue(col, row) }}</span
-                          >
-                        }
-                      </div>
-                    </div>
-                  } @else if (col.type === 'badge') {
-                    <z-badge [zType]="getBadgeVariant(col, row)" zShape="pill">
-                      {{ getValue(col, row) }}
-                    </z-badge>
-                  } @else if (col.type === 'stack') {
-                    <div class="dt-stack">
-                      <span class="dt-primary">{{ getValue(col, row) }}</span>
-                      @if (col.subKey) {
-                        <span class="dt-secondary dt-secondary-flex">
-                          @if (col.subIcon) {
-                            <z-icon [zType]="col.subIcon" class="size-3" />
-                          }
-                          {{ getSubValue(col, row) }}
-                        </span>
-                      }
-                    </div>
-                  } @else {
-                    <span class="dt-text">{{ getValue(col, row) }}</span>
-                  }
-                </td>
-              }
-
-              @if (actions().length > 0) {
-                <td z-table-cell>
-                  <div class="dt-actions">
-                    <z-dropdown-menu>
-                      <button
-                        dropdown-trigger
-                        z-button
-                        zType="outline"
-                        zSize="icon-sm"
-                        title="Opciones"
-                        class="border-transparent shadow-none hover:bg-muted"
-                      >
-                        <z-icon zType="ellipsis" class="size-4" />
-                      </button>
-
-                      <ul class="w-52">
-                        @for (action of actions(); track action.label) {
-                          <li class="w-full">
-                            <button
-                              z-dropdown-menu-item
-                              class="w-full"
-                              [class.text-destructive]="action.destructive"
-                              [class.focus:text-destructive]="action.destructive"
-                              [class.focus:bg-destructive/10]="action.destructive"
-                              (click)="action.onAction(row)"
-                            >
-                              @if (action.icon) {
-                                <z-icon [zType]="action.icon" class="size-4 mr-2" />
-                              }
-                              <span>{{ action.label }}</span>
-                            </button>
-                          </li>
-                        }
-                      </ul>
-                    </z-dropdown-menu>
-                  </div>
-                </td>
-              }
-            </tr>
-          }
+<div class="dt-table-wrapper" [class.dt-loading]="loading()">
+  <table z-table>
+    <thead z-table-header>
+      <tr z-table-row>
+        @for (col of columns(); track col.key) {
+        <th z-table-head>{{ col.label }}</th>
         }
-      </tbody>
-    </table>
-  </div>
+        @if (actions().length > 0) {
+        <th z-table-head class="dt-actions-head">Acciones</th>
+        }
+      </tr>
+    </thead>
 
-  @if (pagination() && !loading()) {
-    <div class="dt-pagination">
-      <span class="dt-pagination-meta">
-        Mostrando <strong>{{ pagination()!.from }}</strong> a
-        <strong>{{ pagination()!.to }}</strong> de <strong>{{ pagination()!.total }}</strong>
-        {{ itemLabel() }}
-      </span>
-      <div class="dt-pagination-controls">
-        <div class="dt-jump">
-          <span class="dt-jump-label">Ir a:</span>
-          <input
-            z-input
-            type="number"
-            class="dt-jump-input"
-            [value]="currentPage().toString()"
-            (change)="onJumpChange($event)"
-            min="1"
-            [max]="pagination()!.last_page"
-          />
-        </div>
-        <z-pagination
-          class="w-auto mx-0"
-          [zPageIndex]="currentPage()"
-          (zPageIndexChange)="pageChange.emit($event)"
-          [zTotal]="pagination()!.last_page"
-          zSize="sm"
-        />
-      </div>
+    <tbody z-table-body>
+      @if (loading() && data().length === 0) {
+      @for (i of skeletonArray(); track i) {
+      <tr z-table-row>
+        @for (col of columns(); track col.key) {
+        <td z-table-cell>
+          @if (col.type === 'avatar') {
+          <div class="dt-avatar-cell">
+            <z-skeleton class="size-9 rounded-full" />
+            <div class="dt-stack">
+              <z-skeleton class="h-3.5 w-28" />
+              <z-skeleton class="h-3 w-16" />
+            </div>
+          </div>
+          } @else if (col.type === 'stack') {
+          <div class="dt-stack">
+            <z-skeleton class="h-3.5 w-32" />
+            <z-skeleton class="h-3 w-24" />
+          </div>
+          } @else if (col.type === 'badge') {
+          <z-skeleton class="h-6 w-20 rounded-full" />
+          } @else {
+          <z-skeleton class="h-3.5 w-24" />
+          }
+        </td>
+        }
+        @if (actions().length > 0) {
+        <td z-table-cell>
+          <z-skeleton class="size-7 rounded-md" />
+        </td>
+        }
+      </tr>
+      }
+      } @else if (data().length === 0) {
+      <tr z-table-row>
+        <td z-table-cell [attr.colspan]="totalCols()" class="dt-empty-cell">
+          <div class="dt-empty-state">
+            <z-icon [zType]="emptyIcon()" class="size-12 opacity-20" />
+            <p class="text-sm font-medium text-muted-foreground">{{ emptyLabel() }}</p>
+            <p class="text-xs text-muted-foreground/60">{{ emptyHint() }}</p>
+          </div>
+        </td>
+      </tr>
+      } @else {
+      @for (row of data(); track row['id'] ?? $index) {
+      <tr z-table-row class="dt-data-row">
+        @for (col of columns(); track col.key) {
+        <td z-table-cell>
+          @if (col.type === 'avatar') {
+          <div class="dt-avatar-cell">
+            <div class="dt-avatar">{{ getAvatarLetter(col, row) }}</div>
+            <div class="dt-stack">
+              <span class="dt-primary">{{ getValue(col, row) }}</span>
+              @if (col.subKey) {
+              <span class="dt-secondary">{{ col.subKey }}: {{ getSubValue(col, row) }}</span>
+              }
+            </div>
+          </div>
+          } @else if (col.type === 'badge') {
+          <z-badge [zType]="getBadgeVariant(col, row)" zShape="pill">
+            {{ getValue(col, row) }}
+          </z-badge>
+          } @else if (col.type === 'stack') {
+          <div class="dt-stack">
+            <span class="dt-primary">{{ getValue(col, row) }}</span>
+            @if (col.subKey) {
+            <span class="dt-secondary dt-secondary-flex">
+              @if (col.subIcon) {
+              <z-icon [zType]="col.subIcon" class="size-3" />
+              }
+              {{ getSubValue(col, row) }}
+            </span>
+            }
+          </div>
+          } @else {
+          <span class="dt-text">{{ getValue(col, row) }}</span>
+          }
+        </td>
+        }
+
+        @if (actions().length > 0) {
+        <td z-table-cell>
+          <div class="dt-actions">
+            <z-dropdown-menu>
+              <button dropdown-trigger z-button zType="outline" zSize="icon-sm" title="Opciones"
+                class="border-transparent shadow-none hover:bg-muted">
+                <z-icon zType="ellipsis" class="size-4" />
+              </button>
+
+              <ul class="w-52">
+                @for (action of actions(); track action.label) {
+                @if (action.show ? action.show(row) : true) {
+                <li class="w-full">
+                  <button z-dropdown-menu-item class="w-full" [class.text-destructive]="action.destructive"
+                    [class.focus:text-destructive]="action.destructive"
+                    [class.focus:bg-destructive/10]="action.destructive" (click)="action.onAction(row)">
+                    @if (action.icon) {
+                    <z-icon [zType]="action.icon" class="size-4 mr-2" />
+                    }
+                    <span>{{ action.label }}</span>
+                  </button>
+                </li>
+                }
+                }
+              </ul>
+            </z-dropdown-menu>
+          </div>
+        </td>
+        }
+      </tr>
+      }
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (pagination() && !loading()) {
+<div class="dt-pagination">
+  <span class="dt-pagination-meta">
+    Mostrando <strong>{{ pagination()!.from }}</strong> a
+    <strong>{{ pagination()!.to }}</strong> de <strong>{{ pagination()!.total }}</strong>
+    {{ itemLabel() }}
+  </span>
+  <div class="dt-pagination-controls">
+    <div class="dt-jump">
+      <span class="dt-jump-label">Ir a:</span>
+      <input z-input type="number" class="dt-jump-input" [value]="currentPage().toString()"
+        (change)="onJumpChange($event)" min="1" [max]="pagination()!.last_page" />
     </div>
-  }
+    <z-pagination class="w-auto mx-0" [zPageIndex]="currentPage()" (zPageIndexChange)="pageChange.emit($event)"
+      [zTotal]="pagination()!.last_page" zSize="sm" />
+  </div>
+</div>
+}
 }

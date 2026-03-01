@@ -1,0 +1,82 @@
+<div class="compra-detail-container pb-8 space-y-6 max-w-5xl mx-auto">
+    <div class="flex items-center justify-between px-6 pt-6">
+        <div class="flex flex-col gap-1">
+            <h1 class="text-3xl font-bold tracking-tight">Detalle de Compra</h1>
+            <p class="text-muted-foreground">
+                Visualiza la información completa de la orden de compra.
+            </p>
+        </div>
+        <div class="flex gap-2">
+            <button z-button zType="outline" (click)="loadPurchase(purchase()?.id?.toString()!)" [disabled]="loading()">
+                <z-icon zType="refresh-cw" [class.animate-spin]="loading()" class="size-4 mr-2"></z-icon>
+                Actualizar
+            </button>
+            @if (purchase()?.status === 'draft') {
+            <button z-button zType="default" (click)="goToEdit()" [disabled]="loading()">
+                <z-icon zType="pencil" class="size-4 mr-2"></z-icon>
+                Editar
+            </button>
+            <button z-button zType="secondary" (click)="confirmPost()" [disabled]="loading() || isActionLoading()">
+                <z-icon [zType]="isActionLoading() ? 'loader-circle' : 'badge-check'"
+                    [class.animate-spin]="isActionLoading()" class="size-4 mr-2"></z-icon>
+                Publicar
+            </button>
+            }
+        </div>
+    </div>
+
+    <div class="px-6">
+        @if (loading()) {
+        <div class="space-y-6">
+            <z-skeleton class="h-48 w-full"></z-skeleton>
+            <z-skeleton class="h-32 w-full"></z-skeleton>
+            <z-skeleton class="h-64 w-full"></z-skeleton>
+        </div>
+        } @else if (purchase()) {
+        <app-form-detail [sections]="detailSections()" [data]="purchase()!" />
+
+        <!-- Tabla de Productos -->
+        <z-card class="mt-6" zTitle="Productos / Servicios Adquiridos">
+            <div class="p-0 border rounded-md overflow-hidden">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-muted/50 border-b">
+                        <tr>
+                            <th class="p-3 text-left font-medium text-muted-foreground w-1/2">Producto</th>
+                            <th class="p-3 text-right font-medium text-muted-foreground">Cantidad</th>
+                            <th class="p-3 text-right font-medium text-muted-foreground">Precio Unit.</th>
+                            <th class="p-3 text-right font-medium text-muted-foreground">Subtotal</th>
+                            <th class="p-3 text-right font-medium text-muted-foreground">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        @for (line of purchase()?.lines; track line.id) {
+                        <tr class="hover:bg-muted/30 transition-colors">
+                            <td class="p-3">
+                                <div class="flex flex-col">
+                                    <span class="font-medium">
+                                        {{ line.product.product_template_id }} - {{ line.product.sku }}
+                                    </span>
+                                    <span class="text-xs text-muted-foreground">
+                                        {{ line.product.barcode || 'Sin código de barras' }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="p-3 text-right">{{ line.quantity | number:'1.2-2' }}</td>
+                            <td class="p-3 text-right">S/ {{ line.price | number:'1.2-2' }}</td>
+                            <td class="p-3 text-right">S/ {{ line.subtotal | number:'1.2-2' }}</td>
+                            <td class="p-3 text-right font-semibold">S/ {{ line.total | number:'1.2-2' }}</td>
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot class="bg-muted/20 border-t font-semibold">
+                        <tr>
+                            <td colspan="4" class="p-3 text-right text-muted-foreground">Monto Total Recibido:</td>
+                            <td class="p-3 text-right text-lg">S/ {{ purchase()?.total | number:'1.2-2' }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </z-card>
+        }
+    </div>
+</div>

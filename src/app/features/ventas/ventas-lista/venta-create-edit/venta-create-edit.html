@@ -1,0 +1,123 @@
+<div class="venta-create-edit-container pb-8 space-y-6 max-w-7xl mx-auto">
+    <div class="flex flex-col gap-1">
+        <h1 class="text-3xl font-bold tracking-tight">
+            {{ isEdit() ? 'Editar Venta' : 'Nueva Venta' }}
+        </h1>
+        <p class="text-muted-foreground">
+            {{ isEdit() ? 'Modifica los datos del comprobante.' : 'Registra una nueva venta manual.' }}
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <z-card class="p-6">
+                @if (loading()) {
+                <div class="space-y-4">
+                    <z-skeleton class="h-10 w-full"></z-skeleton>
+                    <z-skeleton class="h-10 w-full"></z-skeleton>
+                </div>
+                } @else {
+                <app-form-create-edit #headerForm [fields]="formFields()" [initialData]="initialData()"
+                    [isSubmitting]="isSubmitting()" [showActions]="false" (formSubmit)="onFormSubmit($event)" />
+                }
+            </z-card>
+
+            <z-card class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">Productos / Servicios</h3>
+                    <button z-button zType="outline" size="sm" (click)="addLine()">
+                        <z-icon zType="plus" class="size-4 mr-2"></z-icon>
+                        Agregar Item
+                    </button>
+                </div>
+
+                <div class="relative w-full overflow-auto">
+                    <table class="w-full caption-bottom text-sm">
+                        <thead class="bg-muted/50">
+                            <tr class="border-b">
+                                <th class="h-10 px-2 text-left align-middle font-medium text-muted-foreground w-[40%]">
+                                    Producto</th>
+                                <th class="h-10 px-2 text-right align-middle font-medium text-muted-foreground w-[15%]">
+                                    Cant.</th>
+                                <th class="h-10 px-2 text-right align-middle font-medium text-muted-foreground w-[15%]">
+                                    Prec. Unit.</th>
+                                <th class="h-10 px-2 text-right align-middle font-medium text-muted-foreground w-[20%]">
+                                    Total</th>
+                                <th class="h-10 px-2 text-right align-middle font-medium text-muted-foreground w-[10%]">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (line of productLines(); track $index) {
+                            <tr class="border-b transition-colors hover:bg-muted/50">
+                                <td class="p-2">
+                                    <z-combobox [options]="products()" placeholder="Seleccione..."
+                                        [value]="line.product_product_id"
+                                        (zValueChange)="onProductChange($index, $event)"></z-combobox>
+                                </td>
+                                <td class="p-2 text-right">
+                                    <input z-input type="number" min="0.01" step="0.01" class="text-right h-10"
+                                        [value]="line.quantity"
+                                        (input)="updateLine($index, { quantity: $any($event.target).value })">
+                                </td>
+                                <td class="p-2 text-right">
+                                    <input z-input type="number" min="0" step="0.01" class="text-right h-10"
+                                        [value]="line.price"
+                                        (input)="updateLine($index, { price: $any($event.target).value })">
+                                </td>
+                                <td class="p-2 text-right font-medium">
+                                    S/ {{ line.total | number:'1.2-2' }}
+                                </td>
+                                <td class="p-2 text-right">
+                                    <button z-button zType="ghost" size="icon" (click)="removeLine($index)">
+                                        <z-icon zType="trash" class="size-4 text-destructive"></z-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                            }
+                            @if (productLines().length === 0) {
+                            <tr>
+                                <td colspan="5" class="p-8 text-center text-muted-foreground italic">
+                                    No hay productos agregados.
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </z-card>
+        </div>
+
+        <div class="space-y-6">
+            <z-card class="p-6">
+                <h3 class="text-lg font-semibold mb-4">Resumen</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-muted-foreground">Subtotal</span>
+                        <span>S/ {{ totals().subtotal | number:'1.2-2' }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-muted-foreground">Impuestos</span>
+                        <span>S/ {{ totals().taxAmount | number:'1.2-2' }}</span>
+                    </div>
+                    <z-divider></z-divider>
+                    <div class="flex justify-between font-bold text-lg">
+                        <span>Total</span>
+                        <span>S/ {{ totals().total | number:'1.2-2' }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex flex-col gap-2">
+                    <button z-button zType="default" class="w-full" (click)="submitHeaderForm()"
+                        [disabled]="isSubmitting() || loading() || productLines().length === 0">
+                        <z-icon [zType]="isEdit() ? 'save' : 'plus'" leftIcon class="size-4"></z-icon>
+                        {{ isEdit() ? 'Guardar Cambios' : 'Registrar Venta' }}
+                    </button>
+                    <button z-button zType="outline" class="w-full" (click)="onCancel()">
+                        Cancelar
+                    </button>
+                </div>
+            </z-card>
+        </div>
+    </div>
+</div>
