@@ -1,0 +1,24 @@
+<div class="payment-methods-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Métodos de Pago</h1>
+            <p class="page-description">Configura los diferentes métodos de pago aceptados en el sistema.</p>
+        </div>
+        <div class="header-actions">
+            <button z-button zType="default" (click)="goToNewPaymentMethod()" id="btn-new-payment-method">
+                <z-icon zType="plus" class="size-4" />
+                <span>Nuevo Método de Pago</span>
+            </button>
+        </div>
+    </div>
+
+    <z-search-filters id="pm-search-filters" placeholder="Buscar por nombre..." [initialSearch]="search()"
+        [totalResults]="pagination()?.total ?? 0" (searchChange)="search.set($event); currentPage.set(1)" />
+
+    <z-card class="table-card">
+        <app-table-details [columns]="columns" [data]="paymentMethods()" [actions]="actions" [loading]="loading()"
+            [error]="error()" [pagination]="pagination()" [currentPage]="currentPage()" emptyIcon="credit-card"
+            emptyLabel="No se encontraron métodos de pago" emptyHint="Intenta ajustar los filtros o registra uno nuevo"
+            itemLabel="métodos de pago" (pageChange)="currentPage.set($event)" (retry)="loadPaymentMethods()" />
+    </z-card>
+</div>

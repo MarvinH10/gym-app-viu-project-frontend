@@ -1,0 +1,20 @@
+<div class="payment-method-form-container flex flex-col gap-6 p-6">
+    <div class="flex items-center gap-4">
+        <button z-button zType="ghost" zSize="icon" (click)="onCancel()" [disabled]="isLoading() || isSubmitting()">
+            <z-icon zType="arrow-left" class="size-5" />
+        </button>
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-foreground">
+                {{ paymentMethodId() ? 'Editar Método de Pago' : 'Nuevo Método de Pago' }}
+            </h1>
+            <p class="text-sm text-muted-foreground">
+                {{ paymentMethodId() ? 'Actualiza la configuración del método de pago.' : 'Crea un nuevo método de pago
+                para el sistema.' }}
+            </p>
+        </div>
+    </div>
+
+    <app-form-create-edit [fields]="paymentMethodFormFields()" [initialData]="initialData()" [loading]="isLoading()"
+        [submitLabel]="paymentMethodId() ? 'Actualizar Método de Pago' : 'Crear Método de Pago'"
+        [isSubmitting]="isSubmitting()" (formSubmit)="onFormSubmit($event)" (cancel)="onCancel()" />
+</div>
