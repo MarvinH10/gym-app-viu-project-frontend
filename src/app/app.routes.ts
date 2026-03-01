@@ -4,6 +4,28 @@ import { guestGuard } from '@/core/guards/guest-guard';
 
 export const routes: Routes = [
   {
+    path: '',
+    loadComponent: () =>
+      import('./shared/layouts/public-layout/public-layout').then((m) => m.PublicLayout),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/public/home/home').then((m) => m.Home),
+        pathMatch: 'full',
+      },
+      {
+        path: 'tienda',
+        loadComponent: () => import('./features/public/shop/shop').then((m) => m.Shop),
+        title: 'Tienda | Gym App',
+      },
+      {
+        path: 'checkout',
+        loadComponent: () => import('./features/public/checkout/checkout').then((m) => m.Checkout),
+        title: 'Checkout | Gym App',
+      },
+    ],
+  },
+  {
     path: 'auth',
     canActivate: [guestGuard],
     loadComponent: () =>
@@ -784,7 +806,8 @@ export const routes: Routes = [
           },
         ],
       },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      // El path '' (raíz) ya no redirige a dashboard de manera silenciosa aquí
+      // porque lo atrapa el layout público primero.
     ],
   },
   { path: '**', redirectTo: 'auth/login' },
