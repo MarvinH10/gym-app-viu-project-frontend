@@ -584,21 +584,7 @@ export const routes: Routes = [
           },
         ],
       },
-      {
-        path: 'reportes',
-        data: { breadcrumb: 'Reportes' },
-        children: [
-          {
-            path: 'productos-vendidos',
-            loadComponent: () =>
-              import('./features/reportes/productos-vendidos/productos-vendidos').then(
-                (m) => m.ProductosVendidos,
-              ),
-            title: 'Reporte de Productos Vendidos | Gym App',
-            data: { breadcrumb: 'Productos Vendidos' },
-          },
-        ],
-      },
+
       {
         path: 'sistema',
         data: { breadcrumb: 'Sistema' },
@@ -649,19 +635,7 @@ export const routes: Routes = [
             title: 'Usuarios | Gym App',
             data: { breadcrumb: 'Usuarios' },
           },
-          {
-            path: 'roles',
-            loadComponent: () => import('./features/sistema/roles/roles').then((m) => m.Roles),
-            title: 'Roles | Gym App',
-            data: { breadcrumb: 'Roles' },
-          },
-          {
-            path: 'permisos',
-            loadComponent: () =>
-              import('./features/sistema/permisos/permisos').then((m) => m.Permisos),
-            title: 'Permisos | Gym App',
-            data: { breadcrumb: 'Permisos' },
-          },
+
           {
             path: 'diarios',
             data: { breadcrumb: 'Diarios' },
@@ -710,27 +684,27 @@ export const routes: Routes = [
               {
                 path: 'new',
                 loadComponent: () =>
-                  import(
-                    './features/sistema/payment-methods/payment-method-create-edit/payment-method-create-edit.component'
-                  ).then((m) => m.PaymentMethodCreateEditComponent),
+                  import('./features/sistema/payment-methods/payment-method-create-edit/payment-method-create-edit.component').then(
+                    (m) => m.PaymentMethodCreateEditComponent,
+                  ),
                 title: 'Nuevo Método de Pago | Gym App',
                 data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
                 loadComponent: () =>
-                  import(
-                    './features/sistema/payment-methods/payment-method-detail/payment-method-detail.component'
-                  ).then((m) => m.PaymentMethodDetailComponent),
+                  import('./features/sistema/payment-methods/payment-method-detail/payment-method-detail.component').then(
+                    (m) => m.PaymentMethodDetailComponent,
+                  ),
                 title: 'Detalle de Método de Pago | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
                 loadComponent: () =>
-                  import(
-                    './features/sistema/payment-methods/payment-method-create-edit/payment-method-create-edit.component'
-                  ).then((m) => m.PaymentMethodCreateEditComponent),
+                  import('./features/sistema/payment-methods/payment-method-create-edit/payment-method-create-edit.component').then(
+                    (m) => m.PaymentMethodCreateEditComponent,
+                  ),
                 title: 'Editar Método de Pago | Gym App',
                 data: { breadcrumb: 'Editar' },
               },

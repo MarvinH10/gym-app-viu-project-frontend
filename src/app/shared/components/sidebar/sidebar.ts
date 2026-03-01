@@ -155,25 +155,14 @@ export class Sidebar implements OnInit {
         { label: 'Clientes', route: '/ventas/clientes', icon: 'user-plus' },
       ],
     },
-    {
-      label: 'Reportes',
-      icon: 'book-open-text',
-      children: [
-        {
-          label: 'Productos Vendidos',
-          route: '/reportes/productos-vendidos',
-          icon: 'arrow-up-right',
-        },
-      ],
-    },
+
     {
       label: 'Sistema',
       icon: 'settings',
       children: [
         { label: 'Compañías', route: '/sistema/companias', icon: 'house' },
         { label: 'Usuarios', route: '/sistema/usuarios', icon: 'users' },
-        { label: 'Roles', route: '/sistema/roles', icon: 'shield' },
-        { label: 'Permisos', route: '/sistema/permisos', icon: 'badge-check' },
+
         { label: 'Diarios', route: '/sistema/diarios', icon: 'calendar' },
         { label: 'Impuestos', route: '/sistema/impuestos', icon: 'dollar-sign' },
         { label: 'Unidades de Medida', route: '/sistema/unidades-medida', icon: 'layers' },
