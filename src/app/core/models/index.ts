@@ -14,3 +14,4 @@ export * from './attendance.model';
 export * from './subscription.model';
 export * from './membership-plan.model';
 export * from './customer.model';
+export * from './sale.model';

@@ -28,6 +28,7 @@ export interface TableDetailsAction<T = any> {
   label: string;
   icon?: ZardIcon;
   destructive?: boolean;
+  show?: (row: T) => boolean;
   onAction: (row: T) => void;
 }
 

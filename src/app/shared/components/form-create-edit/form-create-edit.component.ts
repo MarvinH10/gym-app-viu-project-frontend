@@ -62,6 +62,7 @@ export interface DynamicField {
     ...ZardBadgeImports,
   ],
   templateUrl: './form-create-edit.html',
+  exportAs: 'formCreateEdit',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormCreateEditComponent implements OnInit {

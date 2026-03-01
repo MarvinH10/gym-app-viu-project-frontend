@@ -403,6 +403,11 @@ export const routes: Routes = [
         data: { breadcrumb: 'Ventas' },
         children: [
           {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'lista',
+          },
+          {
             path: 'pos',
             loadComponent: () => import('./features/ventas/pos/pos').then((m) => m.Pos),
             title: 'Punto de Venta | Gym App',
@@ -410,9 +415,32 @@ export const routes: Routes = [
           },
           {
             path: 'lista',
-            loadComponent: () => import('./features/ventas/ventas/ventas').then((m) => m.Ventas),
-            title: 'Listado de Ventas | Gym App',
             data: { breadcrumb: 'Ventas' },
+            children: [
+              {
+                path: '',
+                loadComponent: () => import('./features/ventas/ventas-lista/ventas').then((m) => m.Ventas),
+                title: 'Listado de Ventas | Gym App',
+              },
+              {
+                path: 'new',
+                loadComponent: () => import('./features/ventas/ventas-lista/venta-create-edit/venta-create-edit.component'),
+                title: 'Nueva Venta | Gym App',
+                data: { breadcrumb: 'Nueva' },
+              },
+              {
+                path: ':id',
+                loadComponent: () => import('./features/ventas/ventas-lista/venta-detail/venta-detail.component'),
+                title: 'Detalle de Venta | Gym App',
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () => import('./features/ventas/ventas-lista/venta-create-edit/venta-create-edit.component'),
+                title: 'Editar Venta | Gym App',
+                data: { breadcrumb: 'Editar' },
+              },
+            ]
           },
           {
             path: 'clientes',
