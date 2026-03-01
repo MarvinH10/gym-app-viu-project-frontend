@@ -2,12 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { CommonModule } from '@angular/common';
 import { ZardBadgeImports } from '@/shared/components/badge';
 import { ZardIconComponent } from '@/shared/components/icon/icon.component';
+import { ZardIcon } from '@/shared/components/icon/icons';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';
 
 export type DetailFieldType = 'text' | 'date' | 'datetime' | 'badge' | 'boolean' | 'currency';
 
 export interface DetailSection {
   title: string;
+  icon?: ZardIcon;
   fields: DetailField[];
 }
 

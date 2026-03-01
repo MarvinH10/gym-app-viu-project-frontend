@@ -13,7 +13,7 @@ import { forkJoin } from 'rxjs';
   template: `
     <div class="p-8 max-w-3xl mx-auto bg-white shadow rounded-lg mt-10">
       <h1 class="text-2xl font-bold mb-4 text-slate-800">Advanced Diagnostic Tool</h1>
-      
+
       <div class="grid grid-cols-2 gap-4 mb-6">
         <div class="space-y-2">
             <h3 class="font-bold">Plans Diagnostics</h3>
@@ -37,8 +37,8 @@ import { forkJoin } from 'rxjs';
       </div>
 
       <div class="mt-4 space-y-2 h-[400px] overflow-auto border-t pt-4">
-        <div *ngFor="let log of logs()" 
-             [class.text-red-600]="log.type === 'error'" 
+        <div *ngFor="let log of logs()"
+             [class.text-red-600]="log.type === 'error'"
              [class.text-green-600]="log.type === 'success'"
              [class.text-slate-500]="log.type === 'info'"
              class="text-xs font-mono border-b pb-1">
@@ -136,7 +136,6 @@ export class RecoveryComponent {
           payment_method: 'cash'
         };
 
-        this.addLog(`Sending with member_id=${memberId}...`, 'info');
         this.subscriptionApi.createSubscription(data).subscribe({
           next: (s) => this.addLog(`SUCCESS with member_id!`, 'success'),
           error: (err) => {

@@ -11,7 +11,12 @@
   @for (section of sections(); track section.title) {
     <div class="detail-section">
       @if (section.title) {
-        <h3 class="detail-section-title">{{ section.title }}</h3>
+        <h3 class="detail-section-title">
+          @if (section.icon) {
+            <z-icon [zType]="section.icon" class="size-5 text-primary" />
+          }
+          {{ section.title }}
+        </h3>
       }
       <div class="detail-grid">
         @for (field of section.fields; track field.name) {

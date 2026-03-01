@@ -1,29 +1,40 @@
-<div class="h-full flex flex-col gap-6 p-6 overflow-hidden">
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tight">Planes de Membresía</h1>
-            <p class="text-muted-foreground">Configura los planes y beneficios para tus socios.</p>
-        </div>
-        <div class="flex items-center gap-2">
-            <z-button (click)="goToNew()" class="gap-2">
-                <z-icon zType="plus" zSize="lg" />
-                Nuevo Plan
-            </z-button>
-        </div>
+<div class="planes-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Planes de Membresía</h1>
+      <p class="page-description">
+        Configura y gestiona los esquemas de suscripción para tus socios.
+      </p>
     </div>
+    <div class="header-actions">
+      <button z-button zType="default" (click)="goToNew()">
+        <z-icon zType="plus" class="size-4" />
+        <span>Nuevo Plan</span>
+      </button>
+    </div>
+  </div>
 
-    <z-card class="bg-card flex-1 flex flex-col overflow-hidden">
-        <!-- Filtros -->
-        <div class="p-6 border-b">
-            <z-search-filters [initialSearch]="search()" (searchChange)="search.set($event)"
-                placeholder="Buscar por nombre..." />
-        </div>
+  <z-search-filters
+    placeholder="Buscar por nombre del plan..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
 
-        <!-- Tabla -->
-        <div class="flex-1 overflow-auto">
-            <app-table-details [columns]="columns" [data]="plans()" [actions]="tableActions" [loading]="loading()"
-                [error]="error()" (retry)="loadPlans()" [pagination]="pagination()"
-                (pageChange)="currentPage.set($event)" />
-        </div>
-    </z-card>
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="plans()"
+      [actions]="tableActions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="clipboard"
+      emptyHint="Intenta ajustar los filtros o registra uno nuevo"
+      itemLabel="planes"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadPlans()"
+    />
+  </z-card>
 </div>

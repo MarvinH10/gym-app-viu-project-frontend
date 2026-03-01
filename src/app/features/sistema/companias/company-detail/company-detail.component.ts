@@ -11,6 +11,7 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { CompanyApi } from '@/core/services/api/company.api';
 import { CompanyResource } from '@/core/models';
 import { ZardSkeletonImports } from '@/shared/components/skeleton';
+import { ZardBadgeImports } from '@/shared/components/badge';
 
 @Component({
   selector: 'app-company-detail',
@@ -21,6 +22,7 @@ import { ZardSkeletonImports } from '@/shared/components/skeleton';
     ZardButtonComponent,
     ZardIconComponent,
     ...ZardSkeletonImports,
+    ...ZardBadgeImports,
     ...FormDetailImports,
   ],
   templateUrl: './company-detail.html',
@@ -34,6 +36,7 @@ export class CompanyDetailComponent implements OnInit {
 
   readonly company = signal<CompanyResource | null>(null);
   readonly loading = signal(true);
+  readonly error = signal<string | null>(null);
   readonly isDeleting = signal(false);
 
   readonly detailSections: DetailSection[] = [
@@ -77,12 +80,17 @@ export class CompanyDetailComponent implements OnInit {
         this.company.set(res.data);
         this.loading.set(false);
       },
-      error: () => {
+      error: (err) => {
         this.loading.set(false);
-        toast.error('No se encontró la compañía');
-        this.router.navigate(['/sistema/companias']);
+        const msg = err?.error?.message || 'No se pudo cargar la información de la compañía.';
+        this.error.set(msg);
+        toast.error('Error', { description: msg });
       },
     });
+  }
+
+  onBack() {
+    this.router.navigate(['/sistema/companias']);
   }
 
   goToEdit() {
@@ -105,7 +113,7 @@ export class CompanyDetailComponent implements OnInit {
         this.companyApi.deleteCompany(c.id).subscribe({
           next: () => {
             toast.success('Compañía eliminada');
-            this.router.navigate(['/sistema/companias']);
+            this.onBack();
           },
           error: () => {
             this.isDeleting.set(false);
