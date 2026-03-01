@@ -4,7 +4,13 @@
       <z-icon zType="refresh-cw" class="size-8 animate-spin text-muted-foreground" />
     </div>
   } @else {
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div
+      class="grid grid-cols-1 gap-6"
+      [class.md:grid-cols-1]="columns() === 1"
+      [class.md:grid-cols-2]="columns() === 2"
+      [class.md:grid-cols-3]="columns() === 3"
+      [class.md:grid-cols-4]="columns() === 4"
+    >
       @for (field of fields(); track field.name) {
         <div class="flex flex-col gap-2" [class.md:col-span-2]="field.colSpan === 2">
           <label z-label *ngIf="field.type !== 'boolean' && field.type !== 'switch'">

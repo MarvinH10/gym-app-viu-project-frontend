@@ -14,6 +14,12 @@
 
     @if (!isLoading() && member()) {
       <div class="flex gap-2">
+        @if (!member()?.has_portal_access) {
+          <button z-button zType="secondary" (click)="openPortalDialog()">
+            <z-icon zType="shield" class="size-4 mr-2" />
+            Activar Portal
+          </button>
+        }
         <button z-button zType="outline" (click)="goToEdit()">
           <z-icon zType="pencil" class="size-4 mr-2" />
           Editar
@@ -43,3 +49,43 @@
     </z-card>
   }
 </div>
+
+<ng-template #portalDialogTpl>
+  <form [formGroup]="portalForm" (ngSubmit)="submitPortal()" class="flex flex-col gap-4 mt-2">
+    <div>
+      <label z-label>Contraseña</label>
+      <input z-input type="password" formControlName="password" placeholder="Mínimo 8 caracteres" />
+      @if (portalForm.get('password')?.invalid && portalForm.get('password')?.touched) {
+        <p class="text-destructive text-xs mt-1">Contraseña requerida (mín. 8 caracteres)</p>
+      }
+    </div>
+    <div>
+      <label z-label>Confirmar Contraseña</label>
+      <input
+        z-input
+        type="password"
+        formControlName="password_confirmation"
+        placeholder="Repite la contraseña"
+      />
+      @if (
+        portalForm.get('password_confirmation')?.invalid &&
+        portalForm.get('password_confirmation')?.touched
+      ) {
+        <p class="text-destructive text-xs mt-1">Confirmación requerida</p>
+      }
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" z-button zType="outline" (click)="portalDialogRef?.close()">
+        Cancelar
+      </button>
+      <button type="submit" z-button [disabled]="activatingPortal()">
+        @if (activatingPortal()) {
+          Activando...
+        } @else {
+          Activar Acceso
+        }
+      </button>
+    </div>
+  </form>
+</ng-template>

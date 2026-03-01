@@ -78,13 +78,14 @@ export class FormCreateEditComponent implements OnInit {
   submitLabel = input('Guardar');
   submitIcon = input<ZardIcon | undefined>(undefined);
   showActions = input(true);
+  columns = input<1 | 2 | 3 | 4>(2);
 
   @Output() formSubmit = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
 
   form!: FormGroup;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.initForm();

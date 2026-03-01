@@ -56,6 +56,10 @@ export class MemberApi {
     return this.http.delete<void>(`${this.API_URL}/members/${id}`);
   }
 
+  activatePortal(id: string, data: any): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/members/${id}/activate-portal`, data);
+  }
+
   getFormOptions(): Observable<{ data: MemberFormOptions }> {
     return this.http.get<{ data: MemberFormOptions }>(`${this.API_URL}/members/form-options`);
   }
