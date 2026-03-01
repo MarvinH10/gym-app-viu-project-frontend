@@ -136,6 +136,7 @@ export class RecoveryComponent {
           payment_method: 'cash'
         };
 
+        this.addLog(`Sending with member_id=${memberId}...`, 'info');
         this.subscriptionApi.createSubscription(data).subscribe({
           next: (s) => this.addLog(`SUCCESS with member_id!`, 'success'),
           error: (err) => {
