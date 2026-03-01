@@ -129,7 +129,8 @@ export const routes: Routes = [
           },
           {
             path: 'recovery',
-            loadComponent: () => import('./features/gym/recovery.component').then(m => m.RecoveryComponent)
+            loadComponent: () =>
+              import('./features/gym/recovery.component').then((m) => m.RecoveryComponent),
           },
           {
             path: 'subscriptions',
@@ -138,7 +139,9 @@ export const routes: Routes = [
               {
                 path: '',
                 loadComponent: () =>
-                  import('./features/gym/subscriptions/subscriptions').then((m) => m.SubscriptionsComponent),
+                  import('./features/gym/subscriptions/subscriptions').then(
+                    (m) => m.SubscriptionsComponent,
+                  ),
               },
               {
                 path: 'new',
@@ -173,7 +176,9 @@ export const routes: Routes = [
               {
                 path: '',
                 loadComponent: () =>
-                  import('./features/gym/attendances/attendances').then((m) => m.AttendancesComponent),
+                  import('./features/gym/attendances/attendances').then(
+                    (m) => m.AttendancesComponent,
+                  ),
               },
               {
                 path: 'check-in',

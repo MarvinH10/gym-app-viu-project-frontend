@@ -1,5 +1,17 @@
-import { Component, inject, computed, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  Component,
+  inject,
+  computed,
+  signal,
+  OnInit,
+  DestroyRef,
+  HostListener,
+  ElementRef,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '@/core/services/auth';
 import { SidebarService } from '@/core/services/sidebar.service';
 import { ZardIconComponent } from '@/shared/components/icon/icon.component';
@@ -16,36 +28,82 @@ interface NavItem {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive, ZardIconComponent, ZardButtonComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, ZardIconComponent, ZardButtonComponent],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
-export class Sidebar {
+export class Sidebar implements OnInit {
   authService = inject(AuthService);
   sidebarService = inject(SidebarService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+  private el = inject(ElementRef);
 
   showUserMenu = signal(false);
-  expandedSubmenus = signal<Set<string>>(new Set());
+  expandedSubmenus = signal<string | null>(null);
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    if (!this.el.nativeElement.contains(event.target)) {
+      if (this.sidebarService.isCollapsed()) {
+        this.expandedSubmenus.set(null);
+      }
+      if (this.showUserMenu()) {
+        this.showUserMenu.set(false);
+      }
+    }
+  }
+
+  ngOnInit() {
+    this.expandActiveSubmenu();
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => {
+        if (this.sidebarService.isCollapsed()) {
+          this.expandedSubmenus.set(null);
+        } else {
+          this.expandActiveSubmenu();
+        }
+      });
+  }
+
+  expandActiveSubmenu() {
+    if (this.sidebarService.isCollapsed()) return;
+    for (const item of this._navItems) {
+      if (item.children && this.isActive(item)) {
+        this.expandedSubmenus.set(item.label);
+      }
+    }
+  }
+
+  isActive(item: NavItem): boolean {
+    if (item.route) {
+      return this.router.isActive(item.route, {
+        paths: 'subset',
+        queryParams: 'ignored',
+        fragment: 'ignored',
+        matrixParams: 'ignored',
+      });
+    }
+    if (item.children) {
+      return item.children.some((child) => child.route && this.router.url.includes(child.route));
+    }
+    return false;
+  }
 
   toggleUserMenu() {
     this.showUserMenu.update((v: boolean) => !v);
   }
 
   toggleSubmenu(label: string) {
-    this.expandedSubmenus.update((set) => {
-      const newSet = new Set(set);
-      if (newSet.has(label)) {
-        newSet.delete(label);
-      } else {
-        newSet.add(label);
-      }
-      return newSet;
-    });
+    this.expandedSubmenus.update((current) => (current === label ? null : label));
   }
 
   isSubmenuExpanded(label: string): boolean {
-    return this.expandedSubmenus().has(label);
+    return this.expandedSubmenus() === label;
   }
 
   navigateToProfile() {
@@ -101,7 +159,11 @@ export class Sidebar {
       label: 'Reportes',
       icon: 'book-open-text',
       children: [
-        { label: 'Productos Vendidos', route: '/reportes/productos-vendidos', icon: 'arrow-up-right' },
+        {
+          label: 'Productos Vendidos',
+          route: '/reportes/productos-vendidos',
+          icon: 'arrow-up-right',
+        },
       ],
     },
     {

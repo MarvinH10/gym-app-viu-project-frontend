@@ -14,6 +14,7 @@
 
 .sidebar.collapsed {
   width: 72px;
+  overflow: visible;
 }
 
 .sidebar-brand {
@@ -80,6 +81,10 @@
   display: none;
 }
 
+.sidebar.collapsed .sidebar-nav {
+  overflow: visible;
+}
+
 .nav-item {
   display: flex;
   align-items: center;
@@ -128,7 +133,19 @@
 
 .submenu-trigger.active {
   color: var(--primary);
+  background: var(--accent);
 }
+
+.sidebar.collapsed .submenu-trigger {
+  justify-content: center !important;
+  padding: 0.5rem;
+}
+
+.sidebar.collapsed .chevron-icon {
+  display: none !important;
+}
+
+/* El submenú colapsado ya se controla por clicks (clase .expanded), no por hover */
 
 .submenu-items {
   position: relative;
@@ -137,6 +154,50 @@
   padding-left: 1.5rem;
   margin-top: 0.125rem;
   gap: 0.125rem;
+  display: none;
+}
+
+.submenu-items.expanded {
+  display: flex;
+}
+
+/* El submenu se muestra si tiene la clase expanded, incluso colapsado */
+.sidebar.collapsed .submenu-items.expanded {
+  display: flex !important;
+}
+
+.sidebar.collapsed .submenu-items {
+  position: absolute;
+  left: calc(100% + 0.5rem);
+  top: 0;
+  width: 220px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  z-index: 100;
+  margin-top: 0;
+  display: none !important;
+}
+
+.sidebar.collapsed .nav-item-group {
+  position: relative;
+}
+
+.sidebar.collapsed .submenu-line {
+  display: none;
+}
+
+.submenu-title {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .submenu-line {
@@ -154,6 +215,25 @@
   font-size: 0.8125rem;
   padding: 0 0.75rem;
   color: var(--muted-foreground);
+  border-radius: var(--radius);
+}
+
+.sidebar.collapsed .submenu-items .nav-item {
+  padding: 0.5rem 0.75rem;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.sidebar.collapsed .submenu-items .nav-item span {
+  display: inline;
+}
+
+.sidebar.collapsed .submenu-item {
+  color: var(--foreground);
+}
+
+.sidebar.collapsed .submenu-item:hover {
+  background: var(--accent);
 }
 
 .submenu-item.active {
