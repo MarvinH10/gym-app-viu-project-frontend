@@ -40,6 +40,7 @@ export interface ProductQueryParams {
   page?: number;
   per_page?: number | string;
   search?: string;
+  category_id?: number | string;
 }
 
 export interface ProductFormOptions {
