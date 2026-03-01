@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ZardInputDirective } from '@/shared/components/input/input.directive';
 import { ZardLabelDirective } from '@/shared/components/label';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardBadgeImports } from '@/shared/components/badge';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 import { ZardDatePickerImports } from '@/shared/components/date-picker';
 import { ZardCheckboxImports } from '@/shared/components/checkbox/checkbox.imports';
@@ -26,7 +27,16 @@ export interface DefaultOption {
 export interface DynamicField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'date' | 'select' | 'textarea' | 'number' | 'boolean' | 'switch';
+  type:
+    | 'text'
+    | 'email'
+    | 'date'
+    | 'select'
+    | 'textarea'
+    | 'number'
+    | 'boolean'
+    | 'switch'
+    | 'tags';
   placeholder?: string;
   options?: DefaultOption[];
   colSpan?: 1 | 2;
@@ -48,6 +58,7 @@ export interface DynamicField {
     ...ZardSelectImports,
     ...ZardCheckboxImports,
     ...ZardSwitchImports,
+    ...ZardBadgeImports,
   ],
   templateUrl: './form-create-edit.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -125,5 +136,24 @@ export class FormCreateEditComponent implements OnInit {
   isInvalid(controlName: string): boolean {
     const control = this.form.get(controlName);
     return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  // Tags logic
+  addTag(fieldName: string, event: any) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.trim();
+    if (value) {
+      const currentTags = this.form.get(fieldName)?.value || [];
+      if (!currentTags.includes(value)) {
+        this.form.get(fieldName)?.setValue([...currentTags, value]);
+      }
+      input.value = '';
+    }
+    event.preventDefault();
+  }
+
+  removeTag(fieldName: string, tag: string) {
+    const currentTags = this.form.get(fieldName)?.value || [];
+    this.form.get(fieldName)?.setValue(currentTags.filter((t: string) => t !== tag));
   }
 }

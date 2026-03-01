@@ -75,6 +75,30 @@
                 [placeholder]="field.placeholder || ''"
               ></textarea>
             }
+            @case ('tags') {
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-wrap gap-2 mb-1">
+                  @for (tag of form.get(field.name)?.value || []; track tag) {
+                    <z-badge zType="secondary" class="pl-3 pr-1 py-0.5 flex items-center gap-1">
+                      {{ tag }}
+                      <button
+                        type="button"
+                        (click)="removeTag(field.name, tag)"
+                        class="p-0.5 hover:bg-muted rounded-full transition-colors"
+                      >
+                        <z-icon zType="x" class="size-3" />
+                      </button>
+                    </z-badge>
+                  }
+                </div>
+                <input
+                  z-input
+                  type="text"
+                  [placeholder]="field.placeholder || 'Escribe y presiona Enter...'"
+                  (keydown.enter)="addTag(field.name, $event)"
+                />
+              </div>
+            }
           }
 
           @if (isInvalid(field.name)) {

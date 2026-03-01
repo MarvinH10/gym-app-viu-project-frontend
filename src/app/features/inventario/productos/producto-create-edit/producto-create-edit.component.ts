@@ -81,8 +81,6 @@ export class ProductoCreateEditComponent implements OnInit {
   });
 
   constructor() {
-    // Re-precargar atributos cuando formOptions llega DESPUÉS del producto.
-    // untracked() evita que attributeLines sea una dependencia del effect (loop infinito)
     effect(() => {
       const attrs = this.attributes();
       const product = this.initialData();

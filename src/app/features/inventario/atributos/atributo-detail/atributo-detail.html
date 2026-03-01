@@ -1,35 +1,54 @@
-<div class="detail-container">
-    <div class="detail-header">
-        <div class="header-main">
-            <button z-button zType="outline" zSize="icon-sm" routerLink="/inventario/atributos" title="Volver">
-                <z-icon zType="arrow-left" class="size-4" />
-            </button>
-            <div class="header-info">
-                <h1 class="header-title">Detalles del Atributo</h1>
-                <p class="header-subtitle">
-                    @if (isLoading()) {
-                    Cargando información...
-                    } @else {
-                    {{ attribute()?.name }}
-                    }
-                </p>
-            </div>
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (isLoading()) {
+        <z-skeleton class="h-8 w-56 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-40 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ attribute()?.name }}</h1>
+          @if (attribute(); as a) {
+            <z-badge [zType]="a.is_active ? 'secondary' : 'outline'">
+              {{ a.is_active ? 'Activo' : 'Inactivo' }}
+            </z-badge>
+          }
         </div>
-
-        <div class="header-actions">
-            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isLoading() || isDeleting()">
-                <z-icon zType="pencil" class="size-4 mr-2" />
-                <span>Editar</span>
-            </button>
-            <button z-button zType="destructive" (click)="confirmDelete()" [zLoading]="isDeleting()"
-                [disabled]="isLoading()">
-                <z-icon zType="trash" class="size-4 mr-2" />
-                <span>Eliminar</span>
-            </button>
-        </div>
+        <p class="text-muted-foreground">
+          {{ attribute()?.values?.length || 0 }} valores registrados
+        </p>
+      }
     </div>
 
-    <z-card class="detail-card">
-        <app-form-detail [sections]="detailSections" [data]="attribute()" [loading]="isLoading()" />
-    </z-card>
+    @if (!isLoading() && attribute()) {
+      <div class="flex gap-2">
+        <button z-button zType="outline" (click)="onBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        <button
+          z-button
+          zType="outline"
+          (click)="goToEdit()"
+          [disabled]="isLoading() || isDeleting()"
+        >
+          <z-icon zType="pencil" class="size-4 mr-2" />
+          <span>Editar</span>
+        </button>
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          (click)="confirmDelete()"
+          [disabled]="isLoading() || isDeleting()"
+        >
+          <z-icon zType="trash" class="size-4 mr-2" />
+          <span>Eliminar</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  <z-card class="p-6">
+    <app-form-detail [sections]="detailSections" [data]="attribute()" [loading]="isLoading()" />
+  </z-card>
 </div>

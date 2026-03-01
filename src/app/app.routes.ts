@@ -208,7 +208,7 @@ export const routes: Routes = [
                 data: { breadcrumb: 'Detalle' },
               },
               {
-                path: 'edit/:id',
+                path: ':id/edit',
                 loadComponent: () =>
                   import('./features/inventario/productos/producto-create-edit/producto-create-edit.component').then(
                     (m) => m.ProductoCreateEditComponent,
@@ -251,12 +251,6 @@ export const routes: Routes = [
               },
             ],
           },
-          {
-            path: 'almacen',
-            loadComponent: () =>
-              import('./features/inventario/almacen/almacen').then((m) => m.Almacen),
-            data: { breadcrumb: 'Almacén' },
-          },
         ],
       },
       {
@@ -297,7 +291,7 @@ export const routes: Routes = [
                 data: { breadcrumb: 'Crear' },
               },
               {
-                path: 'editar/:id',
+                path: ':id/edit',
                 loadComponent: () =>
                   import('./features/compras/proveedores/proveedor-create-edit/proveedor-create-edit.component').then(
                     (m) => m.default,
