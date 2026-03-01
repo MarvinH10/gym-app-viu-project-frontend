@@ -24,7 +24,6 @@ import { ZardSkeletonImports } from '@/shared/components/skeleton';
         ...FormDetailImports,
     ],
     templateUrl: './proveedor-detail.html',
-    styleUrl: './proveedor-detail.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ProveedorDetailComponent implements OnInit {

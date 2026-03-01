@@ -46,11 +46,13 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
+        title: 'Dashboard | Gym App',
         data: { breadcrumb: 'Dashboard' },
       },
       {
         path: 'profile',
         loadComponent: () => import('./features/profile/profile').then((m) => m.Profile),
+        title: 'Mi Perfil | Gym App',
         data: { breadcrumb: 'Perfil' },
       },
       {
@@ -65,23 +67,27 @@ export const routes: Routes = [
                 path: '',
                 loadComponent: () =>
                   import('./features/gym/members/members').then((m) => m.Members),
+                title: 'Miembros | Gym App',
               },
               {
                 path: 'new',
                 loadComponent: () =>
                   import('./features/gym/members/member-create-edit/member-create-edit.component'),
+                title: 'Nuevo Miembro | Gym App',
                 data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
                 loadComponent: () =>
                   import('./features/gym/members/member-detail/member-detail.component'),
+                title: 'Detalle de Miembro | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
                 loadComponent: () =>
                   import('./features/gym/members/member-create-edit/member-create-edit.component'),
+                title: 'Editar Miembro | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -115,23 +121,27 @@ export const routes: Routes = [
                 path: '',
                 loadComponent: () =>
                   import('./features/inventario/categorias/categorias').then((m) => m.Categorias),
+                title: 'Categorías | Gym App',
               },
               {
                 path: 'new',
                 loadComponent: () =>
                   import('./features/inventario/categorias/categoria-create-edit/categoria-create-edit.component'),
-                data: { breadcrumb: 'Nuevo' },
+                title: 'Nueva Categoría | Gym App',
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
                 loadComponent: () =>
                   import('./features/inventario/categorias/categoria-detail/categoria-detail.component'),
+                title: 'Detalle de Categoría | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
                 loadComponent: () =>
                   import('./features/inventario/categorias/categoria-create-edit/categoria-create-edit.component'),
+                title: 'Editar Categoría | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -144,23 +154,27 @@ export const routes: Routes = [
                 path: '',
                 loadComponent: () =>
                   import('./features/inventario/almacen/almacenes').then((m) => m.Almacenes),
+                title: 'Almacenes | Gym App',
               },
               {
                 path: 'new',
                 loadComponent: () =>
                   import('./features/inventario/almacen/almacen-create-edit/almacen-create-edit.component'),
-                data: { breadcrumb: 'Nuevo' },
+                title: 'Nuevo Almacén | Gym App',
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
                 loadComponent: () =>
                   import('./features/inventario/almacen/almacen-detail/almacen-detail.component'),
+                title: 'Detalle de Almacén | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
                 loadComponent: () =>
                   import('./features/inventario/almacen/almacen-create-edit/almacen-create-edit.component'),
+                title: 'Editar Almacén | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -173,6 +187,7 @@ export const routes: Routes = [
                 path: '',
                 loadComponent: () =>
                   import('./features/inventario/productos/productos').then((m) => m.Productos),
+                title: 'Productos | Gym App',
               },
               {
                 path: 'new',
@@ -180,7 +195,8 @@ export const routes: Routes = [
                   import('./features/inventario/productos/producto-create-edit/producto-create-edit.component').then(
                     (m) => m.ProductoCreateEditComponent,
                   ),
-                data: { breadcrumb: 'Nuevo' },
+                title: 'Nuevo Producto | Gym App',
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
@@ -188,14 +204,16 @@ export const routes: Routes = [
                   import('./features/inventario/productos/producto-detail/producto-detail.component').then(
                     (m) => m.ProductoDetailComponent,
                   ),
+                title: 'Detalle de Producto | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
-                path: ':id/edit',
+                path: 'edit/:id',
                 loadComponent: () =>
                   import('./features/inventario/productos/producto-create-edit/producto-create-edit.component').then(
                     (m) => m.ProductoCreateEditComponent,
                   ),
+                title: 'Editar Producto | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -208,23 +226,27 @@ export const routes: Routes = [
                 path: '',
                 loadComponent: () =>
                   import('./features/inventario/atributos/atributos').then((m) => m.Atributos),
+                title: 'Atributos | Gym App',
               },
               {
                 path: 'new',
                 loadComponent: () =>
                   import('./features/inventario/atributos/atributo-create-edit/atributo-create-edit.component'),
-                data: { breadcrumb: 'Nuevo' },
+                title: 'Nuevo Atributo | Gym App',
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
                 loadComponent: () =>
                   import('./features/inventario/atributos/atributo-detail/atributo-detail.component'),
+                title: 'Detalle de Atributo | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
                 loadComponent: () =>
                   import('./features/inventario/atributos/atributo-create-edit/atributo-create-edit.component'),
+                title: 'Editar Atributo | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -248,8 +270,12 @@ export const routes: Routes = [
           },
           {
             path: 'lista',
-            loadComponent: () => import('./features/compras/compras-list/compras-list.component').then((m) => m.ComprasListComponent),
+            loadComponent: () =>
+              import('./features/compras/compras-list/compras-list.component').then(
+                (m) => m.ComprasListComponent,
+              ),
             title: 'Listado de Compras | Gym App',
+            data: { breadcrumb: 'Listado' },
           },
           {
             path: 'proveedores',
@@ -257,23 +283,36 @@ export const routes: Routes = [
             children: [
               {
                 path: '',
-                loadComponent: () => import('./features/compras/proveedores/proveedores').then((m) => m.Proveedores),
+                loadComponent: () =>
+                  import('./features/compras/proveedores/proveedores').then((m) => m.Proveedores),
                 title: 'Proveedores | Gym App',
               },
               {
                 path: 'nuevo',
-                loadComponent: () => import('./features/compras/proveedores/proveedor-create-edit/proveedor-create-edit.component'),
-                title: 'Nuevo Proveedor | Gym App',
+                loadComponent: () =>
+                  import('./features/compras/proveedores/proveedor-create-edit/proveedor-create-edit.component').then(
+                    (m) => m.default,
+                  ),
+                title: 'Crear Proveedor | Gym App',
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: 'editar/:id',
-                loadComponent: () => import('./features/compras/proveedores/proveedor-create-edit/proveedor-create-edit.component'),
+                loadComponent: () =>
+                  import('./features/compras/proveedores/proveedor-create-edit/proveedor-create-edit.component').then(
+                    (m) => m.default,
+                  ),
                 title: 'Editar Proveedor | Gym App',
+                data: { breadcrumb: 'Editar' },
               },
               {
                 path: ':id',
-                loadComponent: () => import('./features/compras/proveedores/proveedor-detail/proveedor-detail.component'),
+                loadComponent: () =>
+                  import('./features/compras/proveedores/proveedor-detail/proveedor-detail.component').then(
+                    (m) => m.default,
+                  ),
                 title: 'Detalle de Proveedor | Gym App',
+                data: { breadcrumb: 'Detalle' },
               },
             ],
           },
@@ -286,17 +325,20 @@ export const routes: Routes = [
           {
             path: 'pos',
             loadComponent: () => import('./features/ventas/pos/pos').then((m) => m.Pos),
+            title: 'Punto de Venta | Gym App',
             data: { breadcrumb: 'POS' },
           },
           {
             path: 'lista',
             loadComponent: () => import('./features/ventas/ventas/ventas').then((m) => m.Ventas),
+            title: 'Listado de Ventas | Gym App',
             data: { breadcrumb: 'Ventas' },
           },
           {
             path: 'clientes',
             loadComponent: () =>
               import('./features/ventas/clientes/clientes').then((m) => m.Clientes),
+            title: 'Clientes | Gym App',
             data: { breadcrumb: 'Clientes' },
           },
         ],
@@ -311,6 +353,7 @@ export const routes: Routes = [
               import('./features/reportes/productos-vendidos/productos-vendidos').then(
                 (m) => m.ProductosVendidos,
               ),
+            title: 'Reporte de Productos Vendidos | Gym App',
             data: { breadcrumb: 'Productos Vendidos' },
           },
         ],
@@ -327,6 +370,7 @@ export const routes: Routes = [
                 path: '',
                 loadComponent: () =>
                   import('./features/sistema/companias/companias').then((m) => m.Companias),
+                title: 'Compañías | Gym App',
               },
               {
                 path: 'new',
@@ -334,7 +378,8 @@ export const routes: Routes = [
                   import('./features/sistema/companias/company-create-edit/company-create-edit.component').then(
                     (m) => m.CompanyCreateEditComponent,
                   ),
-                data: { breadcrumb: 'Nuevo' },
+                title: 'Nueva Compañía | Gym App',
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
@@ -342,6 +387,7 @@ export const routes: Routes = [
                   import('./features/sistema/companias/company-detail/company-detail.component').then(
                     (m) => m.CompanyDetailComponent,
                   ),
+                title: 'Detalle de Compañía | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
@@ -350,6 +396,7 @@ export const routes: Routes = [
                   import('./features/sistema/companias/company-create-edit/company-create-edit.component').then(
                     (m) => m.CompanyCreateEditComponent,
                   ),
+                title: 'Editar Compañía | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -358,23 +405,27 @@ export const routes: Routes = [
             path: 'usuarios',
             loadComponent: () =>
               import('./features/sistema/usuarios/usuarios').then((m) => m.Usuarios),
+            title: 'Usuarios | Gym App',
             data: { breadcrumb: 'Usuarios' },
           },
           {
             path: 'roles',
             loadComponent: () => import('./features/sistema/roles/roles').then((m) => m.Roles),
+            title: 'Roles | Gym App',
             data: { breadcrumb: 'Roles' },
           },
           {
             path: 'permisos',
             loadComponent: () =>
               import('./features/sistema/permisos/permisos').then((m) => m.Permisos),
+            title: 'Permisos | Gym App',
             data: { breadcrumb: 'Permisos' },
           },
           {
             path: 'diarios',
             loadComponent: () =>
               import('./features/sistema/diarios/diarios').then((m) => m.Diarios),
+            title: 'Diarios | Gym App',
             data: { breadcrumb: 'Diarios' },
           },
           {
@@ -385,23 +436,27 @@ export const routes: Routes = [
                 path: '',
                 loadComponent: () =>
                   import('./features/sistema/impuestos/impuestos').then((m) => m.Impuestos),
+                title: 'Impuestos | Gym App',
               },
               {
                 path: 'new',
                 loadComponent: () =>
                   import('./features/sistema/impuestos/impuesto-create-edit/impuesto-create-edit.component'),
-                data: { breadcrumb: 'Nuevo' },
+                title: 'Nuevo Impuesto | Gym App',
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
                 loadComponent: () =>
                   import('./features/sistema/impuestos/impuesto-detail/impuesto-detail.component'),
+                title: 'Detalle de Impuesto | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
                 loadComponent: () =>
                   import('./features/sistema/impuestos/impuesto-create-edit/impuesto-create-edit.component'),
+                title: 'Editar Impuesto | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -416,23 +471,27 @@ export const routes: Routes = [
                   import('./features/sistema/unidades-medida/unidades-medida').then(
                     (m) => m.UnidadesMedida,
                   ),
+                title: 'Unidades de Medida | Gym App',
               },
               {
                 path: 'new',
                 loadComponent: () =>
                   import('./features/sistema/unidades-medida/unidades-medida-create-edit/unidades-medida-create-edit.component'),
-                data: { breadcrumb: 'Nuevo' },
+                title: 'Nueva Unidad | Gym App',
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
                 loadComponent: () =>
                   import('./features/sistema/unidades-medida/unidades-medida-detail/unidades-medida-detail.component'),
+                title: 'Detalle de Unidad | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
                 loadComponent: () =>
                   import('./features/sistema/unidades-medida/unidades-medida-create-edit/unidades-medida-create-edit.component'),
+                title: 'Editar Unidad | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
             ],
