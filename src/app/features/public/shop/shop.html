@@ -1,7 +1,7 @@
 <div class="container px-4 md:px-8 max-w-7xl mx-auto py-12 flex flex-col min-h-[calc(100vh-4rem)]">
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
     <div>
-      <h1 class="text-4xl font-bold tracking-tight mb-2">Tienda GymApp</h1>
+      <h1 class="text-4xl font-bold tracking-tight mb-2">Tienda GymZone</h1>
       <p class="text-muted-foreground">
         Encuentra los mejores planes y productos para tu entrenamiento.
       </p>
@@ -112,7 +112,7 @@
                 {{ product.name }}
               </h3>
               <div class="text-2xl font-bold mt-auto mb-5 text-foreground">
-                S/ {{ product.list_price || '0.00' }}
+                S/ {{ product.price || '0.00' }}
               </div>
 
               <button

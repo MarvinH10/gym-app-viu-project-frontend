@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CartService } from '@/core/services/cart.service';
-import { SaleApi } from '@/core/services/api/sale.api';
+
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardIconComponent } from '@/shared/components/icon/icon.component';
 import { toast } from 'ngx-sonner';
@@ -17,7 +17,7 @@ import { toast } from 'ngx-sonner';
 })
 export class Checkout {
   readonly cartService = inject(CartService);
-  private readonly saleApi = inject(SaleApi);
+
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
@@ -52,11 +52,7 @@ export class Checkout {
 
     this.isSubmitting.set(true);
 
-    // Simulando retraso de red y pasarela de pago
     setTimeout(() => {
-      // En un entorno real, aquí registraríamos al cliente si no existe
-      // y luego llamaríamos a this.saleApi.createSale() con el payload formateado.
-
       toast.success('¡Compra exitosa!', {
         description:
           'Tu orden ha sido procesada correctamente. Te hemos enviado un correo con los detalles.',
