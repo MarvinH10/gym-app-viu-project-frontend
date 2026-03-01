@@ -251,11 +251,40 @@ export const routes: Routes = [
           },
           {
             path: 'unidades-medida',
-            loadComponent: () =>
-              import('./features/sistema/unidades-medida/unidades-medida').then(
-                (m) => m.UnidadesMedida,
-              ),
             data: { breadcrumb: 'Unidades de Medida' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/sistema/unidades-medida/unidades-medida').then(
+                    (m) => m.UnidadesMedida,
+                  ),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import(
+                    './features/sistema/unidades-medida/unidades-medida-create-edit/unidades-medida-create-edit.component'
+                  ),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import(
+                    './features/sistema/unidades-medida/unidades-medida-detail/unidades-medida-detail.component'
+                  ),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import(
+                    './features/sistema/unidades-medida/unidades-medida-create-edit/unidades-medida-create-edit.component'
+                  ),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
         ],
       },
