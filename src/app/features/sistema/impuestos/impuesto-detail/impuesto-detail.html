@@ -2,42 +2,73 @@
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div class="flex flex-col gap-1">
       @if (loading()) {
-        <z-skeleton class="h-8 w-56 rounded-md mb-1" />
-        <z-skeleton class="h-4 w-40 rounded" />
+        <z-skeleton class="h-8 w-64 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-48 rounded" />
       } @else {
-        <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ tax()?.name }}</h1>
-        <p class="text-muted-foreground text-sm">ID: {{ tax()?.id }} · {{ tax()?.tax_type }}</p>
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ tax()?.name }}</h1>
+          @if (tax(); as t) {
+            <z-badge [zType]="t.is_active ? 'secondary' : 'outline'">
+              {{ t.is_active ? 'Activo' : 'Inactivo' }}
+            </z-badge>
+          }
+        </div>
+        <p class="text-muted-foreground">
+          ID: {{ tax()?.id }} • {{ tax()?.tax_type }}
+          {{ tax()?.invoice_label ? '• Etiqueta: ' + tax()?.invoice_label : '' }}
+        </p>
       }
     </div>
 
     @if (!loading() && tax()) {
       <div class="flex gap-2">
+        <button z-button zType="outline" (click)="onBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
         <button z-button zType="outline" (click)="goToEdit()" [disabled]="isDeleting()">
           <z-icon zType="pencil" class="size-4 mr-2" />
-          Editar
+          <span>Editar</span>
         </button>
-        <button z-button zType="destructive" [disabled]="isDeleting()" (click)="confirmDelete()">
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          (click)="confirmDelete()"
+          [disabled]="isDeleting()"
+        >
           <z-icon zType="trash" class="size-4 mr-2" />
-          @if (isDeleting()) {
-            Eliminando...
-          } @else {
-            Eliminar
-          }
+          <span>Eliminar</span>
         </button>
       </div>
     }
   </div>
 
-  <z-card class="p-6">
-    <app-form-detail [sections]="detailSections" [data]="tax()" [loading]="loading()" />
-  </z-card>
-
-  @if (!loading() && tax()?.description) {
-    <z-card class="p-6">
-      <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-        Descripción
-      </h3>
-      <p class="text-sm text-foreground/80 whitespace-pre-line">{{ tax()?.description }}</p>
+  @if (error()) {
+    <z-card class="p-8 text-center bg-destructive/5 border-destructive/20">
+      <z-icon
+        zType="triangle-alert"
+        class="size-12 rounded-full bg-destructive/10 text-destructive text-center mx-auto mb-4"
+      />
+      <h3 class="font-medium text-destructive mb-2">Error</h3>
+      <p class="text-muted-foreground">{{ error() }}</p>
+      <button z-button zType="outline" class="mt-4" (click)="onBack()">Volver a la lista</button>
     </z-card>
+  } @else {
+    <z-card class="p-6">
+      <app-form-detail [sections]="detailSections" [data]="tax()" [loading]="loading()" />
+    </z-card>
+
+    @if (!loading() && tax()?.description) {
+      <z-card class="p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <z-icon zType="text-align-start" class="size-4 text-muted-foreground" />
+          <h3 class="text-sm font-semibold text-foreground uppercase tracking-wide">Descripción</h3>
+        </div>
+        <p class="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
+          {{ tax()?.description }}
+        </p>
+      </z-card>
+    }
   }
 </div>

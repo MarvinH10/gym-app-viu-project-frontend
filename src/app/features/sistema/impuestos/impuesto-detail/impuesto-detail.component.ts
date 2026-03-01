@@ -11,6 +11,7 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { TaxApi } from '@/core/services/api/tax.api';
 import { TaxResource } from '@/core/models';
 import { ZardSkeletonImports } from '@/shared/components/skeleton';
+import { ZardBadgeImports } from '@/shared/components/badge';
 
 @Component({
   selector: 'app-impuesto-detail',
@@ -20,6 +21,7 @@ import { ZardSkeletonImports } from '@/shared/components/skeleton';
     ZardCardComponent,
     ZardButtonComponent,
     ZardIconComponent,
+    ...ZardBadgeImports,
     ...ZardSkeletonImports,
     ...FormDetailImports,
   ],
@@ -34,6 +36,7 @@ export default class ImpuestoDetailComponent implements OnInit {
 
   readonly tax = signal<TaxResource | null>(null);
   readonly loading = signal(true);
+  readonly error = signal<string | null>(null);
   readonly isDeleting = signal(false);
 
   readonly detailSections: DetailSection[] = [
@@ -89,12 +92,17 @@ export default class ImpuestoDetailComponent implements OnInit {
         this.tax.set(res.data);
         this.loading.set(false);
       },
-      error: () => {
+      error: (err) => {
         this.loading.set(false);
-        toast.error('No se encontró el impuesto');
-        this.router.navigate(['/sistema/impuestos']);
+        const msg = err?.error?.message || 'No se pudo cargar la información del impuesto.';
+        this.error.set(msg);
+        toast.error('Error', { description: msg });
       },
     });
+  }
+
+  onBack() {
+    this.router.navigate(['/sistema/impuestos']);
   }
 
   goToEdit() {
@@ -117,7 +125,7 @@ export default class ImpuestoDetailComponent implements OnInit {
         this.taxApi.deleteTax(t.id).subscribe({
           next: () => {
             toast.success('Impuesto eliminado');
-            this.router.navigate(['/sistema/impuestos']);
+            this.onBack();
           },
           error: () => {
             this.isDeleting.set(false);
