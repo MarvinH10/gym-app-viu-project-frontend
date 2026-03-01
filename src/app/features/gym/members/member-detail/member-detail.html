@@ -5,26 +5,67 @@
         <z-skeleton class="h-8 w-56 rounded-md mb-1" />
         <z-skeleton class="h-4 w-40 rounded" />
       } @else {
-        <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ member()?.name }}</h1>
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ member()?.name }}</h1>
+          @if (member(); as m) {
+            <z-badge
+              [zType]="
+                m.status === 'active'
+                  ? 'secondary'
+                  : m.status === 'blacklisted'
+                    ? 'destructive'
+                    : 'outline'
+              "
+            >
+              {{
+                m.status === 'active'
+                  ? 'Activo'
+                  : m.status === 'suspended'
+                    ? 'Suspendido'
+                    : m.status === 'blacklisted'
+                      ? 'Lista Negra'
+                      : 'Inactivo'
+              }}
+            </z-badge>
+          }
+        </div>
         <p class="text-muted-foreground text-sm">
-          ID: {{ member()?.id }} · {{ member()?.document_type }} {{ member()?.document_number }}
+          ID: {{ member()?.id }} • {{ member()?.document_type }} {{ member()?.document_number }}
         </p>
       }
     </div>
 
     @if (!isLoading() && member()) {
       <div class="flex gap-2">
+        <button z-button zType="outline" (click)="goBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        @if (!member()?.has_portal_access) {
+          <button z-button zType="secondary" (click)="openPortalDialog()">
+            <z-icon zType="shield" class="size-4 mr-2" />
+            <span>Activar Portal</span>
+          </button>
+        }
         <button z-button zType="outline" (click)="goToEdit()">
           <z-icon zType="pencil" class="size-4 mr-2" />
-          Editar
+          <span>Editar</span>
         </button>
-        <button z-button zType="destructive" [disabled]="isDeleting()" (click)="confirmDelete()">
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          [disabled]="isDeleting()"
+          (click)="confirmDelete()"
+        >
           <z-icon zType="trash" class="size-4 mr-2" />
-          @if (isDeleting()) {
-            Eliminando...
-          } @else {
-            Eliminar
-          }
+          <span>
+            @if (isDeleting()) {
+              Eliminando...
+            } @else {
+              Eliminar
+            }
+          </span>
         </button>
       </div>
     }
@@ -36,10 +77,53 @@
 
   @if (!isLoading() && member()?.notes) {
     <z-card class="p-6">
-      <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-        Notas
-      </h3>
-      <p class="text-sm text-foreground/80 whitespace-pre-line">{{ member()?.notes }}</p>
+      <div class="flex items-center gap-2 mb-4">
+        <z-icon zType="text-align-start" class="size-4 text-muted-foreground" />
+        <h3 class="text-sm font-semibold text-foreground uppercase tracking-wide">Notas</h3>
+      </div>
+      <p class="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
+        {{ member()?.notes }}
+      </p>
     </z-card>
   }
 </div>
+
+<ng-template #portalDialogTpl>
+  <form [formGroup]="portalForm" (ngSubmit)="submitPortal()" class="flex flex-col gap-4 mt-2">
+    <div>
+      <label z-label>Contraseña</label>
+      <input z-input type="password" formControlName="password" placeholder="Mínimo 8 caracteres" />
+      @if (portalForm.get('password')?.invalid && portalForm.get('password')?.touched) {
+        <p class="text-destructive text-xs mt-1">Contraseña requerida (mín. 8 caracteres)</p>
+      }
+    </div>
+    <div>
+      <label z-label>Confirmar Contraseña</label>
+      <input
+        z-input
+        type="password"
+        formControlName="password_confirmation"
+        placeholder="Repite la contraseña"
+      />
+      @if (
+        portalForm.get('password_confirmation')?.invalid &&
+        portalForm.get('password_confirmation')?.touched
+      ) {
+        <p class="text-destructive text-xs mt-1">Confirmación requerida</p>
+      }
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" z-button zType="outline" (click)="portalDialogRef?.close()">
+        Cancelar
+      </button>
+      <button type="submit" z-button [disabled]="activatingPortal()">
+        @if (activatingPortal()) {
+          Activando...
+        } @else {
+          Activar Acceso
+        }
+      </button>
+    </div>
+  </form>
+</ng-template>

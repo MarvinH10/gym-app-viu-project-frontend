@@ -1,49 +1,178 @@
-<div class="dashboard">
-  <!-- Saludo dinámico con data-binding -->
-  <section class="welcome-section">
-    @if (authService.currentUser(); as user) {
-      <h1 class="welcome-title">
-        Hola, <span class="highlight">{{ user.name }}</span> 👋
+<div class="dashboard-container">
+  <!-- Encabezado de bienvenida -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1 class="welcome-text">
+        Hola, <span class="highlight">{{ authService.currentUser()?.name || 'Admin' }}</span>
       </h1>
-      <p class="welcome-sub">Miembro desde {{ user.created_at | relativeTime }}</p>
-    } @else {
-      <h1 class="welcome-title">Bienvenido a GymApp</h1>
-    }
-  </section>
+      <p class="subtitle-text">Aquí tienes el resumen actual de GymZone</p>
+    </div>
+  </header>
 
-  <!-- Tarjetas de estadísticas con @for y componente hijo -->
-  <section class="stats-grid">
-    @for (stat of stats; track stat.title) {
-      <app-stat-card
-        [title]="stat.title"
-        [value]="stat.value"
-        [icon]="stat.icon"
-        [trend]="stat.trend"
-        (cardClick)="onCardClick($event)"
-      />
-    }
-  </section>
+  @if (isLoading()) {
+    <div class="loading-grid">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <z-card class="skeleton-card h-32 animate-pulse"></z-card>
+      }
+    </div>
+  } @else if (dashboardData(); as data) {
+    <!-- Grid de Estadísticas Premium -->
+    <div class="stats-grid">
+      <z-card class="stat-premium-card">
+        <div class="stat-icon bg-purple-100 text-purple-600">
+          <z-icon zType="users"></z-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Miembros Totales</p>
+          <h3 class="stat-value">{{ data.stats.total_members | number }}</h3>
+          <p class="stat-trend text-green-500">
+            <z-icon zType="trending-up" class="inline h-3 w-3"></z-icon>
+            +12% esta semana
+          </p>
+        </div>
+      </z-card>
 
-  <!-- Feedback del output del hijo -->
-  @if (selectedCard()) {
-    <div class="card-selected-feedback">
-      Has seleccionado: <strong>{{ selectedCard() }}</strong>
+      <z-card class="stat-premium-card">
+        <div class="stat-icon bg-blue-100 text-blue-600">
+          <z-icon zType="credit-card"></z-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Suscripciones Activas</p>
+          <h3 class="stat-value">{{ data.stats.active_subscriptions | number }}</h3>
+          <p class="stat-trend text-blue-500">84% del total</p>
+        </div>
+      </z-card>
+
+      <z-card class="stat-premium-card">
+        <div class="stat-icon bg-green-100 text-green-600">
+          <z-icon zType="dollar-sign"></z-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Ventas del Mes</p>
+          <h3 class="stat-value">S/ {{ data.stats.total_sales_month | number }}</h3>
+          <p class="stat-trend" [class]="trendColor">
+            <z-icon
+              [zType]="data.stats.revenue_trend >= 0 ? 'trending-up' : 'trending-down'"
+              class="inline h-3 w-3"
+            ></z-icon>
+            {{ data.stats.revenue_trend }}% vs mes anterior
+          </p>
+        </div>
+      </z-card>
+
+      <z-card class="stat-premium-card">
+        <div class="stat-icon bg-orange-100 text-orange-600">
+          <z-icon zType="user-plus"></z-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Nuevos (Semana)</p>
+          <h3 class="stat-value">{{ data.stats.new_members_week }}</h3>
+          <p class="stat-trend text-orange-500">Objetivo: 20</p>
+        </div>
+      </z-card>
+    </div>
+
+    <!-- Sección de Gráficos (Figuras) -->
+    <div class="charts-grid mt-6">
+      <z-card class="chart-card col-span-2">
+        <div class="card-header-flex">
+          <h3 class="card-title">Análisis de Ingresos y Suscripciones</h3>
+          <select class="chart-select">
+            <option>Últimos 6 meses</option>
+            <option>Este año</option>
+          </select>
+        </div>
+        <div class="chart-content">
+          <apx-chart
+            [series]="data.revenue_chart.series"
+            [chart]="revenueChartOptions.chart!"
+            [xaxis]="{...revenueChartOptions.xaxis, categories: data.revenue_chart.categories}"
+            [stroke]="revenueChartOptions.stroke!"
+            [colors]="revenueChartOptions.colors!"
+            [fill]="revenueChartOptions.fill!"
+            [yaxis]="revenueChartOptions.yaxis!"
+            [dataLabels]="revenueChartOptions.dataLabels!"
+            [grid]="revenueChartOptions.grid!"
+            [legend]="revenueChartOptions.legend!"
+          ></apx-chart>
+        </div>
+      </z-card>
+
+      <z-card class="chart-card">
+        <h3 class="card-title mb-4">Distribución de Planes</h3>
+        <div class="chart-content">
+          <apx-chart
+            [series]="data.membership_distribution.series"
+            [chart]="membershipChartOptions.chart!"
+            [labels]="data.membership_distribution.labels"
+            [colors]="membershipChartOptions.colors!"
+            [plotOptions]="membershipChartOptions.plotOptions!"
+            [legend]="membershipChartOptions.legend!"
+            [stroke]="membershipChartOptions.stroke!"
+          ></apx-chart>
+        </div>
+      </z-card>
+    </div>
+
+    <!-- Media Player y Actividad -->
+    <div class="activity-section mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Video Player -->
+      <z-card class="video-card lg:col-span-2">
+        <div class="card-header-flex mb-4">
+          <h3 class="card-title">Entrenamiento del Día</h3>
+          <span class="badge-live">EN VIVO</span>
+        </div>
+        <div class="video-container">
+          @if (videoUrl()) {
+            <iframe
+              [src]="videoUrl()!"
+              frameborder="0"
+              allow="
+                accelerometer;
+                autoplay;
+                clipboard-write;
+                encrypted-media;
+                gyroscope;
+                picture-in-picture;
+              "
+              allowfullscreen
+            >
+            </iframe>
+          }
+        </div>
+      </z-card>
+
+      <!-- Actividad Reciente -->
+      <z-card class="activity-card">
+        <div class="card-header-flex mb-6">
+          <h3 class="card-title">Actividad Reciente</h3>
+          <button z-button variant="ghost" size="sm">Ver todo</button>
+        </div>
+        <div class="activity-list">
+          @for (item of data.recent_activity; track item.id) {
+            <div class="activity-item">
+              <div class="activity-icon-wrapper" [class]="item.status">
+                @switch (item.type) {
+                  @case ('member') {
+                    <z-icon zType="user" class="h-4 w-4"></z-icon>
+                  }
+                  @case ('sale') {
+                    <z-icon zType="shopping-cart" class="h-4 w-4"></z-icon>
+                  }
+                  @default {
+                    <z-icon zType="bell" class="h-4 w-4"></z-icon>
+                  }
+                }
+              </div>
+              <div class="activity-info">
+                <p class="activity-title">{{ item.title }}</p>
+                <p class="activity-subtitle">{{ item.subtitle }}</p>
+              </div>
+              <div class="activity-time">{{ item.time }}</div>
+            </div>
+          }
+        </div>
+      </z-card>
     </div>
   }
-
-  <!-- Reproductor de video (HTML5 nativo) -->
-  <section class="video-section">
-    <h2 class="section-title">Workout del día</h2>
-    <div class="video-wrapper">
-      <video
-        controls
-        preload="metadata"
-        class="video-player"
-        [src]="videoUrl"
-        poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
-      >
-        Tu navegador no soporta video HTML5.
-      </video>
-    </div>
-  </section>
 </div>

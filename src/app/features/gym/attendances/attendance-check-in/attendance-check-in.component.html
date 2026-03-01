@@ -1,0 +1,45 @@
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground">Registrar Entrada Manual</h1>
+      <p class="text-muted-foreground mt-2">
+        Ingresa el documento o ID del socio que está ingresando al gimnasio.
+      </p>
+    </div>
+  </div>
+
+  <z-card class="p-6">
+    @if (loading() || loadingMembers()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-48 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-28 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-32 rounded" />
+          <z-skeleton class="h-8 w-12 rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex flex-col gap-2 mt-2">
+          <z-skeleton class="h-4 w-40 rounded" />
+          <z-skeleton class="h-24 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex justify-end gap-3 mt-4">
+          <z-skeleton class="h-10 w-32 rounded-md" />
+          <z-skeleton class="h-10 w-32 rounded-md" />
+        </div>
+      </div>
+    } @else {
+      <app-form-create-edit
+        [fields]="fields()"
+        [loading]="loading()"
+        submitLabel="Registrar Entrada"
+        (formSubmit)="onFormSubmit($event)"
+        (cancel)="onCancel()"
+      />
+    }
+  </z-card>
+</div>

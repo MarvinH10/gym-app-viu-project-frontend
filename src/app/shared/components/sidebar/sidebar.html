@@ -3,7 +3,7 @@
     <div class="brand-logo">
       <z-icon zType="activity" class="size-6" />
     </div>
-    <span class="brand-name">GymApp</span>
+    <span class="brand-name">GymZone</span>
   </div>
 
   <nav class="sidebar-nav">
@@ -21,33 +21,32 @@
               z-button
               zType="ghost"
               class="nav-item submenu-trigger"
-              [class.active]="isSubmenuExpanded(item.label)"
+              [class.active]="isActive(item)"
               (click)="toggleSubmenu(item.label)"
             >
               <z-icon [zType]="item.icon" class="size-4" />
               <span>{{ item.label }}</span>
               <z-icon
                 zType="chevron-right"
-                class="size-3 ml-auto transition-transform"
+                class="size-3 ml-auto transition-transform chevron-icon"
                 [class.rotate-90]="isSubmenuExpanded(item.label)"
               />
             </button>
 
-            @if (isSubmenuExpanded(item.label) && !sidebarService.isCollapsed()) {
-              <div class="submenu-items">
-                <div class="submenu-line"></div>
-                @for (child of item.children; track child.route) {
-                  <a
-                    [routerLink]="child.route"
-                    routerLinkActive="active"
-                    class="nav-item submenu-item"
-                  >
-                    <z-icon [zType]="child.icon" class="size-4" />
-                    <span>{{ child.label }}</span>
-                  </a>
-                }
-              </div>
-            }
+            <div class="submenu-items" [class.expanded]="isSubmenuExpanded(item.label)">
+              <div class="submenu-title" *ngIf="sidebarService.isCollapsed()">{{ item.label }}</div>
+              <div class="submenu-line"></div>
+              @for (child of item.children; track child.route) {
+                <a
+                  [routerLink]="child.route"
+                  routerLinkActive="active"
+                  class="nav-item submenu-item"
+                >
+                  <z-icon [zType]="child.icon" class="size-4" />
+                  <span>{{ child.label }}</span>
+                </a>
+              }
+            </div>
           </div>
         }
       }

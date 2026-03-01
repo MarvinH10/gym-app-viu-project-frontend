@@ -1,0 +1,24 @@
+<div class="clientes-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Gestión de Clientes</h1>
+            <p class="page-description">Administra la base de datos de clientes y su información personal.</p>
+        </div>
+        <div class="header-actions">
+            <button z-button zType="default" (click)="goToNewCustomer()">
+                <z-icon zType="plus" class="size-4" />
+                <span>Nuevo Cliente</span>
+            </button>
+        </div>
+    </div>
+
+    <z-search-filters placeholder="Buscar por nombre o documento..." [initialSearch]="search()"
+        [totalResults]="pagination()?.total ?? 0" (searchChange)="search.set($event); currentPage.set(1)" />
+
+    <z-card class="table-card">
+        <app-table-details [columns]="columns" [data]="customers()" [actions]="actions" [loading]="loading()"
+            [error]="error()" [pagination]="pagination()" [currentPage]="currentPage()" emptyIcon="users"
+            emptyLabel="No se encontraron clientes" emptyHint="Intenta ajustar los filtros o registra uno nuevo"
+            itemLabel="clientes" (pageChange)="currentPage.set($event)" (retry)="loadCustomers()" />
+    </z-card>
+</div>

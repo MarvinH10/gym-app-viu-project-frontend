@@ -1,0 +1,39 @@
+<div class="ventas-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Ventas Generales</h1>
+      <p class="page-description">Gestiona tus comprobantes de venta, boletas y facturas.</p>
+    </div>
+    <div class="header-actions">
+      <button z-button zType="default" (click)="goToNewSale()">
+        <z-icon zType="plus" class="size-4" />
+        <span>Nueva Venta</span>
+      </button>
+    </div>
+  </div>
+
+  <z-search-filters
+    placeholder="Buscar por cliente o número de documento..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
+
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="sales()"
+      [actions]="actions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="shopping-cart"
+      emptyLabel="No se encontraron ventas registradas"
+      emptyHint="Intenta ajustar la búsqueda o añade una nueva"
+      itemLabel="ventas"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadSales()"
+    />
+  </z-card>
+</div>

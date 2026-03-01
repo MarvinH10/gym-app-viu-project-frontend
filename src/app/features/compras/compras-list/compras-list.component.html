@@ -1,0 +1,44 @@
+<div class="compras-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Gestión de Compras</h1>
+      <p class="page-description">
+        Administra tus órdenes de compra, proveedores y stock recibido.
+      </p>
+    </div>
+    <div class="header-actions">
+      <button z-button zType="default" (click)="goToNewPurchase()">
+        <z-icon zType="plus" class="size-4" />
+        <span>Nueva Compra</span>
+      </button>
+    </div>
+  </div>
+
+  <z-search-filters
+    placeholder="Buscar por número, proveedor o serie..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    [sections]="filterSections"
+    [selectedValues]="selectedFilters()"
+    (filterToggle)="onFilterToggle($event)"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
+
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="purchases()"
+      [actions]="actions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="shopping-cart"
+      emptyLabel="No se encontraron compras registradas"
+      emptyHint="Intenta ajustar la búsqueda o añade una nueva"
+      itemLabel="compras"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadPurchases()"
+    />
+  </z-card>
+</div>

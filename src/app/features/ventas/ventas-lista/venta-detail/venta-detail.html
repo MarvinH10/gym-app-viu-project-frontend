@@ -1,0 +1,64 @@
+<div class="venta-detail-container pb-8 space-y-6 max-w-5xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex flex-col gap-1">
+            <h1 class="text-3xl font-bold tracking-tight">Detalle de Venta</h1>
+            <p class="text-muted-foreground">Información detallada del comprobante y productos.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            @if (sale()?.status === 'draft') {
+            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isActionLoading()">
+                <z-icon zType="pencil" class="size-4" />
+                <span>Editar</span>
+            </button>
+            <button z-button zType="default" (click)="confirmPost()" [disabled]="isActionLoading()">
+                <z-icon zType="badge-check" class="size-4" />
+                <span>Publicar</span>
+            </button>
+            }
+        </div>
+    </div>
+
+    <z-card class="p-6">
+        <app-form-detail [sections]="detailSections()" [data]="sale()" [loading]="loading()" />
+    </z-card>
+
+    @if (!loading() && sale()?.products?.length) {
+    <z-card class="p-6">
+        <h3 class="text-lg font-semibold mb-4">Productos</h3>
+        <div class="relative w-full overflow-auto">
+            <table class="w-full caption-bottom text-sm">
+                <thead class="bg-muted/50">
+                    <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Producto /
+                            Variante
+                        </th>
+                        <th class="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Cantidad</th>
+                        <th class="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Precio Unit.
+                        </th>
+                        <th class="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody class="last:border-0">
+                    @for (item of sale()?.products; track item.id) {
+                    <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                        <td class="p-4 align-middle">
+                            <div class="font-medium">{{ item.product.sku }}</div>
+                            @if (item.product.attributes.length) {
+                            <div class="text-xs text-muted-foreground">
+                                @for (attr of item.product.attributes; track attr.id) {
+                                <span>{{ attr.attribute_name }}: {{ attr.value }}{{ $last ? '' : ', ' }}</span>
+                                }
+                            </div>
+                            }
+                        </td>
+                        <td class="p-4 align-middle text-right">{{ item.quantity }}</td>
+                        <td class="p-4 align-middle text-right">S/ {{ item.price | number:'1.2-2' }}</td>
+                        <td class="p-4 align-middle text-right font-medium">S/ {{ item.total | number:'1.2-2' }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </z-card>
+    }
+</div>

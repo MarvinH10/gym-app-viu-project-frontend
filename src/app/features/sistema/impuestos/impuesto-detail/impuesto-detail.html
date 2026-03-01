@@ -1,51 +1,74 @@
-<div class="detail-container">
-  <div class="detail-header">
-    <div class="header-main">
-      <button
-        z-button
-        zType="outline"
-        zSize="icon-sm"
-        routerLink="/sistema/impuestos"
-        title="Volver"
-      >
-        <z-icon zType="arrow-left" class="size-4" />
-      </button>
-      <div class="header-info">
-        <h1 class="header-title">Detalles del Impuesto</h1>
-        <p class="header-subtitle">
-          @if (isLoading()) {
-            Cargando información...
-          } @else {
-            {{ tax()?.name }}
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (loading()) {
+        <z-skeleton class="h-8 w-64 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-48 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ tax()?.name }}</h1>
+          @if (tax(); as t) {
+            <z-badge [zType]="t.is_active ? 'secondary' : 'outline'">
+              {{ t.is_active ? 'Activo' : 'Inactivo' }}
+            </z-badge>
           }
+        </div>
+        <p class="text-muted-foreground">
+          ID: {{ tax()?.id }} • {{ tax()?.tax_type }}
+          {{ tax()?.invoice_label ? '• Etiqueta: ' + tax()?.invoice_label : '' }}
         </p>
-      </div>
+      }
     </div>
 
-    <div class="header-actions">
-      <button
-        z-button
-        zType="outline"
-        (click)="goToEdit()"
-        [disabled]="isLoading() || isDeleting()"
-      >
-        <z-icon zType="pencil" class="size-4 mr-2" />
-        <span>Editar</span>
-      </button>
-      <button
-        z-button
-        zType="destructive"
-        (click)="confirmDelete()"
-        [zLoading]="isDeleting()"
-        [disabled]="isLoading()"
-      >
-        <z-icon zType="trash" class="size-4 mr-2" />
-        <span>Eliminar</span>
-      </button>
-    </div>
+    @if (!loading() && tax()) {
+      <div class="flex gap-2">
+        <button z-button zType="outline" (click)="onBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        <button z-button zType="outline" (click)="goToEdit()" [disabled]="isDeleting()">
+          <z-icon zType="pencil" class="size-4 mr-2" />
+          <span>Editar</span>
+        </button>
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          (click)="confirmDelete()"
+          [disabled]="isDeleting()"
+        >
+          <z-icon zType="trash" class="size-4 mr-2" />
+          <span>Eliminar</span>
+        </button>
+      </div>
+    }
   </div>
 
-  <z-card class="detail-card">
-    <app-form-detail [sections]="detailSections" [data]="tax()" [loading]="isLoading()" />
-  </z-card>
+  @if (error()) {
+    <z-card class="p-8 text-center bg-destructive/5 border-destructive/20">
+      <z-icon
+        zType="triangle-alert"
+        class="size-12 rounded-full bg-destructive/10 text-destructive text-center mx-auto mb-4"
+      />
+      <h3 class="font-medium text-destructive mb-2">Error</h3>
+      <p class="text-muted-foreground">{{ error() }}</p>
+      <button z-button zType="outline" class="mt-4" (click)="onBack()">Volver a la lista</button>
+    </z-card>
+  } @else {
+    <z-card class="p-6">
+      <app-form-detail [sections]="detailSections" [data]="tax()" [loading]="loading()" />
+    </z-card>
+
+    @if (!loading() && tax()?.description) {
+      <z-card class="p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <z-icon zType="text-align-start" class="size-4 text-muted-foreground" />
+          <h3 class="text-sm font-semibold text-foreground uppercase tracking-wide">Descripción</h3>
+        </div>
+        <p class="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
+          {{ tax()?.description }}
+        </p>
+      </z-card>
+    }
+  }
 </div>

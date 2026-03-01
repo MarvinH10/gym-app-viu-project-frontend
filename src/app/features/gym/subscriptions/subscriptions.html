@@ -1,0 +1,38 @@
+<div class="subscriptions-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title flex items-center gap-3">Suscripciones</h1>
+      <p class="page-description">Gestiona y monitorea las membresías activas de tus socios.</p>
+    </div>
+    <div class="header-actions">
+      <z-button (click)="goToNew()" class="gap-2 shadow-sm">
+        <z-icon zType="plus" />
+        Nueva Suscripción
+      </z-button>
+    </div>
+  </div>
+
+  <z-search-filters
+    placeholder="Buscar por socio o ID..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
+
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="subscriptions()"
+      [actions]="tableActions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="clipboard-list"
+      emptyHint="Intenta ajustar los filtros o registra uno nuevo"
+      itemLabel="suscripciones"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadSubscriptions()"
+    />
+  </z-card>
+</div>

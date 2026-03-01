@@ -1,0 +1,25 @@
+<div class="categorias-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Categorías de Inventario</h1>
+            <p class="page-description">Organiza tus productos en categorías y subcategorías.</p>
+        </div>
+        <div class="header-actions">
+            <button z-button zType="default" (click)="goToNewCategory()">
+                <z-icon zType="plus" class="size-4" />
+                <span>Nueva Categoría</span>
+            </button>
+        </div>
+    </div>
+
+    <z-search-filters placeholder="Buscar por nombre..." [initialSearch]="search()"
+        [totalResults]="pagination()?.total ?? 0" (searchChange)="search.set($event); currentPage.set(1)" />
+
+    <z-card class="table-card">
+        <app-table-details [columns]="columns" [data]="categories()" [actions]="actions" [loading]="loading()"
+            [error]="error()" [pagination]="pagination()" [currentPage]="currentPage()" emptyIcon="folder"
+            emptyLabel="No se encontraron categorías registradas"
+            emptyHint="Intenta ajustar la búsqueda o añade una nueva" itemLabel="categorías"
+            (pageChange)="currentPage.set($event)" (retry)="loadCategories()" />
+    </z-card>
+</div>

@@ -1,0 +1,207 @@
+<div class="container px-4 md:px-8 max-w-7xl mx-auto py-12 flex flex-col min-h-[calc(100vh-4rem)]">
+  <div class="mb-8">
+    <a
+      routerLink="/tienda"
+      class="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-4"
+    >
+      <z-icon zType="arrow-left" class="size-4 mr-2" /> Volver a la Tienda
+    </a>
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-2">Checkout</h1>
+    <p class="text-muted-foreground">Completa tus datos para procesar la orden de tu gimnasio.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+    <!-- Formulario de Checkout (Izquierda) -->
+    <div class="lg:col-span-7">
+      <div class="bg-card border border-border/50 rounded-xl p-6 md:p-8 shadow-sm">
+        <h2 class="text-xl font-bold mb-6 flex items-center">
+          <span
+            class="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary mr-3 text-sm"
+            >1</span
+          >
+          Datos Personales
+        </h2>
+
+        <form [formGroup]="checkoutForm" (ngSubmit)="processCheckout()" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="text-sm font-medium leading-none"
+                >Nombres <span class="text-destructive">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="firstName"
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Ej. Juan"
+              />
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-medium leading-none"
+                >Apellidos <span class="text-destructive">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="lastName"
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Ej. Pérez"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium leading-none"
+              >Correo Electrónico <span class="text-destructive">*</span></label
+            >
+            <input
+              type="email"
+              formControlName="email"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="juan.perez@email.com"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="text-sm font-medium leading-none"
+                >Documento de Identidad (DNI) <span class="text-destructive">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="document"
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Número de DNI"
+              />
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-medium leading-none"
+                >Teléfono Celular <span class="text-destructive">*</span></label
+              >
+              <input
+                type="tel"
+                formControlName="phone"
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="987654321"
+              />
+            </div>
+          </div>
+
+          <hr class="border-border my-8" />
+
+          <h2 class="text-xl font-bold mb-6 flex items-center">
+            <span
+              class="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary mr-3 text-sm"
+              >2</span
+            >
+            Pago en Caja
+          </h2>
+
+          <div
+            class="rounded-lg border border-primary/20 bg-primary/5 p-4 flex items-start gap-4 mb-8"
+          >
+            <z-icon zType="info" class="size-6 text-primary shrink-0" />
+            <div>
+              <p class="font-medium text-foreground text-sm">Pago Presencial</p>
+              <p class="text-sm text-muted-foreground mt-1">
+                Por el momento, el pago de esta orden se realizará de forma presencial en recepción.
+                Se reservará tu cupo/producto en el sistema.
+              </p>
+            </div>
+          </div>
+
+          <button
+            z-button
+            type="submit"
+            class="w-full h-12 text-lg disabled:opacity-50"
+            [disabled]="isSubmitting() || cartService.items().length === 0"
+          >
+            @if (isSubmitting()) {
+              <z-icon zType="loader-circle" class="size-5 mr-2 animate-spin" /> Procesando Orden...
+            } @else {
+              Confirmar e Ir a Pagar Presencialmente
+            }
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Resumen de Orden (Derecha) -->
+    <div class="lg:col-span-5 relative">
+      <div class="bg-muted/30 border border-border/50 rounded-xl p-6 lg:p-8 sticky top-24">
+        <h3 class="text-xl font-bold mb-6">Resumen de la Orden</h3>
+
+        @if (cartService.items().length === 0) {
+          <div class="text-center py-10">
+            <div
+              class="inline-flex items-center justify-center size-16 rounded-full bg-muted mb-4 text-muted-foreground"
+            >
+              <z-icon zType="shopping-cart" class="size-8" />
+            </div>
+            <p class="text-muted-foreground mb-4">Tu carrito está vacío</p>
+            <button z-button zType="outline" routerLink="/tienda" class="w-full">
+              Explorar Tienda
+            </button>
+          </div>
+        } @else {
+          <div class="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
+            @for (item of cartService.items(); track item.id + '-' + item.type) {
+              <div
+                class="flex gap-4 items-start py-4 border-b border-border/40 last:border-0 last:pb-0"
+              >
+                <div
+                  class="size-16 rounded-md bg-background flex items-center justify-center shrink-0 border border-border/50"
+                >
+                  @if (item.type === 'plan') {
+                    <z-icon zType="credit-card" class="size-6 text-primary" />
+                  } @else {
+                    <z-icon zType="archive" class="size-6 text-primary" />
+                  }
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-start gap-2 mb-1">
+                    <h4 class="font-medium text-sm leading-tight truncate" [title]="item.name">
+                      {{ item.name }}
+                    </h4>
+                    <span class="font-semibold text-sm whitespace-nowrap"
+                      >S/ {{ item.price * item.quantity | number: '1.2-2' }}</span
+                    >
+                  </div>
+                  <p class="text-xs text-muted-foreground mb-2">
+                    Cantidad: {{ item.quantity }} x S/ {{ item.price }}
+                  </p>
+                  <button
+                    type="button"
+                    class="text-xs text-destructive hover:underline flex items-center"
+                    (click)="removeItem(item.id, item.type)"
+                  >
+                    <z-icon zType="trash" class="size-3 mr-1" /> Eliminar
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="space-y-3 pt-4 border-t border-border">
+            <div class="flex justify-between text-sm">
+              <span class="text-muted-foreground"
+                >Subtotal ({{ cartService.totalItems() }} items)</span
+              >
+              <span class="font-medium">S/ {{ cartService.subtotal() | number: '1.2-2' }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-muted-foreground">Impuestos (IGV 18%)</span>
+              <span class="font-medium">Incluido</span>
+            </div>
+            <div class="pt-4 mt-2 border-t border-border flex justify-between items-end">
+              <span class="text-base font-bold">Total a Pagar</span>
+              <div class="text-right">
+                <span class="text-3xl font-black text-primary"
+                  >S/ {{ cartService.subtotal() | number: '1.2-2' }}</span
+                >
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

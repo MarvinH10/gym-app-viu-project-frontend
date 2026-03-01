@@ -141,11 +141,13 @@ export class Impuestos {
 
   toggleStatus(tax: TaxResource) {
     this.taxApi.toggleStatus(tax.id).subscribe({
-      next: (res) => {
-        toast.success(res.message);
+      next: () => {
+        toast.success('Estado actualizado correctamente');
         this.loadTaxes();
       },
-      error: () => toast.error('Error al actualizar estado'),
+      error: () => {
+        toast.error('No se pudo cambiar el estado del impuesto');
+      },
     });
   }
 

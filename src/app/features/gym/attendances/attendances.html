@@ -1,0 +1,38 @@
+<div class="attendances-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title flex items-center gap-3">Control de Asistencias</h1>
+      <p class="page-description">Monitorea y gestiona el flujo de socios en el gimnasio.</p>
+    </div>
+    <div class="header-actions">
+      <z-button (click)="goToCheckIn()" class="gap-2 shadow-sm">
+        <z-icon zType="plus" />
+        Registrar Entrada
+      </z-button>
+    </div>
+  </div>
+
+  <z-search-filters
+    placeholder="Buscar por socio..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
+
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="attendances()"
+      [actions]="tableActions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="clipboard-list"
+      emptyHint="Intenta ajustar los filtros o registra una nueva entrada"
+      itemLabel="asistencias"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadAttendances()"
+    />
+  </z-card>
+</div>

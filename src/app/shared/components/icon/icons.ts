@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   BadgeCheck,
   Ban,
+  Banknote,
   Bell,
   Bold,
   BookOpen,
@@ -26,6 +27,7 @@ import {
   CircleSmall,
   CircleX,
   Clipboard,
+  ClipboardList,
   Clock,
   Code,
   CodeXml,
@@ -97,6 +99,9 @@ import {
   RefreshCw,
   ReceiptText,
   X,
+  TrendingUp,
+  TrendingDown,
+  Download,
   Zap,
 } from 'lucide-angular';
 
@@ -208,6 +213,11 @@ export const ZARD_ICONS = {
   'shopping-cart': ShoppingCart,
   'refresh-cw': RefreshCw,
   'receipt-text': ReceiptText,
+  'clipboard-list': ClipboardList,
+  banknote: Banknote,
+  'trending-up': TrendingUp,
+  'trending-down': TrendingDown,
+  download: Download,
 } as const satisfies Record<string, LucideIconData>;
 
 export type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;

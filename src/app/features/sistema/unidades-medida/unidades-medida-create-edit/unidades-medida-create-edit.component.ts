@@ -1,162 +1,188 @@
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+  OnInit,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
 import { toast } from 'ngx-sonner';
 
 import { ZardCardComponent } from '@/shared/components/card/card.component';
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardIconComponent } from '@/shared/components/icon/icon.component';
-import { FormCreateEditImports, DynamicField } from '@/shared/components/form-create-edit';
-import { UnitMeasureApi } from '@/core/services/api/unit-measure.api';
-import { UnitMeasureResource } from '@/core/models';
+import {
+  FormCreateEditImports,
+  DynamicField,
+  DefaultOption,
+} from '@/shared/components/form-create-edit';
+import { ZardSkeletonImports } from '@/shared/components/skeleton';
+import { UnitOfMeasureApi } from '@/core/services/api/unit-measure.api';
+import { UnitOfMeasureResource, UnitOfMeasureFormOptions } from '@/core/models';
 
 @Component({
-    selector: 'app-unidades-medida-create-edit',
-    standalone: true,
-    imports: [
-        CommonModule,
-        ZardCardComponent,
-        ZardButtonComponent,
-        ZardIconComponent,
-        ...FormCreateEditImports,
-    ],
-    templateUrl: './unidades-medida-create-edit.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-unidades-medida-create-edit',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ZardCardComponent,
+    ZardIconComponent,
+    ...ZardSkeletonImports,
+    ...FormCreateEditImports,
+  ],
+  templateUrl: './unidades-medida-create-edit.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UnidadesMedidaCreateEditComponent implements OnInit {
-    private readonly router = inject(Router);
-    private readonly route = inject(ActivatedRoute);
-    private readonly unitApi = inject(UnitMeasureApi);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly unitApi = inject(UnitOfMeasureApi);
 
-    readonly isSubmitting = signal(false);
-    readonly isLoading = signal(false);
-    readonly error = signal<string | null>(null);
-    readonly unitId = signal<string | null>(null);
-    readonly initialData = signal<UnitMeasureResource | undefined>(undefined);
-    readonly families = signal<{ label: string; value: string }[]>([]);
-    readonly baseUnits = signal<{ label: string; value: string }[]>([]);
+  readonly isSubmitting = signal(false);
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
+  readonly unitId = signal<string | null>(null);
+  readonly initialData = signal<UnitOfMeasureResource | undefined>(undefined);
 
-    ngOnInit() {
-        this.loadOptions();
-        this.route.paramMap.subscribe((params) => {
-            const id = params.get('id');
-            if (id) {
-                this.unitId.set(id);
-                this.isLoading.set(true);
-                this.unitApi.getUnit(id).subscribe({
-                    next: (res) => {
-                        this.initialData.set(res.data);
-                        this.isLoading.set(false);
-                    },
-                    error: () => {
-                        this.isLoading.set(false);
-                        toast.error('Error al cargar la unidad de medida');
-                        this.router.navigate(['/sistema/unidades-medida']);
-                    },
-                });
-            }
-        });
+  readonly formOptions = signal<UnitOfMeasureFormOptions | null>(null);
+
+  readonly unitFormFields = computed<DynamicField[]>(() => {
+    const options = this.formOptions();
+    const isEdit = !!this.unitId();
+
+    const familyOptions: DefaultOption[] =
+      options?.families.map((f) => ({ label: f, value: f })) || [];
+    const baseUnitOptions: DefaultOption[] =
+      options?.unit_of_measures.map((u) => ({ label: u.name, value: u.id.toString() })) || [];
+
+    const fields: DynamicField[] = [
+      {
+        name: 'name',
+        label: 'Nombre de la Unidad',
+        type: 'text',
+        placeholder: 'Ej. Kilogramos',
+        validators: [Validators.required, Validators.maxLength(255)],
+        colSpan: 2,
+      },
+      {
+        name: 'symbol',
+        label: 'Símbolo',
+        type: 'text',
+        placeholder: 'Ej. kg',
+        validators: [Validators.required, Validators.maxLength(50)],
+        colSpan: 1,
+      },
+      {
+        name: 'family',
+        label: 'Familia',
+        type: 'select',
+        options: familyOptions,
+        validators: [Validators.required],
+        defaultValue: '',
+        colSpan: 1,
+      },
+      {
+        name: 'base_unit_id',
+        label: 'Unidad Base',
+        type: 'select',
+        options: [{ label: 'Ninguna (Es Unidad Base)', value: '' }, ...baseUnitOptions],
+        defaultValue: '',
+        colSpan: 1,
+      },
+      {
+        name: 'factor',
+        label: 'Factor de Conversión',
+        type: 'number',
+        validators: [Validators.required, Validators.min(1e-8)],
+        defaultValue: 1,
+        colSpan: 1,
+      },
+    ];
+
+    if (isEdit) {
+      fields.push({
+        name: 'is_active',
+        label: 'Unidad Activa',
+        type: 'switch',
+        defaultValue: true,
+        validators: [Validators.required],
+        colSpan: 1,
+      });
     }
 
-    loadOptions() {
-        this.unitApi.getFormOptions().subscribe({
-            next: (res) => {
-                // According to the JSON, families is a string? "families": "string"
-                // But usually it should be a list. If it's a string, maybe it's a comma separated list or just one.
-                // I'll assume it's a string from the API spec provided in the prompt.
-                // Wait, the prompt says: "families": "string" required.
-                // And unit_of_measures: array[UnitOfMeasureResource]
+    return fields;
+  });
 
-                // I'll handle families as a single option or split if it looks like a list.
-                // For now let's assume it's a string and we'll see.
-                const familyList = res.families ? [{ label: res.families, value: res.families }] : [];
-                this.families.set(familyList);
+  ngOnInit() {
+    this.loadFormOptions();
 
-                const units = res.unit_of_measures.map(u => ({
-                    label: `${u.name} (${u.symbol || 'N/A'})`,
-                    value: u.id.toString()
-                }));
-                this.baseUnits.set(units);
-            }
-        });
-    }
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.unitId.set(id);
+        this.loadUnitData(id);
+      }
+    });
+  }
 
-    get formFields(): DynamicField[] {
-        return [
-            {
-                name: 'name',
-                label: 'Nombre de la Unidad',
-                type: 'text',
-                placeholder: 'Ej. Kilogramos',
-                validators: [Validators.required, Validators.maxLength(255)],
-                colSpan: 1,
-            },
-            {
-                name: 'symbol',
-                label: 'Símbolo',
-                type: 'text',
-                placeholder: 'Ej. kg',
-                validators: [Validators.maxLength(50)],
-                colSpan: 1,
-            },
-            {
-                name: 'family',
-                label: 'Familia',
-                type: 'text', // The user can type if options are limited
-                placeholder: 'Ej. Peso, Longitud...',
-                validators: [Validators.required, Validators.maxLength(255)],
-                colSpan: 1,
-            },
-            {
-                name: 'base_unit_id',
-                label: 'Unidad Base',
-                type: 'select',
-                options: this.baseUnits(),
-                placeholder: 'Seleccione unidad base (opcional)',
-                colSpan: 1,
-            },
-            {
-                name: 'factor',
-                label: 'Factor de Conversión',
-                type: 'number',
-                defaultValue: 1,
-                validators: [Validators.required, Validators.min(0.00000001)],
-                colSpan: 1,
-            },
-            {
-                name: 'is_active',
-                label: 'Estado Activo',
-                type: 'boolean',
-                defaultValue: true,
-                colSpan: 1,
-            },
-        ];
-    }
+  private loadFormOptions() {
+    this.unitApi.getFormOptions().subscribe({
+      next: (res) => this.formOptions.set(res),
+      error: () => toast.error('Error al cargar opciones del formulario'),
+    });
+  }
 
-    onFormSubmit(data: any) {
-        this.isSubmitting.set(true);
-        this.error.set(null);
-
-        const id = this.unitId();
-        const request = id ? this.unitApi.updateUnit(id, data) : this.unitApi.createUnit(data);
-
-        request.subscribe({
-            next: (res) => {
-                this.isSubmitting.set(false);
-                toast.success(res.message);
-                this.router.navigate(['/sistema/unidades-medida']);
-            },
-            error: (err) => {
-                this.isSubmitting.set(false);
-                const msg = err?.error?.message || 'Error al guardar la unidad de medida';
-                this.error.set(msg);
-                toast.error('Error', { description: msg });
-            },
-        });
-    }
-
-    onCancel() {
+  private loadUnitData(id: string) {
+    this.loading.set(true);
+    this.unitApi.getUnit(id).subscribe({
+      next: (res) => {
+        // En select de FormCreateEditComponent el valor debe ser string si el value del option es string
+        const data = {
+          ...res.data,
+          base_unit_id: res.data.base_unit_id?.toString() || '',
+        };
+        this.initialData.set(data as any);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        toast.error('Error al cargar unidad de medida');
         this.router.navigate(['/sistema/unidades-medida']);
+      },
+    });
+  }
+
+  onFormSubmit(data: any) {
+    this.isSubmitting.set(true);
+    this.error.set(null);
+
+    // Convert empty string back to null for base_unit_id
+    if (data.base_unit_id === '') {
+      data.base_unit_id = null;
     }
+
+    const id = this.unitId();
+    const payload = id ? data : { ...data, is_active: true };
+    const request = id ? this.unitApi.updateUnit(id, payload) : this.unitApi.createUnit(payload);
+
+    request.subscribe({
+      next: (res) => {
+        this.isSubmitting.set(false);
+        toast.success(res.message);
+        this.router.navigate(['/sistema/unidades-medida']);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        const msg = err?.error?.message || 'Error al guardar la unidad de medida';
+        this.error.set(msg);
+        toast.error('Error', { description: msg });
+      },
+    });
+  }
+
+  onCancel() {
+    this.router.navigate(['/sistema/unidades-medida']);
+  }
 }

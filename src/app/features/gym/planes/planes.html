@@ -1,0 +1,40 @@
+<div class="planes-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Planes de Membresía</h1>
+      <p class="page-description">
+        Configura y gestiona los esquemas de suscripción para tus socios.
+      </p>
+    </div>
+    <div class="header-actions">
+      <button z-button zType="default" (click)="goToNew()">
+        <z-icon zType="plus" class="size-4" />
+        <span>Nuevo Plan</span>
+      </button>
+    </div>
+  </div>
+
+  <z-search-filters
+    placeholder="Buscar por nombre del plan..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
+
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="plans()"
+      [actions]="tableActions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="clipboard"
+      emptyHint="Intenta ajustar los filtros o registra uno nuevo"
+      itemLabel="planes"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadPlans()"
+    />
+  </z-card>
+</div>

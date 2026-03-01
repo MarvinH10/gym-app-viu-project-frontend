@@ -6,12 +6,12 @@
       </button>
       <div class="breadcrumb">
         <z-breadcrumb>
-          <z-breadcrumb-item [routerLink]="['/dashboard']">
-            <z-icon zType="house" class="size-4" />
-          </z-breadcrumb-item>
-
-          @for (bc of breadcrumbService.breadcrumbs(); track $index) {
-            <z-breadcrumb-item [routerLink]="[bc.url]">
+          @for (bc of breadcrumbService.breadcrumbs(); track $index; let isFirst = $first) {
+            <z-breadcrumb-item
+              [routerLink]="isFirst ? [] : [bc.url]"
+              [class.pointer-events-none]="isFirst"
+              [class.opacity-70]="isFirst"
+            >
               {{ bc.label }}
             </z-breadcrumb-item>
           }
@@ -20,14 +20,8 @@
     </div>
 
     <div class="header-right">
-      <button z-button zType="ghost" zSize="icon-sm" class="relative">
-        <z-icon zType="bell" class="size-4" />
-        <span
-          class="absolute top-1.5 right-1.5 size-2 bg-primary rounded-full border-2 border-card"
-        ></span>
-      </button>
-      <button z-button zType="ghost" zSize="icon-sm">
-        <z-icon zType="sun-moon" class="size-4" />
+      <button z-button zType="ghost" zSize="icon-sm" (click)="toggleTheme()">
+        <z-icon [zType]="themeService.isDarkMode() ? 'sun' : 'moon'" class="size-4" />
       </button>
     </div>
   </div>

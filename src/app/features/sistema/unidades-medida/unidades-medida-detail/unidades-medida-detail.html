@@ -1,29 +1,59 @@
-<div class="unit-detail-container max-w-5xl mx-auto py-6 px-4">
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-4">
-            <button z-button zType="outline" zSize="icon" (click)="router.navigate(['/sistema/unidades-medida'])"
-                title="Volver">
-                <z-icon zType="arrow-left" class="size-4" />
-            </button>
-            <div>
-                <h1 class="text-2xl font-bold">{{ unit()?.name || 'Detalle de Unidad' }}</h1>
-                <p class="text-sm text-muted-foreground">Consulta la información detallada de esta unidad de medida.</p>
-            </div>
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (loading()) {
+        <z-skeleton class="h-8 w-64 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-48 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ unit()?.name }}</h1>
+          @if (unit(); as u) {
+            <z-badge [zType]="u.is_active ? 'secondary' : 'outline'">
+              {{ u.is_active ? 'Activa' : 'Inactiva' }}
+            </z-badge>
+          }
         </div>
-
-        <div class="flex items-center gap-2">
-            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isLoading() || isDeleting()">
-                <z-icon zType="pencil" class="size-4" />
-                <span>Editar</span>
-            </button>
-            <button z-button zType="destructive" (click)="confirmDelete()" [disabled]="isLoading() || isDeleting()">
-                <z-icon zType="trash" class="size-4" />
-                <span>Eliminar</span>
-            </button>
-        </div>
+        <p class="text-muted-foreground">{{ unit()?.family }} • {{ unit()?.symbol }}</p>
+      }
     </div>
 
-    <z-card>
-        <app-form-detail [sections]="detailSections" [data]="unit()" [loading]="isLoading()" />
+    @if (!loading() && unit()) {
+      <div class="flex gap-2">
+        <button z-button zType="outline" (click)="onBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        <button z-button zType="outline" (click)="goToEdit()" [disabled]="isDeleting()">
+          <z-icon zType="pencil" class="size-4 mr-2" />
+          <span>Editar</span>
+        </button>
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          (click)="confirmDelete()"
+          [disabled]="isDeleting()"
+        >
+          <z-icon zType="trash" class="size-4 mr-2" />
+          <span>Eliminar</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (error()) {
+    <z-card class="p-8 text-center bg-destructive/5 border-destructive/20">
+      <z-icon
+        zType="triangle-alert"
+        class="size-12 rounded-full bg-destructive/10 text-destructive text-center mx-auto mb-4"
+      />
+      <h3 class="font-medium text-destructive mb-2">Error</h3>
+      <p class="text-muted-foreground">{{ error() }}</p>
+      <button z-button zType="outline" class="mt-4" (click)="onBack()">Volver a la lista</button>
     </z-card>
+  } @else {
+    <z-card class="p-6">
+      <app-form-detail [sections]="detailSections" [data]="unit()" [loading]="loading()" />
+    </z-card>
+  }
 </div>

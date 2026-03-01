@@ -1,0 +1,38 @@
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (loading()) {
+        <z-skeleton class="h-8 w-64 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-48 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">
+            Asistencia #{{ attendance()?.id }}
+          </h1>
+          @if (attendance()?.status; as status) {
+            <z-badge [zType]="status === 'valid' ? 'secondary' : 'destructive'" zShape="pill">
+              {{ status === 'valid' ? 'Válido' : 'Denegado' }}
+            </z-badge>
+          }
+        </div>
+        <p class="text-muted-foreground">
+          {{ attendance()?.partner?.name || 'Socio Desconocido' }} • Documento:
+          {{ attendance()?.partner?.document_number || 'N/A' }}
+        </p>
+      }
+    </div>
+
+    @if (!loading() && attendance()) {
+      <div class="flex items-center gap-2">
+        <button z-button zType="outline" (click)="goBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  <z-card class="p-6">
+    <app-form-detail [sections]="detailSections()" [data]="attendance()" [loading]="loading()" />
+  </z-card>
+</div>

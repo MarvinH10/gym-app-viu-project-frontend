@@ -12,10 +12,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ZardInputDirective } from '@/shared/components/input/input.directive';
 import { ZardLabelDirective } from '@/shared/components/label';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardIcon } from '@/shared/components/icon/icons';
+import { ZardBadgeImports } from '@/shared/components/badge';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 import { ZardDatePickerImports } from '@/shared/components/date-picker';
 import { ZardCheckboxImports } from '@/shared/components/checkbox/checkbox.imports';
 import { ZardIconImports } from '@/shared/components/icon/icon.imports';
+import { ZardSwitchImports } from '@/shared/components/switch';
+import { ZardTimePickerImports } from '@/shared/components/time-picker';
 
 export interface DefaultOption {
   label: string;
@@ -25,7 +29,18 @@ export interface DefaultOption {
 export interface DynamicField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'date' | 'select' | 'textarea' | 'number' | 'boolean';
+  type:
+    | 'text'
+    | 'email'
+    | 'date'
+    | 'select'
+    | 'textarea'
+    | 'number'
+    | 'boolean'
+    | 'switch'
+    | 'tags'
+    | 'password'
+    | 'time';
   placeholder?: string;
   options?: DefaultOption[];
   colSpan?: 1 | 2;
@@ -46,8 +61,12 @@ export interface DynamicField {
     ...ZardDatePickerImports,
     ...ZardSelectImports,
     ...ZardCheckboxImports,
+    ...ZardSwitchImports,
+    ...ZardBadgeImports,
+    ...ZardTimePickerImports,
   ],
   templateUrl: './form-create-edit.html',
+  exportAs: 'formCreateEdit',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormCreateEditComponent implements OnInit {
@@ -58,6 +77,9 @@ export class FormCreateEditComponent implements OnInit {
   loading = input(false);
   isSubmitting = input(false);
   submitLabel = input('Guardar');
+  submitIcon = input<ZardIcon | undefined>(undefined);
+  showActions = input(true);
+  columns = input<1 | 2 | 3 | 4>(2);
 
   @Output() formSubmit = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
@@ -79,6 +101,10 @@ export class FormCreateEditComponent implements OnInit {
 
       if (field.type === 'date' && initialValue) {
         initialValue = new Date(initialValue);
+      }
+
+      if (field.type === 'select' && initialValue !== null && initialValue !== undefined) {
+        initialValue = initialValue.toString();
       }
 
       group[field.name] = [initialValue, field.validators || []];
@@ -104,6 +130,13 @@ export class FormCreateEditComponent implements OnInit {
     this.formSubmit.emit(value);
   }
 
+  submit() {
+    this.onSubmit();
+  }
+  isFormInvalid(): boolean {
+    return this.form?.invalid ?? true;
+  }
+
   onCancel() {
     this.cancel.emit();
   }
@@ -111,5 +144,23 @@ export class FormCreateEditComponent implements OnInit {
   isInvalid(controlName: string): boolean {
     const control = this.form.get(controlName);
     return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  addTag(fieldName: string, event: any) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.trim();
+    if (value) {
+      const currentTags = this.form.get(fieldName)?.value || [];
+      if (!currentTags.includes(value)) {
+        this.form.get(fieldName)?.setValue([...currentTags, value]);
+      }
+      input.value = '';
+    }
+    event.preventDefault();
+  }
+
+  removeTag(fieldName: string, tag: string) {
+    const currentTags = this.form.get(fieldName)?.value || [];
+    this.form.get(fieldName)?.setValue(currentTags.filter((t: string) => t !== tag));
   }
 }

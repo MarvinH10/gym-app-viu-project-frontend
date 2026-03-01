@@ -1,0 +1,185 @@
+<div class="w-full flex flex-col min-h-[calc(100vh-4rem)]">
+  <!-- Hero Section -->
+  <section
+    class="relative w-full h-[600px] md:h-[700px] flex items-center justify-center overflow-hidden"
+  >
+    <div
+      class="absolute inset-0 bg-gradient-to-br from-background via-background/90 to-primary/20 z-0"
+    ></div>
+    <div
+      class="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-[0.15] z-0"
+      style="
+        background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop');
+      "
+    ></div>
+
+    <div
+      class="container relative z-10 px-4 md:px-8 max-w-7xl mx-auto flex flex-col items-center text-center gap-6"
+    >
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700"
+      >
+        <z-icon zType="zap" class="size-4" />
+        <span>Transforma tu vida hoy</span>
+      </div>
+
+      <h1
+        class="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground max-w-4xl animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-100 fill-mode-both"
+      >
+        Potencia tu
+        <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-foreground"
+          >rendimiento</span
+        >
+        al máximo nivel
+      </h1>
+
+      <p
+        class="text-lg md:text-xl text-muted-foreground max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 fill-mode-both"
+      >
+        Únete a GymZone y obtén acceso exclusivo a los mejores planes de entrenamiento, productos
+        fitness y rutinas personalizadas.
+      </p>
+
+      <div
+        class="flex flex-col sm:flex-row gap-4 mt-8 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 fill-mode-both"
+      >
+        <button
+          z-button
+          routerLink="/tienda"
+          class="w-full sm:w-auto text-lg px-8 h-14 rounded-full"
+        >
+          Explorar Tienda
+        </button>
+        <button
+          z-button
+          zType="outline"
+          routerLink="/auth/register"
+          class="w-full sm:w-auto text-lg px-8 h-14 rounded-full bg-background/50 backdrop-blur-md"
+        >
+          Unirse Ahora
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios Section -->
+  <section class="py-24 bg-card/50">
+    <div class="container px-4 md:px-8 max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Por qué elegir GymZone</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto">
+          Descubre todas las ventajas de ser parte de nuestra comunidad.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <z-card
+          class="p-8 flex flex-col items-center text-center bg-background/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors shadow-none hover:shadow-lg hover:shadow-primary/5 cursor-default"
+        >
+          <div
+            class="size-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary"
+          >
+            <z-icon zType="activity" class="size-8" />
+          </div>
+          <h3 class="text-xl font-bold mb-3">Equipamiento Premium</h3>
+          <p class="text-muted-foreground">
+            Entrena con las mejores máquinas y accesorios del mercado, renovados constantemente.
+          </p>
+        </z-card>
+
+        <z-card
+          class="p-8 flex flex-col items-center text-center bg-background/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors shadow-none hover:shadow-lg hover:shadow-primary/5 cursor-default"
+        >
+          <div
+            class="size-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary"
+          >
+            <z-icon zType="activity" class="size-8" />
+          </div>
+          <h3 class="text-xl font-bold mb-3">Seguimiento Real</h3>
+          <p class="text-muted-foreground">
+            Monitorea tus progresos, asistencias y evolución física directamente desde nuestra app.
+          </p>
+        </z-card>
+
+        <z-card
+          class="p-8 flex flex-col items-center text-center bg-background/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors shadow-none hover:shadow-lg hover:shadow-primary/5 cursor-default"
+        >
+          <div
+            class="size-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary"
+          >
+            <z-icon zType="shopping-cart" class="size-8" />
+          </div>
+          <h3 class="text-xl font-bold mb-3">Tienda Integrada</h3>
+          <p class="text-muted-foreground">
+            Compra suplementos, ropa deportiva y snacks sin salir de la plataforma con entrega
+            rápida.
+          </p>
+        </z-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Planes Destacados CTA -->
+  <section class="py-24 relative overflow-hidden">
+    <div class="absolute inset-0 bg-primary/5"></div>
+    <div
+      class="container relative z-10 px-4 md:px-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12"
+    >
+      <div class="flex-1 space-y-6">
+        <h2 class="text-3xl md:text-5xl font-bold leading-tight">
+          Encuentra el plan perfecto para ti
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          Nuestros planes se adaptan a tus objetivos. Desde pases diarios hasta suscripciones
+          anuales con beneficios exclusivos.
+        </p>
+        <ul class="space-y-3">
+          <li class="flex items-center gap-3">
+            <z-icon zType="circle-check" class="text-primary size-5" />
+            <span class="text-foreground">Acceso a todas las áreas del gimnasio</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <z-icon zType="circle-check" class="text-primary size-5" />
+            <span class="text-foreground">Clases grupales incluidas</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <z-icon zType="circle-check" class="text-primary size-5" />
+            <span class="text-foreground">Descuentos exclusivos en la tienda</span>
+          </li>
+        </ul>
+        <div class="pt-4">
+          <button z-button routerLink="/tienda" class="rounded-full px-8 h-12">
+            Ver Planes Oficiales
+          </button>
+        </div>
+      </div>
+      <div class="flex-1 w-full relative">
+        <div
+          class="w-full aspect-square md:aspect-auto md:h-[500px] rounded-3xl bg-gradient-to-tr from-muted to-muted/50 p-6 flex flex-col justify-end relative overflow-hidden border border-border/50"
+        >
+          <div
+            class="absolute inset-0 bg-cover bg-center brightness-75 transition-transform duration-700 hover:scale-105"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070&auto=format&fit=crop');
+            "
+          ></div>
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"
+          ></div>
+          <div class="relative z-10 p-4">
+            <div
+              class="inline-block px-3 py-1 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-full tracking-wider mb-3 shadow-lg"
+            >
+              Más Popular
+            </div>
+            <h3 class="text-3xl font-bold mb-2 text-foreground">Plan VIP Mensual</h3>
+            <p class="text-foreground/80 mb-0 font-medium">
+              La mejor experiencia fitness sin límites ni ataduras.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

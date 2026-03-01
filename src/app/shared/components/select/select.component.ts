@@ -15,6 +15,7 @@ import {
   computed,
   contentChildren,
   DestroyRef,
+  effect,
   ElementRef,
   forwardRef,
   inject,
@@ -164,11 +165,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     return this.provideLabelForSingleSelectMode(selectedValue as string);
   });
 
-  private onChange: OnChangeType = (_value: string) => {
-  };
+  private onChange: OnChangeType = (_value: string) => {};
 
-  private onTouched: OnTouchedType = () => {
-  };
+  private onTouched: OnTouchedType = () => {};
 
   protected readonly classes = computed(() => mergeClasses(selectVariants(), this.class()));
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
@@ -180,25 +179,37 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     ),
   );
 
-  ngAfterContentInit() {
-    const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
-    let i = 0;
-    for (const item of this.selectItems()) {
-      item.setSelectHost({
-        selectedValue: () =>
-          this.zMultiple() ? (this.zValue() as string[]) : [this.zValue() as string],
-        selectItem: (value: string, label: string) => this.selectItem(value, label),
-        navigateTo: () => this.navigateTo(item, i),
-      });
-      item.zSize.set(this.zSize());
-      i++;
+  constructor() {
+    effect(() => {
+      const items = this.selectItems();
+      const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
+      let i = 0;
 
-      if (hostWidth <= COMPACT_MODE_WIDTH_THRESHOLD) {
-        this.isCompact.set(true);
-        item.zMode.set('compact');
+      for (const item of items) {
+        item.setSelectHost({
+          selectedValue: () =>
+            this.zMultiple() ? (this.zValue() as string[]) : [this.zValue() as string],
+          selectItem: (value: string, label: string) => this.selectItem(value, label),
+          navigateTo: () => this.navigateTo(item, i),
+        });
+        item.zSize.set(this.zSize());
+
+        if (hostWidth <= COMPACT_MODE_WIDTH_THRESHOLD) {
+          this.isCompact.set(true);
+          item.zMode.set('compact');
+        }
+        i++;
       }
-    }
+    });
+
+    effect(() => {
+      this.zMultiple();
+      this.zValue();
+      this.updateOverlayPosition();
+    });
   }
+
+  ngAfterContentInit() {}
 
   ngOnDestroy() {
     this.destroyOverlay();
@@ -264,7 +275,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   selectItem(value: string, label: string) {
-    if (value === undefined || value === null || value === '') {
+    if (value === undefined || value === null) {
       console.warn('Attempted to select item with invalid value:', { value, label });
       return;
     }
@@ -629,6 +640,5 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.onTouched = fn;
   }
 
-  setDisabledState(): void {
-  }
+  setDisabledState(): void {}
 }

@@ -4,10 +4,16 @@
       <z-icon zType="refresh-cw" class="size-8 animate-spin text-muted-foreground" />
     </div>
   } @else {
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div
+      class="grid grid-cols-1 gap-6"
+      [class.md:grid-cols-1]="columns() === 1"
+      [class.md:grid-cols-2]="columns() === 2"
+      [class.md:grid-cols-3]="columns() === 3"
+      [class.md:grid-cols-4]="columns() === 4"
+    >
       @for (field of fields(); track field.name) {
         <div class="flex flex-col gap-2" [class.md:col-span-2]="field.colSpan === 2">
-          <label z-label *ngIf="field.type !== 'boolean'">
+          <label z-label *ngIf="field.type !== 'boolean' && field.type !== 'switch'">
             {{ field.label }}
             <span *ngIf="field.validators" class="text-destructive">*</span>
           </label>
@@ -32,7 +38,14 @@
             @case ('boolean') {
               <z-checkbox [formControlName]="field.name">
                 {{ field.label }}
+                <span *ngIf="field.validators" class="text-destructive ml-1">*</span>
               </z-checkbox>
+            }
+            @case ('switch') {
+              <z-switch [formControlName]="field.name">
+                {{ field.label }}
+                <span *ngIf="field.validators" class="text-destructive ml-1">*</span>
+              </z-switch>
             }
             @case ('email') {
               <input
@@ -49,6 +62,13 @@
                 [placeholder]="field.placeholder || 'Seleccionar fecha'"
                 zFormat="dd/MM/yyyy"
               ></z-date-picker>
+            }
+            @case ('time') {
+              <z-time-picker
+                [formControlName]="field.name"
+                class="w-full"
+                [placeholder]="field.placeholder || '00:00'"
+              ></z-time-picker>
             }
             @case ('select') {
               <z-select [formControlName]="field.name">
@@ -68,6 +88,38 @@
                 [placeholder]="field.placeholder || ''"
               ></textarea>
             }
+            @case ('tags') {
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-wrap gap-2 mb-1">
+                  @for (tag of form.get(field.name)?.value || []; track tag) {
+                    <z-badge zType="secondary" class="pl-3 pr-1 py-0.5 flex items-center gap-1">
+                      {{ tag }}
+                      <button
+                        type="button"
+                        (click)="removeTag(field.name, tag)"
+                        class="p-0.5 hover:bg-muted rounded-full transition-colors"
+                      >
+                        <z-icon zType="x" class="size-3" />
+                      </button>
+                    </z-badge>
+                  }
+                </div>
+                <input
+                  z-input
+                  type="text"
+                  [placeholder]="field.placeholder || 'Escribe y presiona Enter...'"
+                  (keydown.enter)="addTag(field.name, $event)"
+                />
+              </div>
+            }
+            @case ('password') {
+              <input
+                z-input
+                type="password"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || ''"
+              />
+            }
           }
 
           @if (isInvalid(field.name)) {
@@ -79,23 +131,33 @@
       }
     </div>
 
-    <div class="flex items-center justify-end gap-4 mt-4 pt-6 border-t border-border">
-      <button z-button zType="ghost" type="button" (click)="onCancel()" [disabled]="isSubmitting()">
-        Cancelar
-      </button>
-      <button
-        z-button
-        zType="default"
-        type="submit"
-        [disabled]="form.invalid || isSubmitting()"
-        class="min-w-32"
-      >
-        @if (isSubmitting()) {
-          <span>Guardando...</span>
-        } @else {
-          <span>{{ submitLabel() }}</span>
-        }
-      </button>
-    </div>
+    <ng-content></ng-content>
+
+    @if (showActions()) {
+      <div class="flex items-center justify-end gap-4 mt-4 pt-6 border-t border-border">
+        <button
+          z-button
+          zType="ghost"
+          type="button"
+          (click)="onCancel()"
+          [disabled]="isSubmitting()"
+        >
+          Cancelar
+        </button>
+        <button
+          z-button
+          zType="default"
+          type="submit"
+          [disabled]="form.invalid || isSubmitting()"
+          class="min-w-32"
+        >
+          @if (isSubmitting()) {
+            <span>Guardando...</span>
+          } @else {
+            <span>{{ submitLabel() }}</span>
+          }
+        </button>
+      </div>
+    }
   }
 </form>

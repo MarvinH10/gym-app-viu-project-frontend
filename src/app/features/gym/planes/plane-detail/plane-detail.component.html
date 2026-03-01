@@ -1,0 +1,74 @@
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (loading()) {
+        <z-skeleton class="h-8 w-64 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-48 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ plan()?.name }}</h1>
+          @if (plan(); as p) {
+            <z-badge [zType]="p.is_active ? 'secondary' : 'outline'">
+              {{ p.is_active ? 'Activo' : 'Inactivo' }}
+            </z-badge>
+          }
+        </div>
+        <p class="text-muted-foreground">
+          ID: {{ plan()?.id }} • {{ plan()?.duration_days }} días
+          {{ plan()?.price ? '• S/ ' + (plan()?.price | number: '1.2-2') : '' }}
+        </p>
+      }
+    </div>
+
+    @if (!loading() && plan()) {
+      <div class="flex gap-2">
+        <button z-button zType="outline" (click)="onBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        <button z-button zType="outline" (click)="goToEdit()" [disabled]="isDeleting()">
+          <z-icon zType="pencil" class="size-4 mr-2" />
+          <span>Editar</span>
+        </button>
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          (click)="confirmDelete()"
+          [disabled]="isDeleting()"
+        >
+          <z-icon zType="trash" class="size-4 mr-2" />
+          <span>Eliminar</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (error()) {
+    <z-card class="p-8 text-center bg-destructive/5 border-destructive/20">
+      <z-icon
+        zType="triangle-alert"
+        class="size-12 rounded-full bg-destructive/10 text-destructive text-center mx-auto mb-4"
+      />
+      <h3 class="font-medium text-destructive mb-2">Error</h3>
+      <p class="text-muted-foreground">{{ error() }}</p>
+      <button z-button zType="outline" class="mt-4" (click)="onBack()">Volver a la lista</button>
+    </z-card>
+  } @else {
+    <z-card class="p-6">
+      <app-form-detail [sections]="detailSections" [data]="plan()" [loading]="loading()" />
+    </z-card>
+
+    @if (!loading() && plan()?.description) {
+      <z-card class="p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <z-icon zType="text-align-start" class="size-4 text-muted-foreground" />
+          <h3 class="text-sm font-semibold text-foreground uppercase tracking-wide">Descripción</h3>
+        </div>
+        <p class="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
+          {{ plan()?.description }}
+        </p>
+      </z-card>
+    }
+  }
+</div>

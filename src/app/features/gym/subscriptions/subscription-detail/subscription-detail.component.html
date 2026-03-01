@@ -1,0 +1,50 @@
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (loading()) {
+        <z-skeleton class="h-8 w-64 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-48 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">
+            Suscripción #{{ subscription()?.id }}
+          </h1>
+          @if (subscription()?.status; as status) {
+            <z-badge
+              [zType]="
+                status === 'active' ? 'secondary' : status === 'frozen' ? 'outline' : 'destructive'
+              "
+              zShape="pill"
+            >
+              {{ status === 'active' ? 'Activa' : status === 'frozen' ? 'Congelada' : 'Vencida' }}
+            </z-badge>
+          }
+        </div>
+        <p class="text-muted-foreground">
+          {{ subscription()?.partner?.name }} • {{ subscription()?.plan?.name }}
+        </p>
+      }
+    </div>
+
+    @if (!loading() && subscription()) {
+      <div class="flex items-center gap-2">
+        <button z-button zType="outline" (click)="goBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        <button
+          z-button
+          zType="outline"
+          (click)="router.navigate(['/gym/subscriptions', subscription()?.id, 'edit'])"
+        >
+          <z-icon zType="pencil" class="size-4 mr-2" />
+          <span>Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  <z-card class="p-6">
+    <app-form-detail [sections]="detailSections()" [data]="subscription()" [loading]="loading()" />
+  </z-card>
+</div>

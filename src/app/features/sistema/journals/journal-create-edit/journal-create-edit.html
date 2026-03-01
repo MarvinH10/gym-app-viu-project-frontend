@@ -1,0 +1,62 @@
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground">
+        {{ journalId() ? 'Editar Diario' : 'Crear Nuevo Diario' }}
+      </h1>
+      <p class="text-muted-foreground mt-2">
+        {{
+          journalId()
+            ? 'Modifica la configuración del diario existente.'
+            : 'Registra un nuevo diario en el sistema para gestionar transacciones.'
+        }}
+      </p>
+    </div>
+  </div>
+
+  <z-card class="p-6">
+    @if (error()) {
+      <div
+        class="mb-6 p-4 rounded-md bg-destructive/10 text-destructive text-sm flex items-center gap-3"
+      >
+        <z-icon zType="triangle-alert" class="size-5" />
+        <p>{{ error() }}</p>
+      </div>
+    }
+
+    @if (isLoading()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-36 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-24 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-32 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-40 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex justify-end gap-3 pt-2">
+          <z-skeleton class="h-10 w-24 rounded-md" />
+          <z-skeleton class="h-10 w-28 rounded-md" />
+        </div>
+      </div>
+    } @else {
+      <app-form-create-edit
+        [fields]="journalFormFields()"
+        [initialData]="initialData()"
+        [loading]="isLoading()"
+        [isSubmitting]="isSubmitting()"
+        [submitLabel]="journalId() ? 'Guardar Cambios' : 'Crear Diario'"
+        (formSubmit)="onFormSubmit($event)"
+        (cancel)="onCancel()"
+      />
+    }
+  </z-card>
+</div>

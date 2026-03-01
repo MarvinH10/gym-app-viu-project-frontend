@@ -1,0 +1,26 @@
+<div class="cliente-create-edit-container pb-8 space-y-6 max-w-4xl mx-auto">
+    <div class="flex flex-col gap-1">
+        <h1 class="text-3xl font-bold tracking-tight">
+            {{ isEdit() ? 'Editar Cliente' : 'Nuevo Cliente' }}
+        </h1>
+        <p class="text-muted-foreground">
+            {{ isEdit() ? 'Modifica la información del cliente existente.' : 'Registra un nuevo cliente en el sistema.'
+            }}
+        </p>
+    </div>
+
+    <z-card class="p-6">
+        @if (loading()) {
+        <div class="space-y-4">
+            <z-skeleton class="h-10 w-full" />
+            <z-skeleton class="h-10 w-full" />
+            <z-skeleton class="h-10 w-full" />
+        </div>
+        } @else {
+        <app-form-create-edit [fields]="formFields" [initialData]="initialData()" [isSubmitting]="isSubmitting()"
+            [submitLabel]="isEdit() ? 'Guardar Cambios' : 'Registrar Cliente'" [submitIcon]="'save'"
+            (formSubmit)="onFormSubmit($event)" (cancel)="onCancel()">
+        </app-form-create-edit>
+        }
+    </z-card>
+</div>

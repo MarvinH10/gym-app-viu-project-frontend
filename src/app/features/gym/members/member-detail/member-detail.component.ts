@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { toast } from 'ngx-sonner';
@@ -9,6 +17,13 @@ import { ZardIconComponent } from '@/shared/components/icon/icon.component';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';
 import { FormDetailImports, DetailSection } from '@/shared/components/form-detail';
 import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';
+import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
+import { ZardDialogRef } from '@/shared/components/dialog/dialog-ref';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ZardInputDirective } from '@/shared/components/input/input.directive';
+import { ZardLabelDirective } from '@/shared/components/label';
+import { ZardBadgeImports } from '@/shared/components/badge';
+
 import { MemberApi } from '@/core/services/api/member.api';
 import { Member } from '@/core/models';
 
@@ -21,10 +36,13 @@ import { Member } from '@/core/models';
     ZardButtonComponent,
     ZardIconComponent,
     ZardSkeletonComponent,
+    ReactiveFormsModule,
+    ZardInputDirective,
+    ZardLabelDirective,
+    ...ZardBadgeImports,
     ...FormDetailImports,
   ],
   templateUrl: './member-detail.html',
-  styleUrl: './member-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class MemberDetailComponent implements OnInit {
@@ -33,9 +51,21 @@ export default class MemberDetailComponent implements OnInit {
   private readonly memberApi = inject(MemberApi);
   private readonly alertDialog = inject(ZardAlertDialogService);
 
+  private readonly dialogService = inject(ZardDialogService);
+  private readonly fb = inject(FormBuilder);
+
   readonly member = signal<Member | null>(null);
   readonly isLoading = signal(true);
   readonly isDeleting = signal(false);
+  readonly activatingPortal = signal(false);
+
+  portalForm = this.fb.group({
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    password_confirmation: ['', [Validators.required, Validators.minLength(8)]],
+  });
+
+  @ViewChild('portalDialogTpl') portalDialogTpl!: TemplateRef<any>;
+  portalDialogRef: ZardDialogRef<any> | null = null;
 
   readonly detailSections: DetailSection[] = [
     {
@@ -113,6 +143,10 @@ export default class MemberDetailComponent implements OnInit {
     });
   }
 
+  goBack() {
+    this.router.navigate(['/gym/members']);
+  }
+
   goToEdit() {
     const id = this.member()?.id;
     if (id) this.router.navigate(['/gym/members', id, 'edit']);
@@ -144,6 +178,41 @@ export default class MemberDetailComponent implements OnInit {
             });
           },
         });
+      },
+    });
+  }
+
+  openPortalDialog() {
+    this.portalForm.reset();
+    this.portalDialogRef = this.dialogService.create({
+      zTitle: 'Activar Acceso al Portal',
+      zContent: this.portalDialogTpl,
+      zHideFooter: true,
+      zWidth: '400px',
+    });
+  }
+
+  submitPortal() {
+    if (this.portalForm.invalid) {
+      this.portalForm.markAllAsTouched();
+      return;
+    }
+
+    const m = this.member();
+    if (!m) return;
+
+    this.activatingPortal.set(true);
+    this.memberApi.activatePortal(m.id, this.portalForm.value).subscribe({
+      next: (res) => {
+        toast.success('Portal activado', { description: res.message });
+        this.activatingPortal.set(false);
+        this.portalDialogRef?.close();
+        this.member.set(res.data);
+      },
+      error: (err) => {
+        this.activatingPortal.set(false);
+        const msg = err?.error?.message || 'Error al activar portal';
+        toast.error('Error', { description: msg });
       },
     });
   }
