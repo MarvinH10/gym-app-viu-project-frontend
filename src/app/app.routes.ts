@@ -157,14 +157,12 @@ export const routes: Routes = [
         children: [
           {
             path: 'pos',
-            loadComponent: () =>
-              import('./features/ventas/pos/pos').then((m) => m.Pos),
+            loadComponent: () => import('./features/ventas/pos/pos').then((m) => m.Pos),
             data: { breadcrumb: 'POS' },
           },
           {
             path: 'lista',
-            loadComponent: () =>
-              import('./features/ventas/ventas/ventas').then((m) => m.Ventas),
+            loadComponent: () => import('./features/ventas/ventas/ventas').then((m) => m.Ventas),
             data: { breadcrumb: 'Ventas' },
           },
           {
@@ -207,8 +205,7 @@ export const routes: Routes = [
           },
           {
             path: 'roles',
-            loadComponent: () =>
-              import('./features/sistema/roles/roles').then((m) => m.Roles),
+            loadComponent: () => import('./features/sistema/roles/roles').then((m) => m.Roles),
             data: { breadcrumb: 'Roles' },
           },
           {
@@ -225,9 +222,32 @@ export const routes: Routes = [
           },
           {
             path: 'impuestos',
-            loadComponent: () =>
-              import('./features/sistema/impuestos/impuestos').then((m) => m.Impuestos),
             data: { breadcrumb: 'Impuestos' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/sistema/impuestos/impuestos').then((m) => m.Impuestos),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/sistema/impuestos/impuesto-create-edit/impuesto-create-edit.component'),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/sistema/impuestos/impuesto-detail/impuesto-detail.component'),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/sistema/impuestos/impuesto-create-edit/impuesto-create-edit.component'),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'unidades-medida',

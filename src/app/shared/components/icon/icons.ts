@@ -94,6 +94,8 @@ import {
   Phone,
   ShoppingCart,
   UserCheck,
+  RefreshCw,
+  ReceiptText,
   X,
   Zap,
 } from 'lucide-angular';
@@ -204,6 +206,8 @@ export const ZARD_ICONS = {
   globe: Globe,
   'user-check': UserCheck,
   'shopping-cart': ShoppingCart,
+  'refresh-cw': RefreshCw,
+  'receipt-text': ReceiptText,
 } as const satisfies Record<string, LucideIconData>;
 
-export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;
+export type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;

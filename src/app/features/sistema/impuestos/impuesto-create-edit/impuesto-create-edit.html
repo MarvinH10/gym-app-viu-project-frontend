@@ -1,0 +1,27 @@
+<div class="form-container">
+  <div class="form-header">
+    <div class="header-main">
+      <button z-button zType="outline" zSize="icon-sm" (click)="onCancel()" title="Volver">
+        <z-icon zType="arrow-left" class="size-4" />
+      </button>
+      <div class="header-info">
+        <h1 class="header-title">{{ taxId() ? 'Editar Impuesto' : 'Nuevo Impuesto' }}</h1>
+        <p class="header-subtitle">Completa la información técnica del impuesto.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-content">
+    <z-card class="form-card">
+      <app-form-create-edit
+        [fields]="taxFormFields"
+        [initialData]="initialData()"
+        [loading]="isLoading()"
+        [isSubmitting]="isSubmitting()"
+        [submitLabel]="taxId() ? 'Guardar Cambios' : 'Crear Impuesto'"
+        (formSubmit)="onFormSubmit($event)"
+        (cancel)="onCancel()"
+      />
+    </z-card>
+  </div>
+</div>
