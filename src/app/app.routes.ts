@@ -446,9 +446,53 @@ export const routes: Routes = [
           },
           {
             path: 'pos',
-            loadComponent: () => import('./features/ventas/pos/pos').then((m) => m.Pos),
-            title: 'Punto de Venta | Gym App',
-            data: { breadcrumb: 'POS' },
+            data: { breadcrumb: 'Terminales POS' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/ventas/pos/configs/pos-config-list/pos-config-list.component').then(
+                    (m) => m.PosConfigListComponent,
+                  ),
+                title: 'Terminales POS | Gym App',
+              },
+              {
+                path: 'create',
+                loadComponent: () =>
+                  import('./features/ventas/pos/configs/pos-config-create-edit/pos-config-create-edit.component').then(
+                    (m) => m.PosConfigCreateEditComponent,
+                  ),
+                title: 'Nueva Terminal | Gym App',
+                data: { breadcrumb: 'Crear' },
+              },
+              {
+                path: 'edit/:id',
+                loadComponent: () =>
+                  import('./features/ventas/pos/configs/pos-config-create-edit/pos-config-create-edit.component').then(
+                    (m) => m.PosConfigCreateEditComponent,
+                  ),
+                title: 'Editar Terminal | Gym App',
+                data: { breadcrumb: 'Editar' },
+              },
+              {
+                path: 'open/:configId',
+                loadComponent: () =>
+                  import('./features/ventas/pos/interactive/pos-session-open.component').then(
+                    (m) => m.PosSessionOpenComponent,
+                  ),
+                title: 'Apertura de Caja | Gym App',
+                data: { breadcrumb: 'Apertura' },
+              },
+              {
+                path: 'session/:sessionId',
+                loadComponent: () =>
+                  import('./features/ventas/pos/interactive/pos-layout.component').then(
+                    (m) => m.PosLayoutComponent,
+                  ),
+                title: 'Terminal PDV | Gym App',
+                data: { breadcrumb: 'Terminal' },
+              },
+            ],
           },
           {
             path: 'lista',

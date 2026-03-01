@@ -29,6 +29,9 @@ export class ProductApi {
     if (params.search) {
       httpParams = httpParams.set('search', params.search);
     }
+    if (params.category_id) {
+      httpParams = httpParams.set('category_id', params.category_id.toString());
+    }
 
     return this.http
       .get<any>(this.API_URL, {
