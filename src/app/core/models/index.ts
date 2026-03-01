@@ -5,3 +5,4 @@ export * from './member.model';
 export * from './tax.model';
 export * from './unit-measure.model';
 export * from './attribute.model';
+export * from './category.model';

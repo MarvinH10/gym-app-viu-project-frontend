@@ -109,9 +109,36 @@ export const routes: Routes = [
         children: [
           {
             path: 'categorias',
-            loadComponent: () =>
-              import('./features/inventario/categorias/categorias').then((m) => m.Categorias),
             data: { breadcrumb: 'Categorías' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/inventario/categorias/categorias').then((m) => m.Categorias),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import(
+                    './features/inventario/categorias/categoria-create-edit/categoria-create-edit.component'
+                  ),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/inventario/categorias/categoria-detail/categoria-detail.component'),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import(
+                    './features/inventario/categorias/categoria-create-edit/categoria-create-edit.component'
+                  ),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'productos',

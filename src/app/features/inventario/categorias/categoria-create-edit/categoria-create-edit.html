@@ -1,0 +1,21 @@
+<div class="form-container">
+    <div class="form-header">
+        <div class="header-main">
+            <button z-button zType="outline" zSize="icon-sm" (click)="onCancel()" title="Volver">
+                <z-icon zType="arrow-left" class="size-4" />
+            </button>
+            <div class="header-info">
+                <h1 class="header-title">{{ categoryId() ? 'Editar Categoría' : 'Nueva Categoría' }}</h1>
+                <p class="header-subtitle">Configura los datos y la jerarquía de la categoría.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-content">
+        <z-card class="form-card">
+            <app-form-create-edit [fields]="categoryFormFields" [initialData]="initialData()" [loading]="isLoading()"
+                [isSubmitting]="isSubmitting()" [submitLabel]="categoryId() ? 'Guardar Cambios' : 'Crear Categoría'"
+                (formSubmit)="onFormSubmit($event)" (cancel)="onCancel()" />
+        </z-card>
+    </div>
+</div>
