@@ -416,9 +416,35 @@ export const routes: Routes = [
           },
           {
             path: 'clientes',
-            loadComponent: () =>
-              import('./features/ventas/clientes/clientes').then((m) => m.Clientes),
-            title: 'Clientes | Gym App',
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/ventas/clientes/clientes').then((m) => m.Clientes),
+                title: 'Clientes | Gym App',
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/ventas/clientes/cliente-create-edit/cliente-create-edit.component'),
+                title: 'Nuevo Cliente | Gym App',
+                data: { breadcrumb: 'Crear' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/ventas/clientes/cliente-detail/cliente-detail.component'),
+                title: 'Detalle de Cliente | Gym App',
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/ventas/clientes/cliente-create-edit/cliente-create-edit.component'),
+                title: 'Editar Cliente | Gym App',
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
             data: { breadcrumb: 'Clientes' },
           },
         ],

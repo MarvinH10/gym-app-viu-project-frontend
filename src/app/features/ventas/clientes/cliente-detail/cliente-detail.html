@@ -1,0 +1,28 @@
+<div class="cliente-detail-container pb-8 space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Detalle del Cliente</h1>
+            <p class="text-muted-foreground">Consulta la información completa del cliente.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isDeleting()">
+                <z-icon zType="pencil" class="size-4" />
+                <span>Editar</span>
+            </button>
+            <button z-button zType="destructive" [disabled]="isDeleting()" (click)="confirmDelete()">
+                <z-icon zType="trash" class="size-4" />
+                <span>
+                    @if (isDeleting()) {
+                    Eliminando...
+                    } @else {
+                    Eliminar
+                    }
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <z-card>
+        <app-form-detail [data]="customer()" [sections]="detailSections" [loading]="loading()" />
+    </z-card>
+</div>
