@@ -8,16 +8,14 @@ import {
   input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ZardInputDirective } from '@/shared/components/input/input.directive';
 import { ZardLabelDirective } from '@/shared/components/label';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 import { ZardDatePickerImports } from '@/shared/components/date-picker';
+import { ZardCheckboxImports } from '@/shared/components/checkbox/checkbox.imports';
+import { ZardIconImports } from '@/shared/components/icon/icon.imports';
 
 export interface DefaultOption {
   label: string;
@@ -27,11 +25,12 @@ export interface DefaultOption {
 export interface DynamicField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'date' | 'select' | 'textarea';
+  type: 'text' | 'email' | 'date' | 'select' | 'textarea' | 'number' | 'boolean';
   placeholder?: string;
   options?: DefaultOption[];
   colSpan?: 1 | 2;
   validators?: any[];
+  defaultValue?: any;
 }
 
 @Component({
@@ -43,8 +42,10 @@ export interface DynamicField {
     ZardInputDirective,
     ZardLabelDirective,
     ZardButtonComponent,
+    ...ZardIconImports,
     ...ZardDatePickerImports,
     ...ZardSelectImports,
+    ...ZardCheckboxImports,
   ],
   templateUrl: './form-create-edit.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,7 +55,9 @@ export class FormCreateEditComponent implements OnInit {
 
   fields = input<DynamicField[]>([]);
   initialData = input<any | undefined>(undefined);
+  loading = input(false);
   isSubmitting = input(false);
+  submitLabel = input('Guardar');
 
   @Output() formSubmit = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
@@ -72,12 +75,10 @@ export class FormCreateEditComponent implements OnInit {
     const group: { [key: string]: any } = {};
 
     this.fields().forEach((field) => {
-      let initialValue = initial ? initial[field.name] : null;
+      let initialValue = initial ? initial[field.name] : (field.defaultValue ?? null);
 
       if (field.type === 'date' && initialValue) {
         initialValue = new Date(initialValue);
-      } else if (initialValue === undefined) {
-        initialValue = null;
       }
 
       group[field.name] = [initialValue, field.validators || []];
