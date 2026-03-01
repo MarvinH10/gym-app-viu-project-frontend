@@ -1,16 +1,55 @@
-<div class="p-6 flex flex-col gap-6 max-w-4xl mx-auto h-full">
-    <div>
-        <h1 class="text-3xl font-bold tracking-tight">
-            {{ id() ? 'Editar Suscripción' : 'Nueva Suscripción' }}
-        </h1>
-        <p class="text-muted-foreground">
-            {{ id() ? 'Actualiza los términos de la membresía.' : 'Registra una nueva venta de plan para un socio.' }}
-        </p>
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground">
+        {{ id() ? 'Editar Suscripción' : 'Nueva Suscripción' }}
+      </h1>
+      <p class="text-muted-foreground mt-2">
+        {{
+          id()
+            ? 'Modifica los parámetros de la suscripción seleccionada.'
+            : 'Selecciona un socio y plan para registrar una nueva suscripción en el sistema.'
+        }}
+      </p>
     </div>
+  </div>
 
-    <div class="flex-1 overflow-auto">
-        <app-form-create-edit [fields]="fields()" [initialData]="initialData()" [loading]="loading()"
-            [submitLabel]="id() ? 'Actualizar' : 'Crear Suscripción'" (formSubmit)="onFormSubmit($event)"
-            (cancel)="goBack()" />
-    </div>
+  <z-card class="p-6">
+    @if (loading()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-20 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-32 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-24 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-28 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex flex-col gap-2 mt-2">
+          <z-skeleton class="h-4 w-24 rounded" />
+          <z-skeleton class="h-24 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex justify-end gap-3 mt-4">
+          <z-skeleton class="h-10 w-32 rounded-md" />
+          <z-skeleton class="h-10 w-32 rounded-md" />
+        </div>
+      </div>
+    } @else {
+      <app-form-create-edit
+        [fields]="fields()"
+        [initialData]="initialData()"
+        [submitLabel]="id() ? 'Actualizar Suscripción' : 'Adquirir Plan'"
+        (formSubmit)="onFormSubmit($event)"
+        (cancel)="goBack()"
+      />
+    }
+  </z-card>
 </div>

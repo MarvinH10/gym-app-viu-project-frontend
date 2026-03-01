@@ -11,6 +11,7 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { UnitOfMeasureApi } from '@/core/services/api/unit-measure.api';
 import { UnitOfMeasureResource } from '@/core/models';
 import { ZardSkeletonImports } from '@/shared/components/skeleton';
+import { ZardBadgeImports } from '@/shared/components/badge';
 
 @Component({
   selector: 'app-unidades-medida-detail',
@@ -20,6 +21,7 @@ import { ZardSkeletonImports } from '@/shared/components/skeleton';
     ZardCardComponent,
     ZardButtonComponent,
     ZardIconComponent,
+    ...ZardBadgeImports,
     ...ZardSkeletonImports,
     ...FormDetailImports,
   ],
@@ -34,6 +36,7 @@ export default class UnidadesMedidaDetailComponent implements OnInit {
 
   readonly unit = signal<UnitOfMeasureResource | null>(null);
   readonly loading = signal(true);
+  readonly error = signal<string | null>(null);
   readonly isDeleting = signal(false);
 
   readonly detailSections: DetailSection[] = [
@@ -84,12 +87,18 @@ export default class UnidadesMedidaDetailComponent implements OnInit {
         this.unit.set(res.data);
         this.loading.set(false);
       },
-      error: () => {
+      error: (err) => {
         this.loading.set(false);
-        toast.error('No se encontró la unidad de medida');
-        this.router.navigate(['/sistema/unidades-medida']);
+        const msg =
+          err?.error?.message || 'No se pudo cargar la información de la unidad de medida.';
+        this.error.set(msg);
+        toast.error('Error', { description: msg });
       },
     });
+  }
+
+  onBack() {
+    this.router.navigate(['/sistema/unidades-medida']);
   }
 
   goToEdit() {
@@ -112,7 +121,7 @@ export default class UnidadesMedidaDetailComponent implements OnInit {
         this.unitApi.deleteUnit(u.id).subscribe({
           next: () => {
             toast.success('Unidad de medida eliminada');
-            this.router.navigate(['/sistema/unidades-medida']);
+            this.onBack();
           },
           error: () => {
             this.isDeleting.set(false);

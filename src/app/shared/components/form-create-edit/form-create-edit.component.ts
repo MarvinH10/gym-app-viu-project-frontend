@@ -18,6 +18,7 @@ import { ZardDatePickerImports } from '@/shared/components/date-picker';
 import { ZardCheckboxImports } from '@/shared/components/checkbox/checkbox.imports';
 import { ZardIconImports } from '@/shared/components/icon/icon.imports';
 import { ZardSwitchImports } from '@/shared/components/switch';
+import { ZardTimePickerImports } from '@/shared/components/time-picker';
 
 export interface DefaultOption {
   label: string;
@@ -36,7 +37,8 @@ export interface DynamicField {
     | 'number'
     | 'boolean'
     | 'switch'
-    | 'tags';
+    | 'tags'
+    | 'time';
   placeholder?: string;
   options?: DefaultOption[];
   colSpan?: 1 | 2;
@@ -59,6 +61,7 @@ export interface DynamicField {
     ...ZardCheckboxImports,
     ...ZardSwitchImports,
     ...ZardBadgeImports,
+    ...ZardTimePickerImports,
   ],
   templateUrl: './form-create-edit.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -138,7 +141,6 @@ export class FormCreateEditComponent implements OnInit {
     return !!(control && control.invalid && (control.dirty || control.touched));
   }
 
-  // Tags logic
   addTag(fieldName: string, event: any) {
     const input = event.target as HTMLInputElement;
     const value = input.value.trim();

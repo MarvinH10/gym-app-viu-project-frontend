@@ -57,6 +57,13 @@
                 zFormat="dd/MM/yyyy"
               ></z-date-picker>
             }
+            @case ('time') {
+              <z-time-picker
+                [formControlName]="field.name"
+                class="w-full"
+                [placeholder]="field.placeholder || '00:00'"
+              ></z-time-picker>
+            }
             @case ('select') {
               <z-select [formControlName]="field.name">
                 <z-select-item [zValue]="''">Seleccionar...</z-select-item>
