@@ -116,7 +116,7 @@ export class Proveedores {
     {
       label: 'Editar',
       icon: 'pencil',
-      onAction: (s) => this.router.navigate(['/compras/proveedores/editar', s.id]),
+      onAction: (s) => this.router.navigate(['/compras/proveedores', s.id, 'edit']),
     },
     {
       label: 'Cambiar estado',

@@ -1,50 +1,58 @@
 <div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex flex-col gap-2">
-            <h1 class="text-3xl font-bold tracking-tight text-foreground">
-                {{ warehouseId() ? 'Editar Almacén' : 'Crear Nuevo Almacén' }}
-            </h1>
-            <p class="text-muted-foreground mt-2">
-                {{
-                warehouseId()
-                ? 'Modifica los datos del almacén seleccionado.'
-                : 'Completa el formulario para registrar una nueva ubicación de inventario.'
-                }}
-            </p>
-        </div>
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground">
+        {{ warehouseId() ? 'Editar Almacén' : 'Crear Nuevo Almacén' }}
+      </h1>
+      <p class="text-muted-foreground">
+        {{
+          warehouseId()
+            ? 'Modifica los datos del almacén seleccionado.'
+            : 'Completa el formulario para registrar una nueva ubicación de inventario.'
+        }}
+      </p>
     </div>
+  </div>
 
-    <z-card class="p-6">
-        @if (error()) {
-        <div class="mb-6 p-4 rounded-md bg-destructive/10 text-destructive text-sm flex items-center gap-3">
-            <z-icon zType="triangle-alert" class="size-5" />
-            <p>{{ error() }}</p>
-        </div>
-        }
+  <z-card class="p-6">
+    @if (error()) {
+      <div
+        class="mb-6 p-4 rounded-md bg-destructive/10 text-destructive text-sm flex items-center gap-3"
+      >
+        <z-icon zType="triangle-alert" class="size-5" />
+        <p>{{ error() }}</p>
+      </div>
+    }
 
-        @if (loading()) {
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="md:col-span-2 flex flex-col gap-2">
-                <z-skeleton class="h-4 w-36 rounded" />
-                <z-skeleton class="h-10 w-full rounded-md" />
-            </div>
-            <div class="md:col-span-2 flex flex-col gap-2">
-                <z-skeleton class="h-4 w-24 rounded" />
-                <z-skeleton class="h-20 w-full rounded-md" />
-            </div>
-            <div class="flex flex-col gap-2">
-                <z-skeleton class="h-4 w-32 rounded" />
-                <z-skeleton class="h-10 w-full rounded-md" />
-            </div>
-            <div class="md:col-span-2 flex justify-end gap-3 pt-2">
-                <z-skeleton class="h-10 w-24 rounded-md" />
-                <z-skeleton class="h-10 w-28 rounded-md" />
-            </div>
+    @if (isLoading()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-36 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
         </div>
-        } @else {
-        <app-form-create-edit [fields]="warehouseFormFields()" [initialData]="initialData()" [loading]="loading()"
-            [isSubmitting]="isSubmitting()" [submitLabel]="warehouseId() ? 'Guardar Cambios' : 'Crear Almacén'"
-            (formSubmit)="onFormSubmit($event)" (cancel)="onCancel()" />
-        }
-    </z-card>
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-24 rounded" />
+          <z-skeleton class="h-20 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-32 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex justify-end gap-3 pt-2">
+          <z-skeleton class="h-10 w-24 rounded-md" />
+          <z-skeleton class="h-10 w-28 rounded-md" />
+        </div>
+      </div>
+    } @else {
+      <app-form-create-edit
+        [fields]="warehouseFormFields()"
+        [initialData]="initialData()"
+        [loading]="isLoading()"
+        [isSubmitting]="isSubmitting()"
+        [submitLabel]="warehouseId() ? 'Guardar Cambios' : 'Crear Almacén'"
+        (formSubmit)="onFormSubmit($event)"
+        (cancel)="onCancel()"
+      />
+    }
+  </z-card>
 </div>

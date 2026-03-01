@@ -1,41 +1,85 @@
 <div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/40 pb-6">
-        <div class="flex flex-col gap-1">
-            <div class="flex items-center gap-2 mb-1">
-                <button z-button zType="outline" zSize="icon-sm" (click)="onBack()" title="Volver">
-                    <z-icon zType="arrow-left" class="size-4" />
-                </button>
-                @if (loading()) {
-                <z-skeleton class="h-8 w-64 rounded-md" />
-                } @else {
-                <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ supplier()?.display_name }}</h1>
-                }
-            </div>
-            @if (loading()) {
-            <z-skeleton class="h-4 w-48 rounded ml-10" />
-            } @else {
-            <p class="text-muted-foreground ml-10">
-                {{ supplier()?.document_type }}: {{ supplier()?.document_number }} • {{ supplier()?.provider_category ||
-                'Proveedor General' }}
-            </p>
-            }
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (loading()) {
+        <z-skeleton class="h-8 w-64 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-48 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">
+            {{ supplier()?.display_name }}
+          </h1>
+          @if (supplier(); as s) {
+            <z-badge
+              [zType]="
+                s.status === 'active'
+                  ? 'secondary'
+                  : s.status === 'suspended' || s.status === 'blacklisted'
+                    ? 'destructive'
+                    : 'outline'
+              "
+            >
+              {{
+                s.status === 'active'
+                  ? 'Activo'
+                  : s.status === 'inactive'
+                    ? 'Inactivo'
+                    : s.status === 'suspended'
+                      ? 'Suspendido'
+                      : 'Lista Negra'
+              }}
+            </z-badge>
+          }
         </div>
-
-        @if (!loading() && supplier()) {
-        <div class="flex gap-2">
-            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isDeleting()">
-                <z-icon zType="pencil" class="size-4 mr-2" />
-                <span>Editar</span>
-            </button>
-            <button z-button zType="destructive" zVariant="outline" (click)="confirmDelete()" [disabled]="isDeleting()">
-                <z-icon zType="trash" class="size-4 mr-2" />
-                <span>Eliminar</span>
-            </button>
-        </div>
-        }
+        <p class="text-muted-foreground">
+          {{ supplier()?.document_type }}: {{ supplier()?.document_number }} •
+          {{ supplier()?.provider_category || 'Proveedor General' }}
+        </p>
+      }
     </div>
 
-    <z-card class="p-6">
-        <app-form-detail [sections]="detailSections" [data]="supplier()" [loading]="loading()" />
+    @if (!loading() && supplier()) {
+      <div class="flex gap-2">
+        <button z-button zType="outline" (click)="onBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        <button
+          z-button
+          zType="outline"
+          (click)="goToEdit()"
+          [disabled]="loading() || isDeleting()"
+        >
+          <z-icon zType="pencil" class="size-4 mr-2" />
+          <span>Editar</span>
+        </button>
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          (click)="confirmDelete()"
+          [disabled]="loading() || isDeleting()"
+        >
+          <z-icon zType="trash" class="size-4 mr-2" />
+          <span>Eliminar</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (error()) {
+    <z-card class="p-8 text-center bg-destructive/5 border-destructive/20">
+      <z-icon
+        zType="triangle-alert"
+        class="size-12 rounded-full bg-destructive/10 text-destructive text-center mx-auto mb-4"
+      />
+      <h3 class="font-medium text-destructive mb-2">Error</h3>
+      <p class="text-muted-foreground">{{ error() }}</p>
+      <button z-button zType="outline" class="mt-4" (click)="onBack()">Volver a la lista</button>
     </z-card>
+  } @else {
+    <z-card class="p-6">
+      <app-form-detail [sections]="detailSections" [data]="supplier()" [loading]="loading()" />
+    </z-card>
+  }
 </div>
