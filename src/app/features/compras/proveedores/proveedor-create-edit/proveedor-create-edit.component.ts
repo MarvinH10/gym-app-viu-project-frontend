@@ -19,6 +19,7 @@ import {
   DefaultOption,
 } from '@/shared/components/form-create-edit';
 import { SupplierApi } from '@/core/services/api/supplier.api';
+import { CompanyApi } from '@/core/services/api/company.api';
 import { SupplierResource, SupplierFormOptions } from '@/core/models';
 import { ZardSkeletonImports } from '@/shared/components/skeleton';
 
@@ -39,6 +40,7 @@ export default class ProveedorCreateEditComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly supplierApi = inject(SupplierApi);
+  private readonly companyApi = inject(CompanyApi);
 
   readonly isSubmitting = signal(false);
   readonly isLoading = signal(false);
@@ -169,9 +171,14 @@ export default class ProveedorCreateEditComponent implements OnInit {
   }
 
   private loadFormOptions() {
-    this.supplierApi.getFormOptions().subscribe({
-      next: (res) => this.formOptions.set(res.data),
-      error: () => toast.error('Error al cargar opciones del formulario'),
+    // Skipping supplierApi.getFormOptions() due to 500 error, using fallback
+    this.companyApi.getCompanies({ per_page: 100 }).subscribe({
+      next: (res: any) => {
+        this.formOptions.set({
+          companies: res.data || res.data?.data || []
+        });
+      },
+      error: () => toast.error('Error al cargar compañías para el proveedor')
     });
   }
 

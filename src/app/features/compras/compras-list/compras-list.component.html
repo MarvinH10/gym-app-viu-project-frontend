@@ -1,0 +1,41 @@
+<div class="compras-container pb-8 space-y-6">
+    <div class="flex flex-col gap-1 px-6 pt-6">
+        <h1 class="text-3xl font-bold tracking-tight">Gestión de Compras</h1>
+        <p class="text-muted-foreground">
+            Administra tus órdenes de compra, proveedores y stock recibido.
+        </p>
+    </div>
+
+    <div class="px-6">
+        <z-card>
+            <div class="p-6 space-y-6">
+                <!-- Filtros -->
+                <div class="flex flex-col md:flex-row md:items-center gap-4">
+                    <z-search-filters class="flex-1" placeholder="Buscar por número, proveedor o serie..."
+                        [initialSearch]="search()" [totalResults]="pagination()?.total ?? 0" [sections]="filterSections"
+                        [selectedValues]="selectedFilters()" (filterToggle)="onFilterToggle($event)"
+                        (searchChange)="search.set($event); currentPage.set(1)" />
+
+                    <button z-button zType="default" (click)="goToNewPurchase()">
+                        <z-icon zType="plus" class="size-4 mr-2"></z-icon>
+                        Nueva Compra
+                    </button>
+                </div>
+
+                <!-- Tabla -->
+                @if (error()) {
+                <div class="p-4 bg-destructive/10 text-destructive rounded-md flex items-center gap-3">
+                    <z-icon zType="circle-alert" class="size-5"></z-icon>
+                    <p>{{ error() }}</p>
+                    <button z-button zType="outline" size="sm" class="ml-auto" (click)="loadPurchases()">
+                        Reintentar
+                    </button>
+                </div>
+                }
+
+                <app-table-details [data]="purchases()" [columns]="columns" [actions]="actions" [loading]="loading()"
+                    [pagination]="pagination()" [currentPage]="currentPage()" (pageChange)="currentPage.set($event)" />
+            </div>
+        </z-card>
+    </div>
+</div>

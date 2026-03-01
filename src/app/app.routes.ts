@@ -350,12 +350,44 @@ export const routes: Routes = [
           },
           {
             path: 'lista',
-            loadComponent: () =>
-              import('./features/compras/compras-list/compras-list.component').then(
-                (m) => m.ComprasListComponent,
-              ),
-            title: 'Listado de Compras | Gym App',
-            data: { breadcrumb: 'Listado' },
+            data: { breadcrumb: 'Compras' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/compras/compras-list/compras-list.component').then(
+                    (m) => m.ComprasListComponent,
+                  ),
+                title: 'Listado de Compras | Gym App',
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/compras/compras-list/compra-create-edit/compra-create-edit.component').then(
+                    (m) => m.CompraCreateEditComponent,
+                  ),
+                title: 'Nueva Orden de Compra | Gym App',
+                data: { breadcrumb: 'Nueva' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/compras/compras-list/compra-detail/compra-detail.component').then(
+                    (m) => m.CompraDetailComponent,
+                  ),
+                title: 'Detalle de Compra | Gym App',
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/compras/compras-list/compra-create-edit/compra-create-edit.component').then(
+                    (m) => m.CompraCreateEditComponent,
+                  ),
+                title: 'Editar Compra | Gym App',
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'proveedores',
