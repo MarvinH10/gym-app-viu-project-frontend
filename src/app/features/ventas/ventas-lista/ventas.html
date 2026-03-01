@@ -1,27 +1,39 @@
-<div class="ventas-container pb-8 flex flex-col gap-6">
-    <div class="page-header flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex flex-col gap-1">
-            <h1 class="text-3xl font-bold tracking-tight">Ventas</h1>
-            <p class="text-muted-foreground italic">
-                Gestiona tus comprobantes de venta, boletas y facturas.
-            </p>
-        </div>
-        <button z-button zType="default" (click)="goToNewSale()">
-            <z-icon zType="plus" leftIcon class="size-4" />
-            Nueva Venta
-        </button>
+<div class="ventas-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Ventas Generales</h1>
+      <p class="page-description">Gestiona tus comprobantes de venta, boletas y facturas.</p>
     </div>
+    <div class="header-actions">
+      <button z-button zType="default" (click)="goToNewSale()">
+        <z-icon zType="plus" class="size-4" />
+        <span>Nueva Venta</span>
+      </button>
+    </div>
+  </div>
 
-    <z-card class="table-card">
-        <div class="p-6 flex flex-col gap-6">
-            <div class="flex flex-col md:flex-row md:items-center gap-4">
-                <z-search-filters class="flex-1" placeholder="Buscar por cliente o número de documento..."
-                    [initialSearch]="search()" [totalResults]="pagination()?.total ?? 0"
-                    (searchChange)="search.set($event); currentPage.set(1)" />
-            </div>
+  <z-search-filters
+    placeholder="Buscar por cliente o número de documento..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
 
-            <app-table-details [data]="sales()" [columns]="columns" [actions]="actions" [loading]="loading()"
-                [pagination]="pagination()" [currentPage]="currentPage()" (pageChange)="currentPage.set($event)" />
-        </div>
-    </z-card>
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="sales()"
+      [actions]="actions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="shopping-cart"
+      emptyLabel="No se encontraron ventas registradas"
+      emptyHint="Intenta ajustar la búsqueda o añade una nueva"
+      itemLabel="ventas"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadSales()"
+    />
+  </z-card>
 </div>

@@ -346,7 +346,7 @@ export const routes: Routes = [
       },
       {
         path: 'compras',
-        data: { breadcrumb: 'Compras' },
+        data: { breadcrumb: 'Ordenes de Compra' },
         children: [
           {
             path: '',
@@ -372,7 +372,7 @@ export const routes: Routes = [
                     (m) => m.CompraCreateEditComponent,
                   ),
                 title: 'Nueva Orden de Compra | Gym App',
-                data: { breadcrumb: 'Nueva' },
+                data: { breadcrumb: 'Crear' },
               },
               {
                 path: ':id',
@@ -437,7 +437,7 @@ export const routes: Routes = [
       },
       {
         path: 'ventas',
-        data: { breadcrumb: 'Ventas' },
+        data: { breadcrumb: 'Ventas Generales' },
         children: [
           {
             path: '',
@@ -500,28 +500,32 @@ export const routes: Routes = [
             children: [
               {
                 path: '',
-                loadComponent: () => import('./features/ventas/ventas-lista/ventas').then((m) => m.Ventas),
+                loadComponent: () =>
+                  import('./features/ventas/ventas-lista/ventas').then((m) => m.Ventas),
                 title: 'Listado de Ventas | Gym App',
               },
               {
                 path: 'new',
-                loadComponent: () => import('./features/ventas/ventas-lista/venta-create-edit/venta-create-edit.component'),
+                loadComponent: () =>
+                  import('./features/ventas/ventas-lista/venta-create-edit/venta-create-edit.component'),
                 title: 'Nueva Venta | Gym App',
                 data: { breadcrumb: 'Nueva' },
               },
               {
                 path: ':id',
-                loadComponent: () => import('./features/ventas/ventas-lista/venta-detail/venta-detail.component'),
+                loadComponent: () =>
+                  import('./features/ventas/ventas-lista/venta-detail/venta-detail.component'),
                 title: 'Detalle de Venta | Gym App',
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
-                loadComponent: () => import('./features/ventas/ventas-lista/venta-create-edit/venta-create-edit.component'),
+                loadComponent: () =>
+                  import('./features/ventas/ventas-lista/venta-create-edit/venta-create-edit.component'),
                 title: 'Editar Venta | Gym App',
                 data: { breadcrumb: 'Editar' },
               },
-            ]
+            ],
           },
           {
             path: 'clientes',
