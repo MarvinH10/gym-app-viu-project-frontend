@@ -1,31 +1,38 @@
-<div class="h-full flex flex-col gap-6 p-6 overflow-hidden">
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tight">Control de Asistencias</h1>
-            <p class="text-muted-foreground">Monitorea y gestiona el flujo de socios en el gimnasio.</p>
-        </div>
-        <div class="flex items-center gap-2">
-            <z-button (click)="goToCheckIn()" class="gap-2">
-                <z-icon zType="user-check" zSize="lg" />
-                Registrar Entrada
-            </z-button>
-        </div>
+<div class="attendances-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title flex items-center gap-3">Control de Asistencias</h1>
+      <p class="page-description">Monitorea y gestiona el flujo de socios en el gimnasio.</p>
     </div>
+    <div class="header-actions">
+      <z-button (click)="goToCheckIn()" class="gap-2 shadow-sm">
+        <z-icon zType="plus" />
+        Registrar Entrada
+      </z-button>
+    </div>
+  </div>
 
-    <z-card class="bg-card flex-1 flex flex-col overflow-hidden">
-        <!-- Filtros de búsqueda y estado -->
-        <div class="p-6 border-b">
-            <z-search-filters [initialSearch]="search()" (searchChange)="search.set($event)"
-                placeholder="Buscar por socio o documento...">
-                <!-- Se podrían añadir filtros adicionales por fecha aquí -->
-            </z-search-filters>
-        </div>
+  <z-search-filters
+    placeholder="Buscar por socio..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
 
-        <!-- Tabla de Asistencias -->
-        <div class="flex-1 overflow-auto">
-            <app-table-details [columns]="columns" [data]="attendances()" [actions]="tableActions" [loading]="loading()"
-                [error]="error()" (retry)="loadAttendances()" [pagination]="pagination()"
-                (pageChange)="currentPage.set($event)" />
-        </div>
-    </z-card>
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="attendances()"
+      [actions]="tableActions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="clipboard-list"
+      emptyHint="Intenta ajustar los filtros o registra una nueva entrada"
+      itemLabel="asistencias"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadAttendances()"
+    />
+  </z-card>
 </div>

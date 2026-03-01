@@ -6,12 +6,12 @@
       </button>
       <div class="breadcrumb">
         <z-breadcrumb>
-          <z-breadcrumb-item [routerLink]="['/dashboard']">
-            <z-icon zType="house" class="size-4" />
-          </z-breadcrumb-item>
-
-          @for (bc of breadcrumbService.breadcrumbs(); track $index) {
-            <z-breadcrumb-item [routerLink]="[bc.url]">
+          @for (bc of breadcrumbService.breadcrumbs(); track $index; let isFirst = $first) {
+            <z-breadcrumb-item
+              [routerLink]="isFirst ? [] : [bc.url]"
+              [class.pointer-events-none]="isFirst"
+              [class.opacity-70]="isFirst"
+            >
               {{ bc.label }}
             </z-breadcrumb-item>
           }
