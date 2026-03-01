@@ -1,19 +1,4 @@
-export interface CompanyResource {
-  id: number | string;
-  parent_id: number | string | null;
-  branch_code: string;
-  is_main: boolean;
-  business_name: string;
-  trade_name: string;
-  ruc: string;
-  address: string;
-  phone: string;
-  email: string;
-  ubigeo: string;
-  active: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import { CompanyResource } from './company.model';
 
 export interface MemberUserResource {
   id: string;

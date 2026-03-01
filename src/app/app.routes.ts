@@ -119,9 +119,7 @@ export const routes: Routes = [
               {
                 path: 'new',
                 loadComponent: () =>
-                  import(
-                    './features/inventario/categorias/categoria-create-edit/categoria-create-edit.component'
-                  ),
+                  import('./features/inventario/categorias/categoria-create-edit/categoria-create-edit.component'),
                 data: { breadcrumb: 'Nuevo' },
               },
               {
@@ -133,9 +131,7 @@ export const routes: Routes = [
               {
                 path: ':id/edit',
                 loadComponent: () =>
-                  import(
-                    './features/inventario/categorias/categoria-create-edit/categoria-create-edit.component'
-                  ),
+                  import('./features/inventario/categorias/categoria-create-edit/categoria-create-edit.component'),
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -158,9 +154,7 @@ export const routes: Routes = [
               {
                 path: 'new',
                 loadComponent: () =>
-                  import(
-                    './features/inventario/atributos/atributo-create-edit/atributo-create-edit.component'
-                  ),
+                  import('./features/inventario/atributos/atributo-create-edit/atributo-create-edit.component'),
                 data: { breadcrumb: 'Nuevo' },
               },
               {
@@ -172,9 +166,7 @@ export const routes: Routes = [
               {
                 path: ':id/edit',
                 loadComponent: () =>
-                  import(
-                    './features/inventario/atributos/atributo-create-edit/atributo-create-edit.component'
-                  ),
+                  import('./features/inventario/atributos/atributo-create-edit/atributo-create-edit.component'),
                 data: { breadcrumb: 'Editar' },
               },
             ],
@@ -247,9 +239,38 @@ export const routes: Routes = [
         children: [
           {
             path: 'companias',
-            loadComponent: () =>
-              import('./features/sistema/companias/companias').then((m) => m.Companias),
             data: { breadcrumb: 'Compañías' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/sistema/companias/companias').then((m) => m.Companias),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/sistema/companias/company-create-edit/company-create-edit.component').then(
+                    (m) => m.CompanyCreateEditComponent,
+                  ),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/sistema/companias/company-detail/company-detail.component').then(
+                    (m) => m.CompanyDetailComponent,
+                  ),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/sistema/companias/company-create-edit/company-create-edit.component').then(
+                    (m) => m.CompanyCreateEditComponent,
+                  ),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'usuarios',
@@ -317,30 +338,23 @@ export const routes: Routes = [
               {
                 path: 'new',
                 loadComponent: () =>
-                  import(
-                    './features/sistema/unidades-medida/unidades-medida-create-edit/unidades-medida-create-edit.component'
-                  ),
+                  import('./features/sistema/unidades-medida/unidades-medida-create-edit/unidades-medida-create-edit.component'),
                 data: { breadcrumb: 'Nuevo' },
               },
               {
                 path: ':id',
                 loadComponent: () =>
-                  import(
-                    './features/sistema/unidades-medida/unidades-medida-detail/unidades-medida-detail.component'
-                  ),
+                  import('./features/sistema/unidades-medida/unidades-medida-detail/unidades-medida-detail.component'),
                 data: { breadcrumb: 'Detalle' },
               },
               {
                 path: ':id/edit',
                 loadComponent: () =>
-                  import(
-                    './features/sistema/unidades-medida/unidades-medida-create-edit/unidades-medida-create-edit.component'
-                  ),
+                  import('./features/sistema/unidades-medida/unidades-medida-create-edit/unidades-medida-create-edit.component'),
                 data: { breadcrumb: 'Editar' },
               },
             ],
           },
-
         ],
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

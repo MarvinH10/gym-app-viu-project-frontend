@@ -1,0 +1,48 @@
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground">Detalle de Compañía</h1>
+      <p class="text-muted-foreground mt-2">
+        Visualiza la información completa de la sede o sucursal seleccionada.
+      </p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button z-button zType="outline" (click)="goToEdit()" [disabled]="loading()">
+        <z-icon zType="pencil" class="size-4 mr-2" />
+        Editar
+      </button>
+      <button
+        z-button
+        zType="destructive"
+        (click)="confirmDelete()"
+        [disabled]="loading() || isDeleting()"
+      >
+        <z-icon zType="trash" class="size-4 mr-2" />
+        Eliminar
+      </button>
+    </div>
+  </div>
+
+  <z-card class="p-6">
+    @if (loading()) {
+      <div class="space-y-8">
+        <div class="space-y-4">
+          <z-skeleton class="h-6 w-48" />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <z-skeleton class="h-12 w-full" />
+            <z-skeleton class="h-12 w-full" />
+          </div>
+        </div>
+        <div class="space-y-4">
+          <z-skeleton class="h-6 w-48" />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <z-skeleton class="h-12 w-full" />
+            <z-skeleton class="h-12 w-full" />
+          </div>
+        </div>
+      </div>
+    } @else if (company()) {
+      <app-form-detail [sections]="detailSections" [data]="company()" />
+    }
+  </z-card>
+</div>
