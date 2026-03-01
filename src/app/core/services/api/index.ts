@@ -7,3 +7,4 @@ export * from './tax.api';
 export * from './unit-measure.api';
 export * from './supplier.api';
 export * from './warehouse.api';
+export * from './product.api';
