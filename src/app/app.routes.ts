@@ -638,10 +638,42 @@ export const routes: Routes = [
           },
           {
             path: 'usuarios',
-            loadComponent: () =>
-              import('./features/sistema/usuarios/usuarios').then((m) => m.Usuarios),
-            title: 'Usuarios | GymZone',
             data: { breadcrumb: 'Usuarios' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/sistema/usuarios/usuarios').then((m) => m.Usuarios),
+                title: 'Usuarios | GymZone',
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/sistema/usuarios/usuario-create-edit/usuario-create-edit.component').then(
+                    (m) => m.UsuarioCreateEditComponent,
+                  ),
+                title: 'Nuevo Usuario | GymZone',
+                data: { breadcrumb: 'Crear' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/sistema/usuarios/usuario-detail/usuario-detail.component').then(
+                    (m) => m.UsuarioDetailComponent,
+                  ),
+                title: 'Detalle de Usuario | GymZone',
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/sistema/usuarios/usuario-create-edit/usuario-create-edit.component').then(
+                    (m) => m.UsuarioCreateEditComponent,
+                  ),
+                title: 'Editar Usuario | GymZone',
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
 
           {

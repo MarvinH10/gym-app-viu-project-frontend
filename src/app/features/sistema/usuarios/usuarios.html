@@ -1,0 +1,39 @@
+<div class="usuarios-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Gestión de Usuarios</h1>
+      <p class="page-description">Administra los usuarios y accesos al sistema GymZone.</p>
+    </div>
+    <div class="header-actions">
+      <button z-button zType="default" (click)="goToNewUser()">
+        <z-icon zType="plus" class="size-4" />
+        <span>Nuevo Usuario</span>
+      </button>
+    </div>
+  </div>
+
+  <z-search-filters
+    placeholder="Buscar por nombre o descripción..."
+    [initialSearch]="search()"
+    [totalResults]="pagination()?.total ?? 0"
+    (searchChange)="search.set($event); currentPage.set(1)"
+  />
+
+  <z-card class="table-card">
+    <app-table-details
+      [columns]="columns"
+      [data]="users()"
+      [actions]="actions"
+      [loading]="loading()"
+      [error]="error()"
+      [pagination]="pagination()"
+      [currentPage]="currentPage()"
+      emptyIcon="receipt-text"
+      emptyLabel="No se encontraron usuarios"
+      emptyHint="Intenta ajustar los filtros o registra uno nuevo"
+      itemLabel="usuarios"
+      (pageChange)="currentPage.set($event)"
+      (retry)="loadUsers()"
+    />
+  </z-card>
+</div>
