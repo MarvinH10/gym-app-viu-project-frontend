@@ -1,0 +1,29 @@
+<div class="unit-detail-container max-w-5xl mx-auto py-6 px-4">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-4">
+            <button z-button zType="outline" zSize="icon" (click)="router.navigate(['/sistema/unidades-medida'])"
+                title="Volver">
+                <z-icon zType="arrow-left" class="size-4" />
+            </button>
+            <div>
+                <h1 class="text-2xl font-bold">{{ unit()?.name || 'Detalle de Unidad' }}</h1>
+                <p class="text-sm text-muted-foreground">Consulta la información detallada de esta unidad de medida.</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isLoading() || isDeleting()">
+                <z-icon zType="pencil" class="size-4" />
+                <span>Editar</span>
+            </button>
+            <button z-button zType="destructive" (click)="confirmDelete()" [disabled]="isLoading() || isDeleting()">
+                <z-icon zType="trash" class="size-4" />
+                <span>Eliminar</span>
+            </button>
+        </div>
+    </div>
+
+    <z-card>
+        <app-form-detail [sections]="detailSections" [data]="unit()" [loading]="isLoading()" />
+    </z-card>
+</div>
