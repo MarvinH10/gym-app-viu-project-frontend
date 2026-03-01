@@ -22,6 +22,7 @@ import { ZardDialogRef } from '@/shared/components/dialog/dialog-ref';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ZardInputDirective } from '@/shared/components/input/input.directive';
 import { ZardLabelDirective } from '@/shared/components/label';
+import { ZardBadgeImports } from '@/shared/components/badge';
 
 import { MemberApi } from '@/core/services/api/member.api';
 import { Member } from '@/core/models';
@@ -38,10 +39,10 @@ import { Member } from '@/core/models';
     ReactiveFormsModule,
     ZardInputDirective,
     ZardLabelDirective,
+    ...ZardBadgeImports,
     ...FormDetailImports,
   ],
   templateUrl: './member-detail.html',
-  styleUrl: './member-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class MemberDetailComponent implements OnInit {
@@ -140,6 +141,10 @@ export default class MemberDetailComponent implements OnInit {
         this.router.navigate(['/gym/members']);
       },
     });
+  }
+
+  goBack() {
+    this.router.navigate(['/gym/members']);
   }
 
   goToEdit() {

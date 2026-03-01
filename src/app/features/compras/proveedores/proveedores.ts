@@ -104,6 +104,7 @@ export class Proveedores {
       key: 'created_at',
       label: 'Registrado',
       type: 'text',
+      transform: (v: string) => (v ? new Date(v).toLocaleString() : 'N/A'),
     },
   ];
 
