@@ -1,25 +1,25 @@
 <div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div class="flex flex-col gap-1">
-      @if (isLoading()) {
+      @if (loading()) {
         <z-skeleton class="h-8 w-64 rounded-md mb-1" />
         <z-skeleton class="h-4 w-48 rounded" />
       } @else {
         <div class="flex items-center gap-3">
           <h1 class="text-3xl font-bold tracking-tight text-foreground">
-            {{ paymentMethod()?.name }}
+            {{ user()?.name }}
           </h1>
-          @if (paymentMethod(); as pm) {
-            <z-badge [zType]="pm.is_active ? 'secondary' : 'outline'">
-              {{ pm.is_active ? 'Activo' : 'Inactivo' }}
+          @if (user(); as u) {
+            <z-badge [zType]="u.email_verified_at ? 'secondary' : 'outline'">
+              {{ u.email_verified_at ? 'Verificado' : 'Pendiente' }}
             </z-badge>
           }
         </div>
-        <p class="text-muted-foreground">ID: {{ paymentMethod()?.id }}</p>
+        <p class="text-muted-foreground">{{ user()?.email }} • ID: {{ user()?.id }}</p>
       }
     </div>
 
-    @if (!isLoading() && paymentMethod()) {
+    @if (!loading() && user()) {
       <div class="flex gap-2">
         <button z-button zType="outline" (click)="onBack()">
           <z-icon zType="arrow-left" class="size-4 mr-2" />
@@ -55,11 +55,7 @@
     </z-card>
   } @else {
     <z-card class="p-6">
-      <app-form-detail
-        [sections]="detailSections"
-        [data]="paymentMethod()"
-        [loading]="isLoading()"
-      />
+      <app-form-detail [sections]="detailSections" [data]="user()" [loading]="loading()" />
     </z-card>
   }
 </div>

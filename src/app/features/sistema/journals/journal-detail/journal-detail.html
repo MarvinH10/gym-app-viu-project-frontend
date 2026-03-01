@@ -1,30 +1,67 @@
-<div class="journal-detail-container flex flex-col gap-6 p-6">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
-            <button z-button zType="ghost" zSize="icon" (click)="onBack()">
-                <z-icon zType="arrow-left" class="size-5" />
-            </button>
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight text-foreground">Detalle del Diario</h1>
-                <p class="text-sm text-muted-foreground">Consulta la configuración detallada del diario seleccionado.
-                </p>
-            </div>
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (isLoading()) {
+        <z-skeleton class="h-8 w-64 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-48 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">
+            {{ journal()?.name }}
+          </h1>
+          @if (journal(); as j) {
+            <z-badge [zType]="j.is_fiscal ? 'secondary' : 'outline'">
+              {{ j.is_fiscal ? 'Fiscal' : 'Interno' }}
+            </z-badge>
+          }
         </div>
-        <div class="flex items-center gap-2">
-            <button z-button zType="outline" (click)="confirmResetSequence()" [disabled]="isLoading() || isDeleting()">
-                <z-icon zType="refresh-cw" class="mr-2 size-4" />
-                <span>Reiniciar Secuencia</span>
-            </button>
-            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isLoading() || isDeleting()">
-                <z-icon zType="pencil" class="mr-2 size-4" />
-                <span>Editar</span>
-            </button>
-            <button z-button zType="destructive" (click)="confirmDelete()" [disabled]="isLoading() || isDeleting()">
-                <z-icon zType="trash" class="mr-2 size-4" />
-                <span>Eliminar</span>
-            </button>
-        </div>
+        <p class="text-muted-foreground">
+          Código: {{ journal()?.code }} • Tipo: {{ journal()?.type }}
+        </p>
+      }
     </div>
 
-    <app-form-detail [data]="journal()" [sections]="detailSections" [loading]="isLoading()" />
+    @if (!isLoading() && journal()) {
+      <div class="flex gap-2">
+        <button z-button zType="outline" (click)="onBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        <button z-button zType="outline" (click)="confirmResetSequence()" [disabled]="isDeleting()">
+          <z-icon zType="refresh-cw" class="size-4 mr-2" />
+          <span>Reiniciar Secuencia</span>
+        </button>
+        <button z-button zType="outline" (click)="goToEdit()" [disabled]="isDeleting()">
+          <z-icon zType="pencil" class="size-4 mr-2" />
+          <span>Editar</span>
+        </button>
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          (click)="confirmDelete()"
+          [disabled]="isDeleting()"
+        >
+          <z-icon zType="trash" class="size-4 mr-2" />
+          <span>Eliminar</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (error()) {
+    <z-card class="p-8 text-center bg-destructive/5 border-destructive/20">
+      <z-icon
+        zType="triangle-alert"
+        class="size-12 rounded-full bg-destructive/10 text-destructive text-center mx-auto mb-4"
+      />
+      <h3 class="font-medium text-destructive mb-2">Error</h3>
+      <p class="text-muted-foreground">{{ error() }}</p>
+      <button z-button zType="outline" class="mt-4" (click)="onBack()">Volver a la lista</button>
+    </z-card>
+  } @else {
+    <z-card class="p-6">
+      <app-form-detail [sections]="detailSections" [data]="journal()" [loading]="isLoading()" />
+    </z-card>
+  }
 </div>

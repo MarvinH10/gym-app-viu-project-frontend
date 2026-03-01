@@ -39,6 +39,7 @@ export interface DynamicField {
     | 'boolean'
     | 'switch'
     | 'tags'
+    | 'password'
     | 'time';
   placeholder?: string;
   options?: DefaultOption[];

@@ -63,6 +63,10 @@ export class SaleApi {
     return this.http.patch<ApiResponse<SaleResource>>(`${this.API_URL}/${id}/post`, {});
   }
 
+  paySale(id: number | string): Observable<ApiResponse<SaleResource>> {
+    return this.http.patch<ApiResponse<SaleResource>>(`${this.API_URL}/${id}/pay`, {});
+  }
+
   cancelSale(id: number | string): Observable<ApiResponse<SaleResource>> {
     return this.http.patch<ApiResponse<SaleResource>>(`${this.API_URL}/${id}/cancel`, {});
   }

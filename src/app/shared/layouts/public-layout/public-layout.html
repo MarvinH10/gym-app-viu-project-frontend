@@ -8,7 +8,7 @@
         <a routerLink="/" class="flex items-center space-x-2">
           <z-icon zType="activity" class="size-6 text-primary" />
           <span class="inline-block font-bold text-xl tracking-tight"
-            >Gym<span class="text-primary">App</span></span
+            >Gym<span class="text-primary">Zone</span></span
           >
         </a>
         <nav class="hidden md:flex gap-6">
@@ -23,9 +23,9 @@
             >Tienda</a
           >
           <a
-            routerLink="/planes"
+            routerLink="/quienes-somos"
             class="flex items-center text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
-            >Planes</a
+            >Quiénes Somos</a
           >
         </nav>
       </div>
@@ -39,11 +39,15 @@
           <span
             class="absolute top-1 right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center"
           >
-            0
+            {{ cartService.totalItems() }}
           </span>
         </a>
         <div class="hidden md:flex items-center gap-2">
-          <button routerLink="/auth/login" z-button zType="ghost">Entrar</button>
+          @if (authService.isLoggedIn()) {
+            <button routerLink="/dashboard" z-button zType="ghost">Dashboard</button>
+          } @else {
+            <button routerLink="/auth/login" z-button zType="ghost">Entrar</button>
+          }
         </div>
         <!-- Mobile Menu Toggle -->
         <button
@@ -69,7 +73,7 @@
         <div class="flex items-center gap-2">
           <z-icon zType="activity" class="size-5 text-primary" />
           <span class="font-bold text-lg tracking-tight"
-            >Gym<span class="text-primary">App</span></span
+            >Gym<span class="text-primary">Zone</span></span
           >
         </div>
         <p class="text-sm text-muted-foreground w-full max-w-xs">
@@ -92,7 +96,7 @@
     <div
       class="container max-w-7xl mx-auto px-4 md:px-8 mt-8 pt-8 border-t text-center text-sm text-muted-foreground"
     >
-      &copy; 2026 GymApp. Todos los derechos reservados.
+      &copy; 2026 GymZone. Todos los derechos reservados.
     </div>
   </footer>
 </div>

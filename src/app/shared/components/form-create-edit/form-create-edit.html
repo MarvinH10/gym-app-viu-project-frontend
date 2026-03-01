@@ -112,6 +112,14 @@
                 />
               </div>
             }
+            @case ('password') {
+              <input
+                z-input
+                type="password"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || ''"
+              />
+            }
           }
 
           @if (isInvalid(field.name)) {

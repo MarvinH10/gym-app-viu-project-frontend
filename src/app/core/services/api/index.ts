@@ -14,3 +14,4 @@ export * from './subscription.api';
 export * from './membership-plan.api';
 export * from './payment-method.api';
 export * from './customer.api';
+export * from './dashboard.api';

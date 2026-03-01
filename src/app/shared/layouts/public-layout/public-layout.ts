@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardIconComponent } from '@/shared/components/icon/icon.component';
+import { AuthService } from '@/core/services/auth';
+import { CartService } from '@/core/services/cart.service';
 
 @Component({
   selector: 'app-public-layout',
@@ -10,4 +12,7 @@ import { ZardIconComponent } from '@/shared/components/icon/icon.component';
   templateUrl: './public-layout.html',
   styleUrl: './public-layout.css',
 })
-export class PublicLayout {}
+export class PublicLayout {
+  authService = inject(AuthService);
+  cartService = inject(CartService);
+}
