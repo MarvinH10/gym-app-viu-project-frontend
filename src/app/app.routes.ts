@@ -638,10 +638,36 @@ export const routes: Routes = [
           },
           {
             path: 'diarios',
-            loadComponent: () =>
-              import('./features/sistema/diarios/diarios').then((m) => m.Diarios),
-            title: 'Diarios | Gym App',
             data: { breadcrumb: 'Diarios' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/sistema/journals/journals').then((m) => m.JournalsComponent),
+                title: 'Diarios | Gym App',
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/sistema/journals/journal-create-edit/journal-create-edit.component'),
+                title: 'Nuevo Diario | Gym App',
+                data: { breadcrumb: 'Crear' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/sistema/journals/journal-detail/journal-detail.component'),
+                title: 'Detalle de Diario | Gym App',
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/sistema/journals/journal-create-edit/journal-create-edit.component'),
+                title: 'Editar Diario | Gym App',
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'impuestos',
