@@ -1,6 +1,6 @@
 import { CategoryResource } from './category.model';
 import { AttributeValueResource, AttributeResource } from './attribute.model';
-import { PaginatedResponse } from './member.model';
+import { PaginatedResponse } from './api-response.model';
 
 export interface ProductProductResource {
   id: number;

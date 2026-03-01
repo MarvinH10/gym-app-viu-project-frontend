@@ -1,0 +1,29 @@
+<div class="h-full flex flex-col gap-6 p-6 overflow-hidden">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Planes de Membresía</h1>
+            <p class="text-muted-foreground">Configura los planes y beneficios para tus socios.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <z-button (click)="goToNew()" class="gap-2">
+                <z-icon zType="plus" zSize="lg" />
+                Nuevo Plan
+            </z-button>
+        </div>
+    </div>
+
+    <z-card class="bg-card flex-1 flex flex-col overflow-hidden">
+        <!-- Filtros -->
+        <div class="p-6 border-b">
+            <z-search-filters [initialSearch]="search()" (searchChange)="search.set($event)"
+                placeholder="Buscar por nombre..." />
+        </div>
+
+        <!-- Tabla -->
+        <div class="flex-1 overflow-auto">
+            <app-table-details [columns]="columns" [data]="plans()" [actions]="tableActions" [loading]="loading()"
+                [error]="error()" (retry)="loadPlans()" [pagination]="pagination()"
+                (pageChange)="currentPage.set($event)" />
+        </div>
+    </z-card>
+</div>

@@ -1,4 +1,4 @@
-import { PaginatedResponse } from './member.model';
+import { PaginatedResponse } from './api-response.model';
 
 export interface CategoryResource {
     id: number;

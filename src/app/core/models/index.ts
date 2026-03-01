@@ -10,3 +10,6 @@ export * from './company.model';
 export * from './warehouse.model';
 export * from './supplier.model';
 export * from './product.model';
+export * from './attendance.model';
+export * from './subscription.model';
+export * from './membership-plan.model';

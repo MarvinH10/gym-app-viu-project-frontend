@@ -1,0 +1,17 @@
+<div class="p-6 flex flex-col gap-6">
+    <div class="flex items-center gap-4">
+        <z-button variant="outline" size="icon" (click)="goBack()">
+            <z-icon zType="arrow-left" zSize="lg" />
+        </z-button>
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Detalle de Suscripción</h1>
+            <p class="text-muted-foreground">Información técnica y financiera de la membresía.</p>
+        </div>
+    </div>
+
+    <z-card class="bg-card">
+        <div class="p-6">
+            <app-form-detail [sections]="detailSections()" [data]="subscription()" [loading]="loading()" />
+        </div>
+    </z-card>
+</div>
