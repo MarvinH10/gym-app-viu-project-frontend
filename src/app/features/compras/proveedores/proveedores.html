@@ -1,0 +1,25 @@
+<div class="suppliers-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Gestión de Proveedores</h1>
+            <p class="page-description">Administra tus proveedores, contactos y categorías de provisión.</p>
+        </div>
+        <div class="header-actions">
+            <button z-button zType="default" (click)="goToNewSupplier()">
+                <z-icon zType="plus" class="size-4" />
+                <span>Nuevo Proveedor</span>
+            </button>
+        </div>
+    </div>
+
+    <z-search-filters placeholder="Buscar por nombre, documento o contacto..." [initialSearch]="search()"
+        [totalResults]="pagination()?.total ?? 0" (searchChange)="search.set($event); currentPage.set(1)" />
+
+    <z-card class="table-card">
+        <app-table-details [columns]="columns" [data]="suppliers()" [actions]="actions" [loading]="loading()"
+            [error]="error()" [pagination]="pagination()" [currentPage]="currentPage()" emptyIcon="users"
+            emptyLabel="No se encontraron proveedores registrados"
+            emptyHint="Intenta ajustar la búsqueda o añade uno nuevo" itemLabel="proveedores"
+            (pageChange)="currentPage.set($event)" (retry)="loadSuppliers()" />
+    </z-card>
+</div>

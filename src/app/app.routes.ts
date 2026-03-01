@@ -137,6 +137,35 @@ export const routes: Routes = [
             ],
           },
           {
+            path: 'almacen',
+            data: { breadcrumb: 'Almacenes' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/inventario/almacen/almacenes').then((m) => m.Almacenes),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/inventario/almacen/almacen-create-edit/almacen-create-edit.component'),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/inventario/almacen/almacen-detail/almacen-detail.component'),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/inventario/almacen/almacen-create-edit/almacen-create-edit.component'),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
+          },
+          {
             path: 'productos',
             loadComponent: () =>
               import('./features/inventario/productos/productos').then((m) => m.Productos),
@@ -184,16 +213,40 @@ export const routes: Routes = [
         data: { breadcrumb: 'Compras' },
         children: [
           {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'lista',
+          },
+          {
             path: 'lista',
-            loadComponent: () =>
-              import('./features/compras/compras/compras').then((m) => m.Compras),
-            data: { breadcrumb: 'Compras' },
+            loadComponent: () => import('./features/compras/compras-list/compras-list.component').then((m) => m.ComprasListComponent),
+            title: 'Listado de Compras | Gym App',
           },
           {
             path: 'proveedores',
-            loadComponent: () =>
-              import('./features/compras/proveedores/proveedores').then((m) => m.Proveedores),
             data: { breadcrumb: 'Proveedores' },
+            children: [
+              {
+                path: '',
+                loadComponent: () => import('./features/compras/proveedores/proveedores').then((m) => m.Proveedores),
+                title: 'Proveedores | Gym App',
+              },
+              {
+                path: 'nuevo',
+                loadComponent: () => import('./features/compras/proveedores/proveedor-create-edit/proveedor-create-edit.component'),
+                title: 'Nuevo Proveedor | Gym App',
+              },
+              {
+                path: 'editar/:id',
+                loadComponent: () => import('./features/compras/proveedores/proveedor-create-edit/proveedor-create-edit.component'),
+                title: 'Editar Proveedor | Gym App',
+              },
+              {
+                path: ':id',
+                loadComponent: () => import('./features/compras/proveedores/proveedor-detail/proveedor-detail.component'),
+                title: 'Detalle de Proveedor | Gym App',
+              },
+            ],
           },
         ],
       },
