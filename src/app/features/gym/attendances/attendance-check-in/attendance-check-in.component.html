@@ -1,0 +1,11 @@
+<div class="p-6 flex flex-col gap-6 max-w-2xl mx-auto h-full">
+    <div>
+        <h1 class="text-3xl font-bold tracking-tight">Registrar Entrada Manual</h1>
+        <p class="text-muted-foreground">Ingresa el socio que está ingresando al gimnasio.</p>
+    </div>
+
+    <div class="flex-1 overflow-auto">
+        <app-form-create-edit [fields]="fields" [loading]="loading()" submitLabel="Registrar Entrada"
+            (formSubmit)="onFormSubmit($event)" (cancel)="onCancel()" />
+    </div>
+</div>

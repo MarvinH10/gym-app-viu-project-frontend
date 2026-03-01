@@ -1,0 +1,31 @@
+<div class="h-full flex flex-col gap-6 p-6 overflow-hidden">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Control de Asistencias</h1>
+            <p class="text-muted-foreground">Monitorea y gestiona el flujo de socios en el gimnasio.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <z-button (click)="goToCheckIn()" class="gap-2">
+                <z-icon zType="user-check" zSize="lg" />
+                Registrar Entrada
+            </z-button>
+        </div>
+    </div>
+
+    <z-card class="bg-card flex-1 flex flex-col overflow-hidden">
+        <!-- Filtros de búsqueda y estado -->
+        <div class="p-6 border-b">
+            <z-search-filters [initialSearch]="search()" (searchChange)="search.set($event)"
+                placeholder="Buscar por socio o documento...">
+                <!-- Se podrían añadir filtros adicionales por fecha aquí -->
+            </z-search-filters>
+        </div>
+
+        <!-- Tabla de Asistencias -->
+        <div class="flex-1 overflow-auto">
+            <app-table-details [columns]="columns" [data]="attendances()" [actions]="tableActions" [loading]="loading()"
+                [error]="error()" (retry)="loadAttendances()" [pagination]="pagination()"
+                (pageChange)="currentPage.set($event)" />
+        </div>
+    </z-card>
+</div>

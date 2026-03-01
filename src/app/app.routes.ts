@@ -88,18 +88,104 @@ export const routes: Routes = [
           },
           {
             path: 'plans',
-            loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard), // Temporary reuse
             data: { breadcrumb: 'Planes' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/gym/planes/planes').then((m) => m.PlanesComponent),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/gym/planes/plane-create-edit/plane-create-edit.component').then(
+                    (m) => m.PlaneCreateEditComponent,
+                  ),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/gym/planes/plane-detail/plane-detail.component').then(
+                    (m) => m.PlaneDetailComponent,
+                  ),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/gym/planes/plane-create-edit/plane-create-edit.component').then(
+                    (m) => m.PlaneCreateEditComponent,
+                  ),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
+          },
+          {
+            path: 'recovery',
+            loadComponent: () => import('./features/gym/recovery.component').then(m => m.RecoveryComponent)
           },
           {
             path: 'subscriptions',
-            loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard), // Temporary reuse
             data: { breadcrumb: 'Suscripciones' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/gym/subscriptions/subscriptions').then((m) => m.SubscriptionsComponent),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/gym/subscriptions/subscription-create-edit/subscription-create-edit.component').then(
+                    (m) => m.SubscriptionCreateEditComponent,
+                  ),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/gym/subscriptions/subscription-detail/subscription-detail.component').then(
+                    (m) => m.SubscriptionDetailComponent,
+                  ),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/gym/subscriptions/subscription-create-edit/subscription-create-edit.component').then(
+                    (m) => m.SubscriptionCreateEditComponent,
+                  ),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'attendance',
-            loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard), // Temporary reuse
             data: { breadcrumb: 'Asistencias' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/gym/attendances/attendances').then((m) => m.AttendancesComponent),
+              },
+              {
+                path: 'check-in',
+                loadComponent: () =>
+                  import('./features/gym/attendances/attendance-check-in/attendance-check-in.component').then(
+                    (m) => m.AttendanceCheckInComponent,
+                  ),
+                data: { breadcrumb: 'Registrar Entrada' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/gym/attendances/attendance-detail/attendance-detail.component').then(
+                    (m) => m.AttendanceDetailComponent,
+                  ),
+                data: { breadcrumb: 'Detalle' },
+              },
+            ],
           },
         ],
       },
