@@ -1,0 +1,35 @@
+<div class="detail-container">
+    <div class="detail-header">
+        <div class="header-main">
+            <button z-button zType="outline" zSize="icon-sm" routerLink="/inventario/atributos" title="Volver">
+                <z-icon zType="arrow-left" class="size-4" />
+            </button>
+            <div class="header-info">
+                <h1 class="header-title">Detalles del Atributo</h1>
+                <p class="header-subtitle">
+                    @if (isLoading()) {
+                    Cargando información...
+                    } @else {
+                    {{ attribute()?.name }}
+                    }
+                </p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isLoading() || isDeleting()">
+                <z-icon zType="pencil" class="size-4 mr-2" />
+                <span>Editar</span>
+            </button>
+            <button z-button zType="destructive" (click)="confirmDelete()" [zLoading]="isDeleting()"
+                [disabled]="isLoading()">
+                <z-icon zType="trash" class="size-4 mr-2" />
+                <span>Eliminar</span>
+            </button>
+        </div>
+    </div>
+
+    <z-card class="detail-card">
+        <app-form-detail [sections]="detailSections" [data]="attribute()" [loading]="isLoading()" />
+    </z-card>
+</div>

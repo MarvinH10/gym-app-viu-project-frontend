@@ -4,3 +4,4 @@ export * from './api-response.model';
 export * from './member.model';
 export * from './tax.model';
 export * from './unit-measure.model';
+export * from './attribute.model';
