@@ -138,9 +138,38 @@ export const routes: Routes = [
           },
           {
             path: 'productos',
-            loadComponent: () =>
-              import('./features/inventario/productos/productos').then((m) => m.Productos),
             data: { breadcrumb: 'Productos' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/inventario/productos/productos').then((m) => m.Productos),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import('./features/inventario/productos/producto-create-edit/producto-create-edit.component').then(
+                    (m) => m.ProductoCreateEditComponent,
+                  ),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/inventario/productos/producto-detail/producto-detail.component').then(
+                    (m) => m.ProductoDetailComponent,
+                  ),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import('./features/inventario/productos/producto-create-edit/producto-create-edit.component').then(
+                    (m) => m.ProductoCreateEditComponent,
+                  ),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'atributos',

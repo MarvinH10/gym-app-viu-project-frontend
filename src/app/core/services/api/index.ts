@@ -5,3 +5,4 @@ export * from './company.api';
 export * from './member.api';
 export * from './tax.api';
 export * from './unit-measure.api';
+export * from './product.api';
