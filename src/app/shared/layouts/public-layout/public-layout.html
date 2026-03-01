@@ -1,0 +1,98 @@
+<div class="min-h-screen bg-background flex flex-col font-sans">
+  <!-- Navbar Transparente / Sticky -->
+  <header
+    class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+  >
+    <div class="container flex h-16 max-w-7xl items-center justify-between mx-auto px-4 md:px-8">
+      <div class="flex items-center gap-6 md:gap-10">
+        <a routerLink="/" class="flex items-center space-x-2">
+          <z-icon zType="activity" class="size-6 text-primary" />
+          <span class="inline-block font-bold text-xl tracking-tight"
+            >Gym<span class="text-primary">App</span></span
+          >
+        </a>
+        <nav class="hidden md:flex gap-6">
+          <a
+            routerLink="/"
+            class="flex items-center text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            >Inicio</a
+          >
+          <a
+            routerLink="/tienda"
+            class="flex items-center text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            >Tienda</a
+          >
+          <a
+            routerLink="/planes"
+            class="flex items-center text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            >Planes</a
+          >
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-2 md:gap-4">
+        <a
+          routerLink="/checkout"
+          class="relative text-foreground/80 hover:text-foreground flex items-center justify-center size-10 rounded-full hover:bg-muted transition-colors"
+        >
+          <z-icon zType="shopping-cart" class="size-5" />
+          <span
+            class="absolute top-1 right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center"
+          >
+            0
+          </span>
+        </a>
+        <div class="hidden md:flex items-center gap-2">
+          <button routerLink="/auth/login" z-button zType="ghost">Entrar</button>
+        </div>
+        <!-- Mobile Menu Toggle -->
+        <button
+          class="md:hidden size-10 flex flex-col justify-center items-center gap-[4px] text-foreground p-2"
+        >
+          <span class="w-6 h-[2px] bg-current rounded-full"></span>
+          <span class="w-6 h-[2px] bg-current rounded-full"></span>
+          <span class="w-6 h-[2px] bg-current rounded-full"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 flex flex-col">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="border-t py-12 bg-card mt-auto">
+    <div
+      class="container max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6"
+    >
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2">
+          <z-icon zType="activity" class="size-5 text-primary" />
+          <span class="font-bold text-lg tracking-tight"
+            >Gym<span class="text-primary">App</span></span
+          >
+        </div>
+        <p class="text-sm text-muted-foreground w-full max-w-xs">
+          La mejor plataforma para administrar y llevar tu entrenamiento al máximo nivel.
+        </p>
+      </div>
+
+      <div class="flex gap-4 text-muted-foreground">
+        <a href="#" class="hover:text-foreground transition-colors"
+          ><z-icon zType="globe" class="size-5"
+        /></a>
+        <a href="#" class="hover:text-foreground transition-colors"
+          ><z-icon zType="activity" class="size-5"
+        /></a>
+        <a href="#" class="hover:text-foreground transition-colors"
+          ><z-icon zType="star" class="size-5"
+        /></a>
+      </div>
+    </div>
+    <div
+      class="container max-w-7xl mx-auto px-4 md:px-8 mt-8 pt-8 border-t text-center text-sm text-muted-foreground"
+    >
+      &copy; 2026 GymApp. Todos los derechos reservados.
+    </div>
+  </footer>
+</div>
