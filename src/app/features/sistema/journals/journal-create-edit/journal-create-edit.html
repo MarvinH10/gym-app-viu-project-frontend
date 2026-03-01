@@ -1,0 +1,20 @@
+<div class="journal-form-container flex flex-col gap-6 p-6">
+    <div class="flex items-center gap-4">
+        <button z-button zType="ghost" zSize="icon" (click)="onCancel()" [disabled]="isLoading() || isSubmitting()">
+            <z-icon zType="arrow-left" class="size-5" />
+        </button>
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-foreground">
+                {{ journalId() ? 'Editar Diario' : 'Nuevo Diario' }}
+            </h1>
+            <p class="text-sm text-muted-foreground">
+                {{ journalId() ? 'Modifica la configuración del diario existente.' : 'Registra un nuevo diario en el
+                sistema.' }}
+            </p>
+        </div>
+    </div>
+
+    <app-form-create-edit [fields]="journalFormFields()" [initialData]="initialData()" [loading]="isLoading()"
+        [submitLabel]="journalId() ? 'Actualizar Diario' : 'Crear Diario'" [isSubmitting]="isSubmitting()"
+        (formSubmit)="onFormSubmit($event)" (cancel)="onCancel()" />
+</div>
