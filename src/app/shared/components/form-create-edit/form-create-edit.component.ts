@@ -16,6 +16,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
 import { ZardDatePickerImports } from '@/shared/components/date-picker';
 import { ZardCheckboxImports } from '@/shared/components/checkbox/checkbox.imports';
 import { ZardIconImports } from '@/shared/components/icon/icon.imports';
+import { ZardSwitchImports } from '@/shared/components/switch';
 
 export interface DefaultOption {
   label: string;
@@ -25,7 +26,7 @@ export interface DefaultOption {
 export interface DynamicField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'date' | 'select' | 'textarea' | 'number' | 'boolean';
+  type: 'text' | 'email' | 'date' | 'select' | 'textarea' | 'number' | 'boolean' | 'switch';
   placeholder?: string;
   options?: DefaultOption[];
   colSpan?: 1 | 2;
@@ -46,6 +47,7 @@ export interface DynamicField {
     ...ZardDatePickerImports,
     ...ZardSelectImports,
     ...ZardCheckboxImports,
+    ...ZardSwitchImports,
   ],
   templateUrl: './form-create-edit.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

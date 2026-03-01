@@ -10,6 +10,7 @@ import { FormDetailImports, DetailSection } from '@/shared/components/form-detai
 import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';
 import { TaxApi } from '@/core/services/api/tax.api';
 import { TaxResource } from '@/core/models';
+import { ZardSkeletonImports } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'app-impuesto-detail',
@@ -19,10 +20,10 @@ import { TaxResource } from '@/core/models';
     ZardCardComponent,
     ZardButtonComponent,
     ZardIconComponent,
+    ...ZardSkeletonImports,
     ...FormDetailImports,
   ],
   templateUrl: './impuesto-detail.html',
-  styleUrl: './impuesto-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ImpuestoDetailComponent implements OnInit {
@@ -32,7 +33,7 @@ export default class ImpuestoDetailComponent implements OnInit {
   private readonly alertDialog = inject(ZardAlertDialogService);
 
   readonly tax = signal<TaxResource | null>(null);
-  readonly isLoading = signal(true);
+  readonly loading = signal(true);
   readonly isDeleting = signal(false);
 
   readonly detailSections: DetailSection[] = [
@@ -86,10 +87,10 @@ export default class ImpuestoDetailComponent implements OnInit {
     this.taxApi.getTax(id).subscribe({
       next: (res) => {
         this.tax.set(res.data);
-        this.isLoading.set(false);
+        this.loading.set(false);
       },
       error: () => {
-        this.isLoading.set(false);
+        this.loading.set(false);
         toast.error('No se encontró el impuesto');
         this.router.navigate(['/sistema/impuestos']);
       },

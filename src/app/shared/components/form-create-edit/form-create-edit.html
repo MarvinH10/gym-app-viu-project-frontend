@@ -7,7 +7,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       @for (field of fields(); track field.name) {
         <div class="flex flex-col gap-2" [class.md:col-span-2]="field.colSpan === 2">
-          <label z-label *ngIf="field.type !== 'boolean'">
+          <label z-label *ngIf="field.type !== 'boolean' && field.type !== 'switch'">
             {{ field.label }}
             <span *ngIf="field.validators" class="text-destructive">*</span>
           </label>
@@ -32,7 +32,14 @@
             @case ('boolean') {
               <z-checkbox [formControlName]="field.name">
                 {{ field.label }}
+                <span *ngIf="field.validators" class="text-destructive ml-1">*</span>
               </z-checkbox>
+            }
+            @case ('switch') {
+              <z-switch [formControlName]="field.name">
+                {{ field.label }}
+                <span *ngIf="field.validators" class="text-destructive ml-1">*</span>
+              </z-switch>
             }
             @case ('email') {
               <input

@@ -29,7 +29,7 @@ export const checkboxVariants = cva(
 export const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidden select-none', {
   variants: {
     zSize: {
-      default: 'text-base',
+      default: 'text-sm',
       lg: 'text-lg',
     },
   },
@@ -38,6 +38,8 @@ export const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidd
   },
 });
 
-export type ZardCheckboxShapeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zShape']>;
+export type ZardCheckboxShapeVariants = NonNullable<
+  VariantProps<typeof checkboxVariants>['zShape']
+>;
 export type ZardCheckboxSizeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zSize']>;
 export type ZardCheckboxTypeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zType']>;
