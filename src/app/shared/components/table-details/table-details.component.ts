@@ -106,4 +106,22 @@ export class TableDetailsComponent<T extends Record<string, any> = any> {
   totalCols(): number {
     return this.columns().length + (this.actions().length > 0 ? 1 : 0);
   }
+
+  onJumpChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    let newPage = Number(inputElement.value);
+    const maxPage = this.pagination()?.last_page || 1;
+
+    if (isNaN(newPage) || newPage < 1) {
+      newPage = 1;
+    } else if (newPage > maxPage) {
+      newPage = maxPage;
+    }
+
+    inputElement.value = newPage.toString();
+
+    if (newPage !== this.currentPage()) {
+      this.pageChange.emit(newPage);
+    }
+  }
 }

@@ -1,0 +1,142 @@
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      @if (loading()) {
+        <z-skeleton class="h-8 w-56 rounded-md mb-1" />
+        <z-skeleton class="h-4 w-40 rounded" />
+      } @else {
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ product()?.name }}</h1>
+          @if (product(); as p) {
+            <z-badge [zType]="p.is_active ? 'secondary' : 'outline'">
+              {{ p.is_active ? 'Activo' : 'Inactivo' }}
+            </z-badge>
+          }
+        </div>
+        <p class="text-muted-foreground">
+          {{ product()?.category?.name || 'General' }} • SKU: {{ product()?.sku || 'Sin SKU' }}
+        </p>
+      }
+    </div>
+
+    @if (!loading() && product()) {
+      <div class="flex gap-2">
+        <button z-button zType="outline" (click)="goBack()">
+          <z-icon zType="arrow-left" class="size-4 mr-2" />
+          <span>Volver</span>
+        </button>
+        <button z-button zType="outline" (click)="goToEdit()" [disabled]="loading()">
+          <z-icon zType="pencil" class="size-4 mr-2" />
+          <span>Editar</span>
+        </button>
+        <button
+          z-button
+          zType="destructive"
+          zVariant="outline"
+          (click)="confirmDelete()"
+          [disabled]="loading()"
+        >
+          <z-icon zType="trash" class="size-4 mr-2" />
+          <span>Eliminar</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (error()) {
+    <z-card class="p-8 text-center bg-destructive/5 border-destructive/20">
+      <z-icon
+        zType="triangle-alert"
+        class="size-12 rounded-full bg-destructive/10 text-destructive text-center mx-auto mb-4"
+      />
+      <h3 class="font-medium text-destructive mb-2">Error</h3>
+      <p class="text-muted-foreground">{{ error() }}</p>
+      <button z-button zType="outline" class="mt-4" (click)="goBack()">Volver a la lista</button>
+    </z-card>
+  } @else {
+    <z-card class="p-6">
+      <app-form-detail [sections]="detailSections" [data]="product()" [loading]="loading()" />
+    </z-card>
+
+    @if (!loading()) {
+      @if (hasVariants()) {
+        <z-card class="p-6">
+          <div class="flex items-center gap-2 mb-5">
+            <z-icon zType="layers" class="size-5 text-muted-foreground" />
+            <h2 class="text-base font-semibold text-foreground">Variantes del Producto</h2>
+            <z-badge zType="outline" class="ml-auto"
+              >{{ attributedVariants().length }} variantes</z-badge
+            >
+          </div>
+
+          <div class="overflow-x-auto rounded-md border border-border">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-muted/50 border-b border-border">
+                  <th class="px-4 py-3 text-left font-medium text-muted-foreground">Atributos</th>
+                  <th class="px-4 py-3 text-left font-medium text-muted-foreground">SKU</th>
+                  <th class="px-4 py-3 text-left font-medium text-muted-foreground">
+                    Código de Barras
+                  </th>
+                  <th class="px-4 py-3 text-right font-medium text-muted-foreground">Precio</th>
+                  <th class="px-4 py-3 text-right font-medium text-muted-foreground">Stock</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (variant of attributedVariants(); track variant.id) {
+                  <tr
+                    class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors"
+                  >
+                    <td class="px-4 py-3">
+                      <div class="flex flex-wrap gap-1">
+                        @for (attr of variant.attributes; track attr.id) {
+                          <span
+                            class="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium"
+                          >
+                            @if (attr.attribute_name) {
+                              <span class="text-muted-foreground">{{ attr.attribute_name }}:</span>
+                            }
+                            {{ attr.value }}
+                          </span>
+                        }
+                      </div>
+                    </td>
+                    <td class="px-4 py-3 text-muted-foreground">{{ variant.sku || '—' }}</td>
+                    <td class="px-4 py-3 text-muted-foreground">{{ variant.barcode || '—' }}</td>
+                    <td class="px-4 py-3 text-right font-medium">
+                      S/ {{ variant.price | number: '1.2-2' }}
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                      <z-badge [zType]="+variant.stock > 0 ? 'secondary' : 'outline'">
+                        {{ variant.stock }}
+                      </z-badge>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </z-card>
+      } @else if (principalAttributes().length > 0) {
+        <z-card class="p-6">
+          <div class="flex items-center gap-2 mb-5">
+            <z-icon zType="tag" class="size-5 text-muted-foreground" />
+            <h2 class="text-base font-semibold text-foreground">Atributos</h2>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            @for (attr of principalAttributes(); track attr.id) {
+              <div class="flex items-center gap-1.5 bg-muted/60 rounded-lg px-3 py-2">
+                @if (attr.attribute_name) {
+                  <span class="text-xs font-medium text-muted-foreground"
+                    >{{ attr.attribute_name }}:</span
+                  >
+                }
+                <span class="text-sm font-semibold text-foreground">{{ attr.value }}</span>
+              </div>
+            }
+          </div>
+        </z-card>
+      }
+    }
+  }
+</div>

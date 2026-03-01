@@ -86,23 +86,33 @@
       }
     </div>
 
-    <div class="flex items-center justify-end gap-4 mt-4 pt-6 border-t border-border">
-      <button z-button zType="ghost" type="button" (click)="onCancel()" [disabled]="isSubmitting()">
-        Cancelar
-      </button>
-      <button
-        z-button
-        zType="default"
-        type="submit"
-        [disabled]="form.invalid || isSubmitting()"
-        class="min-w-32"
-      >
-        @if (isSubmitting()) {
-          <span>Guardando...</span>
-        } @else {
-          <span>{{ submitLabel() }}</span>
-        }
-      </button>
-    </div>
+    <ng-content></ng-content>
+
+    @if (showActions()) {
+      <div class="flex items-center justify-end gap-4 mt-4 pt-6 border-t border-border">
+        <button
+          z-button
+          zType="ghost"
+          type="button"
+          (click)="onCancel()"
+          [disabled]="isSubmitting()"
+        >
+          Cancelar
+        </button>
+        <button
+          z-button
+          zType="default"
+          type="submit"
+          [disabled]="form.invalid || isSubmitting()"
+          class="min-w-32"
+        >
+          @if (isSubmitting()) {
+            <span>Guardando...</span>
+          } @else {
+            <span>{{ submitLabel() }}</span>
+          }
+        </button>
+      </div>
+    }
   }
 </form>

@@ -60,6 +60,7 @@ export class FormCreateEditComponent implements OnInit {
   loading = input(false);
   isSubmitting = input(false);
   submitLabel = input('Guardar');
+  showActions = input(true);
 
   @Output() formSubmit = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
@@ -83,6 +84,10 @@ export class FormCreateEditComponent implements OnInit {
         initialValue = new Date(initialValue);
       }
 
+      if (field.type === 'select' && initialValue !== null && initialValue !== undefined) {
+        initialValue = initialValue.toString();
+      }
+
       group[field.name] = [initialValue, field.validators || []];
     });
 
@@ -104,6 +109,13 @@ export class FormCreateEditComponent implements OnInit {
     });
 
     this.formSubmit.emit(value);
+  }
+
+  submit() {
+    this.onSubmit();
+  }
+  isFormInvalid(): boolean {
+    return this.form?.invalid ?? true;
   }
 
   onCancel() {
