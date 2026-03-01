@@ -64,54 +64,58 @@ export interface FilterSection {
         }
       </ng-template>
 
-      <div class="relative">
-        <button
-          z-button
-          zType="outline"
-          class="gap-2 px-4 h-10"
-          [class.bg-accent]="isFiltersOpen()"
-          [class.border-primary]="isFiltersOpen() || isAnyFilterActive()"
-          (click)="toggleFilters()"
-        >
-          <z-icon zType="filter" class="size-4" />
-          <span>Filtros</span>
-          <z-icon
-            zType="chevron-down"
-            class="size-4 transition-transform"
-            [class.rotate-180]="isFiltersOpen()"
-          />
-        </button>
-
-        @if (isFiltersOpen()) {
-          <div
-            class="absolute top-[calc(100%+0.5rem)] right-0 w-60 bg-black/90 border border-border rounded-2xl shadow-2xl z-50 overflow-hidden p-5 animate-in fade-in slide-in-from-top-2 duration-200"
+      @if (sections().length > 0) {
+        <div class="relative">
+          <button
+            z-button
+            zType="outline"
+            class="gap-2 px-4 h-10"
+            [class.bg-accent]="isFiltersOpen()"
+            [class.border-primary]="isFiltersOpen() || isAnyFilterActive()"
+            (click)="toggleFilters()"
           >
-            @for (section of sections(); track section.id; let last = $last) {
-              <div class="flex flex-col gap-3">
-                <h3 class="text-[0.75rem] font-bold text-muted-foreground uppercase tracking-wider">
-                  {{ section.title }}
-                </h3>
-                <div class="flex flex-col gap-2.5">
-                  @for (option of section.options; track option.value) {
-                    <z-checkbox
-                      [ngModel]="selectedValues()[section.id]?.includes(option.value)"
-                      (ngModelChange)="onFilterChange(section.id, option.value)"
-                      class="group"
-                    >
-                      <span class="text-sm transition-colors group-hover:text-primary">{{
-                        option.label
-                      }}</span>
-                    </z-checkbox>
-                  }
+            <z-icon zType="filter" class="size-4" />
+            <span>Filtros</span>
+            <z-icon
+              zType="chevron-down"
+              class="size-4 transition-transform"
+              [class.rotate-180]="isFiltersOpen()"
+            />
+          </button>
+
+          @if (isFiltersOpen()) {
+            <div
+              class="absolute top-[calc(100%+0.5rem)] right-0 w-60 bg-black/90 border border-border rounded-2xl shadow-2xl z-50 overflow-hidden p-5 animate-in fade-in slide-in-from-top-2 duration-200"
+            >
+              @for (section of sections(); track section.id; let last = $last) {
+                <div class="flex flex-col gap-3">
+                  <h3
+                    class="text-[0.75rem] font-bold text-muted-foreground uppercase tracking-wider"
+                  >
+                    {{ section.title }}
+                  </h3>
+                  <div class="flex flex-col gap-2.5">
+                    @for (option of section.options; track option.value) {
+                      <z-checkbox
+                        [ngModel]="selectedValues()[section.id]?.includes(option.value)"
+                        (ngModelChange)="onFilterChange(section.id, option.value)"
+                        class="group"
+                      >
+                        <span class="text-sm transition-colors group-hover:text-primary">{{
+                          option.label
+                        }}</span>
+                      </z-checkbox>
+                    }
+                  </div>
                 </div>
-              </div>
-              @if (!last) {
-                <div class="h-px bg-border my-4 w-full"></div>
+                @if (!last) {
+                  <div class="h-px bg-border my-4 w-full"></div>
+                }
               }
-            }
-          </div>
-        }
-      </div>
+            </div>
+          }
+        </div>
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,27 +1,78 @@
-<div class="form-container">
-  <div class="form-header">
-    <div class="header-main">
-      <button z-button zType="outline" zSize="icon-sm" (click)="onCancel()" title="Volver">
-        <z-icon zType="arrow-left" class="size-4" />
-      </button>
-      <div class="header-info">
-        <h1 class="header-title">{{ taxId() ? 'Editar Impuesto' : 'Nuevo Impuesto' }}</h1>
-        <p class="header-subtitle">Completa la información técnica del impuesto.</p>
-      </div>
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground">
+        {{ taxId() ? 'Editar Impuesto' : 'Crear Nuevo Impuesto' }}
+      </h1>
+      <p class="text-muted-foreground mt-2">
+        {{
+          taxId()
+            ? 'Modifica los datos del impuesto del sistema.'
+            : 'Completa el formulario para registrar un nuevo impuesto en el sistema.'
+        }}
+      </p>
     </div>
   </div>
 
-  <div class="form-content">
-    <z-card class="form-card">
+  <z-card class="p-6">
+    @if (error()) {
+      <div
+        class="mb-6 p-4 rounded-md bg-destructive/10 text-destructive text-sm flex items-center gap-3"
+      >
+        <z-icon zType="triangle-alert" class="size-5" />
+        <p>{{ error() }}</p>
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-36 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <z-skeleton class="h-4 w-44 rounded" />
+          <z-skeleton class="h-24 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-40 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-24 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-32 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-20 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-44 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <z-skeleton class="h-4 w-24 rounded" />
+          <z-skeleton class="h-10 w-full rounded-md" />
+        </div>
+        <div class="md:col-span-2 flex justify-end gap-3 pt-2">
+          <z-skeleton class="h-10 w-24 rounded-md" />
+          <z-skeleton class="h-10 w-28 rounded-md" />
+        </div>
+      </div>
+    } @else if (!taxId() || initialData()) {
       <app-form-create-edit
         [fields]="taxFormFields"
         [initialData]="initialData()"
-        [loading]="isLoading()"
+        [loading]="loading()"
         [isSubmitting]="isSubmitting()"
         [submitLabel]="taxId() ? 'Guardar Cambios' : 'Crear Impuesto'"
         (formSubmit)="onFormSubmit($event)"
         (cancel)="onCancel()"
       />
-    </z-card>
-  </div>
+    }
+  </z-card>
 </div>
