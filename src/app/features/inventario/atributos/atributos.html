@@ -1,0 +1,25 @@
+<div class="atributos-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Gestión de Atributos</h1>
+            <p class="page-description">Configura los atributos y variantes para tus productos.</p>
+        </div>
+        <div class="header-actions">
+            <button z-button zType="default" (click)="goToNewAttribute()">
+                <z-icon zType="plus" class="size-4" />
+                <span>Nuevo Atributo</span>
+            </button>
+        </div>
+    </div>
+
+    <z-search-filters placeholder="Buscar por nombre..." [initialSearch]="search()"
+        [totalResults]="pagination()?.total ?? 0" (searchChange)="search.set($event); currentPage.set(1)" />
+
+    <z-card class="table-card">
+        <app-table-details [columns]="columns" [data]="attributes()" [actions]="actions" [loading]="loading()"
+            [error]="error()" [pagination]="pagination()" [currentPage]="currentPage()" emptyIcon="settings"
+            emptyLabel="No se encontraron atributos registrados"
+            emptyHint="Intenta ajustar la búsqueda o añade uno nuevo" itemLabel="atributos"
+            (pageChange)="currentPage.set($event)" (retry)="loadAttributes()" />
+    </z-card>
+</div>

@@ -121,9 +121,36 @@ export const routes: Routes = [
           },
           {
             path: 'atributos',
-            loadComponent: () =>
-              import('./features/inventario/atributos/atributos').then((m) => m.Atributos),
             data: { breadcrumb: 'Atributos' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/inventario/atributos/atributos').then((m) => m.Atributos),
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import(
+                    './features/inventario/atributos/atributo-create-edit/atributo-create-edit.component'
+                  ),
+                data: { breadcrumb: 'Nuevo' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import('./features/inventario/atributos/atributo-detail/atributo-detail.component'),
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import(
+                    './features/inventario/atributos/atributo-create-edit/atributo-create-edit.component'
+                  ),
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
           },
           {
             path: 'almacen',
@@ -286,6 +313,7 @@ export const routes: Routes = [
               },
             ],
           },
+
         ],
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
