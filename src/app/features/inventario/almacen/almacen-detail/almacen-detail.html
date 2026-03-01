@@ -1,0 +1,39 @@
+<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-2 mb-1">
+                <button z-button zType="outline" zSize="icon-sm" (click)="onBack()" title="Volver">
+                    <z-icon zType="arrow-left" class="size-4" />
+                </button>
+                @if (loading()) {
+                <z-skeleton class="h-8 w-56 rounded-md" />
+                } @else {
+                <h1 class="text-3xl font-bold tracking-tight text-foreground">{{ warehouse()?.name }}</h1>
+                }
+            </div>
+            @if (loading()) {
+            <z-skeleton class="h-4 w-40 rounded" />
+            } @else {
+            <p class="text-muted-foreground ml-10">{{ warehouse()?.company?.business_name || 'Sin compañía' }} • {{
+                warehouse()?.location || 'Sin ubicación' }}</p>
+            }
+        </div>
+
+        @if (!loading() && warehouse()) {
+        <div class="flex gap-2">
+            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isDeleting()">
+                <z-icon zType="pencil" class="size-4 mr-2" />
+                <span>Editar</span>
+            </button>
+            <button z-button zType="destructive" zVariant="outline" (click)="confirmDelete()" [disabled]="isDeleting()">
+                <z-icon zType="trash" class="size-4 mr-2" />
+                <span>Eliminar</span>
+            </button>
+        </div>
+        }
+    </div>
+
+    <z-card class="p-6">
+        <app-form-detail [sections]="detailSections" [data]="warehouse()" [loading]="loading()" />
+    </z-card>
+</div>
