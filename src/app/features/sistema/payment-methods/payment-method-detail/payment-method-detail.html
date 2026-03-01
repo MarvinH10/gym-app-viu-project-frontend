@@ -1,0 +1,25 @@
+<div class="payment-method-detail-container flex flex-col gap-6 p-6">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <button z-button zType="ghost" zSize="icon" (click)="onBack()">
+                <z-icon zType="arrow-left" class="size-5" />
+            </button>
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-foreground">Detalle del Método de Pago</h1>
+                <p class="text-sm text-muted-foreground">Consulta la configuración detallada del método de pago.</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button z-button zType="outline" (click)="goToEdit()" [disabled]="isLoading() || isDeleting()">
+                <z-icon zType="pencil" class="mr-2 size-4" />
+                <span>Editar</span>
+            </button>
+            <button z-button zType="destructive" (click)="confirmDelete()" [disabled]="isLoading() || isDeleting()">
+                <z-icon zType="trash" class="mr-2 size-4" />
+                <span>Eliminar</span>
+            </button>
+        </div>
+    </div>
+
+    <app-form-detail [data]="paymentMethod()" [sections]="detailSections" [loading]="isLoading()" />
+</div>

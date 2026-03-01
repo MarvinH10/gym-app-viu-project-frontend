@@ -177,6 +177,7 @@ export class Sidebar implements OnInit {
         { label: 'Diarios', route: '/sistema/diarios', icon: 'calendar' },
         { label: 'Impuestos', route: '/sistema/impuestos', icon: 'dollar-sign' },
         { label: 'Unidades de Medida', route: '/sistema/unidades-medida', icon: 'layers' },
+        { label: 'Métodos de Pago', route: '/sistema/payment-methods', icon: 'credit-card' },
       ],
     },
   ];

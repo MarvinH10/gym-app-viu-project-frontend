@@ -16,3 +16,4 @@ export * from './membership-plan.model';
 export * from './customer.model';
 export * from './sale.model';
 export * from './journal.model';
+export * from './payment-method.model';

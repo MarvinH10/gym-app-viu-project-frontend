@@ -670,6 +670,47 @@ export const routes: Routes = [
             ],
           },
           {
+            path: 'payment-methods',
+            data: { breadcrumb: 'Métodos de Pago' },
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/sistema/payment-methods/payment-methods').then(
+                    (m) => m.PaymentMethodsComponent,
+                  ),
+                title: 'Métodos de Pago | Gym App',
+              },
+              {
+                path: 'new',
+                loadComponent: () =>
+                  import(
+                    './features/sistema/payment-methods/payment-method-create-edit/payment-method-create-edit.component'
+                  ).then((m) => m.PaymentMethodCreateEditComponent),
+                title: 'Nuevo Método de Pago | Gym App',
+                data: { breadcrumb: 'Crear' },
+              },
+              {
+                path: ':id',
+                loadComponent: () =>
+                  import(
+                    './features/sistema/payment-methods/payment-method-detail/payment-method-detail.component'
+                  ).then((m) => m.PaymentMethodDetailComponent),
+                title: 'Detalle de Método de Pago | Gym App',
+                data: { breadcrumb: 'Detalle' },
+              },
+              {
+                path: ':id/edit',
+                loadComponent: () =>
+                  import(
+                    './features/sistema/payment-methods/payment-method-create-edit/payment-method-create-edit.component'
+                  ).then((m) => m.PaymentMethodCreateEditComponent),
+                title: 'Editar Método de Pago | Gym App',
+                data: { breadcrumb: 'Editar' },
+              },
+            ],
+          },
+          {
             path: 'impuestos',
             data: { breadcrumb: 'Impuestos' },
             children: [
