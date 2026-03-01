@@ -1,8 +1,8 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
   @if (loading()) {
-  <div class="flex items-center justify-center py-12">
-    <z-icon zType="refresh-cw" class="size-8 animate-spin text-muted-foreground" />
-  </div>
+    <div class="flex items-center justify-center py-12">
+      <z-icon zType="refresh-cw" class="size-8 animate-spin text-muted-foreground" />
+    </div>
   } @else {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       @for (field of fields(); track field.name) {
@@ -108,91 +108,42 @@
             }
           }
 
-      @switch (field.type) {
-      @case ('text') {
-      <input z-input type="text" [formControlName]="field.name" [placeholder]="field.placeholder || ''" />
-      }
-      @case ('number') {
-      <input z-input type="number" [formControlName]="field.name" [placeholder]="field.placeholder || ''" />
-      }
-      @case ('boolean') {
-      <z-checkbox [formControlName]="field.name">
-        {{ field.label }}
-        <span *ngIf="field.validators" class="text-destructive ml-1">*</span>
-      </z-checkbox>
-      }
-      @case ('switch') {
-      <z-switch [formControlName]="field.name">
-        {{ field.label }}
-        <span *ngIf="field.validators" class="text-destructive ml-1">*</span>
-      </z-switch>
-      }
-      @case ('email') {
-      <input z-input type="email" [formControlName]="field.name" [placeholder]="field.placeholder || ''" />
-      }
-      @case ('date') {
-      <z-date-picker [formControlName]="field.name" class="w-full"
-        [placeholder]="field.placeholder || 'Seleccionar fecha'" zFormat="dd/MM/yyyy"></z-date-picker>
-      }
-      @case ('select') {
-      <z-select [formControlName]="field.name">
-        <z-select-item [zValue]="''">Seleccionar...</z-select-item>
-        @if (field.options) {
-        @for (opt of field.options; track opt.value) {
-        <z-select-item [zValue]="opt.value">{{ opt.label }}</z-select-item>
-        }
-        }
-      </z-select>
-      }
-      @case ('textarea') {
-      <textarea z-input [formControlName]="field.name" rows="3" [placeholder]="field.placeholder || ''"></textarea>
-      }
-      @case ('tags') {
-      <div class="flex flex-col gap-2">
-        <div class="flex flex-wrap gap-2 mb-1">
-          @for (tag of form.get(field.name)?.value || []; track tag) {
-          <z-badge zType="secondary" class="pl-3 pr-1 py-0.5 flex items-center gap-1">
-            {{ tag }}
-            <button type="button" (click)="removeTag(field.name, tag)"
-              class="p-0.5 hover:bg-muted rounded-full transition-colors">
-              <z-icon zType="x" class="size-3" />
-            </button>
-          </z-badge>
+          @if (isInvalid(field.name)) {
+            <p class="text-xs text-destructive">
+              Por favor ingresa un {{ field.label.toLowerCase() }} válido.
+            </p>
           }
         </div>
-        <input z-input type="text" [placeholder]="field.placeholder || 'Escribe y presiona Enter...'"
-          (keydown.enter)="addTag(field.name, $event)" />
-      </div>
-      }
-      }
-
-      @if (isInvalid(field.name)) {
-      <p class="text-xs text-destructive">
-        Por favor ingresa un {{ field.label.toLowerCase() }} válido.
-      </p>
       }
     </div>
+
+    <ng-content></ng-content>
+
+    @if (showActions()) {
+      <div class="flex items-center justify-end gap-4 mt-4 pt-6 border-t border-border">
+        <button
+          z-button
+          zType="ghost"
+          type="button"
+          (click)="onCancel()"
+          [disabled]="isSubmitting()"
+        >
+          Cancelar
+        </button>
+        <button
+          z-button
+          zType="default"
+          type="submit"
+          [disabled]="form.invalid || isSubmitting()"
+          class="min-w-32"
+        >
+          @if (isSubmitting()) {
+            <span>Guardando...</span>
+          } @else {
+            <span>{{ submitLabel() }}</span>
+          }
+        </button>
+      </div>
     }
-  </div>
-
-  <ng-content></ng-content>
-
-  @if (showActions()) {
-  <div class="flex items-center justify-end gap-4 mt-4 pt-6 border-t border-border">
-    <button z-button zType="ghost" type="button" (click)="onCancel()" [disabled]="isSubmitting()">
-      Cancelar
-    </button>
-    <button z-button zType="default" type="submit" [disabled]="form.invalid || isSubmitting()" class="min-w-32">
-      @if (isSubmitting()) {
-      <span>Guardando...</span>
-      } @else {
-      @if (submitIcon()) {
-      <z-icon [zType]="submitIcon()!" class="size-4 mr-2" />
-      }
-      <span>{{ submitLabel() }}</span>
-      }
-    </button>
-  </div>
-  }
   }
 </form>
